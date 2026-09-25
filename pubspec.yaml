@@ -1,0 +1,68 @@
+name: msn_manager_mobile
+description: >-
+  MSN Manager Mobile — application métier offline-first pour MSN
+  Multi-Services Numériques : demandes, qualification, devis, factures,
+  paiements, workflows, communication et transfert vers le PC de production.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.4.0 <4.0.0'
+  flutter: '>=3.22.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # State management
+  flutter_riverpod: ^2.5.1
+
+  # Navigation
+  go_router: ^14.2.7
+
+  # Base de données locale (offline-first)
+  drift: ^2.20.3
+  sqlite3_flutter_libs: ^0.5.24
+  path_provider: ^2.1.4
+  path: ^1.9.0
+
+  # Utilitaires
+  intl: ^0.19.0
+  uuid: ^4.5.1
+  crypto: ^3.0.3
+  http: ^1.2.2
+  collection: ^1.18.0
+
+  # Génération de documents professionnels
+  pdf: ^3.11.1
+  printing: ^5.13.2
+
+  # Partage natif Android/iOS
+  share_plus: ^10.0.2
+
+  # Connectivité & notifications
+  connectivity_plus: ^6.0.5
+  flutter_local_notifications: ^17.2.3
+  timezone: ^0.9.4
+
+  # Sécurité
+  flutter_secure_storage: ^9.2.2
+
+  # Fichiers reçus du client
+  file_picker: ^8.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+  # Génération de code Drift (base de données)
+  drift_dev: ^2.20.3
+  build_runner: ^2.4.13
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/logo/
