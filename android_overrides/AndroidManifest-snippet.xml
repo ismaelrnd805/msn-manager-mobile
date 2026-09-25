@@ -1,0 +1,31 @@
+<!--
+  Fragment AndroidManifest.xml à fusionner dans android/app/src/main/AndroidManifest.xml
+  après `flutter create` (voir docs/10-generer-android.md).
+
+  1) Dans la balise <manifest> (racine) :
+     <uses-permission android:name="android.permission.INTERNET" />
+     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+  2) Dans la balise <application>, à côté de l'activity :
+     <receiver android:exported="false"
+         android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
+     <receiver android:exported="false"
+         android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
+         <intent-filter>
+             <action android:name="android.intent.action.BOOT_COMPLETED" />
+             <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+         </intent-filter>
+     </receiver>
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <!-- Rappel : fusionner les <receiver> ci-dessus dans <application> -->
+</manifest>
