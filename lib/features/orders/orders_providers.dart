@@ -7,8 +7,8 @@ import '../../core/database/app_database.dart';
 import '../../core/domain/business_rules.dart';
 import '../../core/domain/enums.dart';
 import '../../core/providers/database_provider.dart';
+import '../../core/database/daos/orders_dao.dart';
 import '../../core/providers/services_providers.dart';
-import '../../core/sync/sync_engine.dart';
 import '../../core/utils/formatters.dart';
 
 final ordersFilterProvider = StateProvider<String?>((ref) => null);

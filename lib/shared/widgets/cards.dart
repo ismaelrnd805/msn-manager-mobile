@@ -43,7 +43,7 @@ class StatTile extends StatelessWidget {
                     Container(
                       width: 7,
                       height: 7,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: MsnColors.danger,
                         shape: BoxShape.circle,
                       ),
@@ -146,7 +146,7 @@ class EmptyState extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 44, color: MsnColors.textSecondary.withOpacity( 0.5)),
+            Icon(icon, size: 44, color: MsnColors.textSecondary.withValues( alpha: 0.5)),
             const SizedBox(height: 12),
             Text(
               title,

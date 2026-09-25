@@ -8,9 +8,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/database/app_database.dart';
 import '../../core/domain/template_engine.dart';
 import '../../core/providers/database_provider.dart';
+import '../../core/domain/enums.dart';
 import '../../core/providers/services_providers.dart';
 import '../../core/theme/msn_theme.dart';
-import '../../shared/widgets/feedback.dart';
 import '../communication/communication_providers.dart';
 
 class AdminTemplatesScreen extends ConsumerWidget {

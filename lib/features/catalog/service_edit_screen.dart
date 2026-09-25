@@ -7,13 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/auth/session.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/database/app_database.dart';
 import '../../core/domain/enums.dart';
 import '../../core/providers/database_provider.dart';
 import '../../core/providers/services_providers.dart';
-import '../../core/sync/sync_engine.dart';
+import '../catalog/catalog_providers.dart';
 import '../../core/theme/msn_theme.dart';
 import '../../core/utils/formatters.dart';
 import '../../core/utils/validators.dart';
@@ -281,7 +280,7 @@ class _ServiceEditScreenState extends ConsumerState<ServiceEditScreen> {
               controller: _exclusions,
               hint: 'Ex. impression physique',
             ),
-            MnnConditions(),
+            _buildConditionsField(),
             SwitchListTile(
               contentPadding: EdgeInsets.zero,
               title: const Text('Service actif',
@@ -409,7 +408,7 @@ class _ServiceEditScreenState extends ConsumerState<ServiceEditScreen> {
     );
   }
 
-  Widget MnnConditions() {
+  Widget _buildConditionsField() {
     return MsnTextField(
       label: 'Conditions particulières',
       controller: _conditions,

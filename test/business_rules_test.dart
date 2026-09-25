@@ -1,4 +1,5 @@
 /// Tests du moteur de règles métier (section 23) : blocages et exceptions.
+library;
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:msn_manager_mobile/core/constants/app_constants.dart';

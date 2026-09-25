@@ -21,6 +21,7 @@ class MsnTextField extends StatelessWidget {
     this.prefixIcon,
     this.suffix,
     this.autofocus = false,
+    this.onChanged,
   });
 
   final String label;
@@ -34,6 +35,7 @@ class MsnTextField extends StatelessWidget {
   final IconData? prefixIcon;
   final Widget? suffix;
   final bool autofocus;
+  final ValueChanged<String>? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +44,7 @@ class MsnTextField extends StatelessWidget {
       child: TextFormField(
         controller: controller,
         validator: validator,
+        onChanged: onChanged,
         maxLines: obscure ? 1 : maxLines,
         keyboardType: keyboardType,
         obscureText: obscure,
@@ -79,7 +82,7 @@ class MsnDropdown<T> extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: DropdownButtonFormField<T>(
-        value: value,
+        initialValue: value,
         isExpanded: true,
         decoration: InputDecoration(labelText: label),
         items: items

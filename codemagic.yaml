@@ -1,14 +1,150 @@
+# ============================================================================
+# Codemagic CI/CD — MSN Manager Mobile
+# https://codemagic.io — machine mac_mini_m2 (forfait personnel)
+#
+# Ce workflow :
+#   1. utilise le dossier android/ versionné dans le dépôt (Option A) ;
+#   2. le génère automatiquement s'il est absent (filet de sécurité) ;
+#   3. patche le AndroidManifest.xml (permissions + receivers notifications)
+#      de façon idempotente, au cas où le manifest serait régénéré ;
+#   4. régénère le code Drift (*.g.dart) via build_runner — OBLIGATOIRE car
+#      les *.g.dart sont exclus du dépôt par le .gitignore ;
+#   5. compile un APK release signé (keystore Codemagic si configuré,
+#      sinon signature debug — l'APK s'installe et fonctionne).
+#
+# Signature release (facultative) : dans Codemagic → App settings →
+# « Code signing » ou via un groupe de variables chiffrées nommé
+# keystore_credentials contenant :
+#   CM_KEYSTORE_PATH       (chemin du keystore, ex. $CM_BUILD_DIR/keystore.jks)
+#   CM_KEYSTORE_PASSWORD
+#   CM_KEY_ALIAS
+#   CM_KEY_PASSWORD
+# Sans keystore : fallback automatique sur la signature debug.
+# ============================================================================
+
 workflows:
   android-workflow:
-    name: Android APK
+    name: MSN Manager Mobile — APK Release
     instance_type: mac_mini_m2
-    max_build_duration: 30
+    max_build_duration: 40
+
     environment:
-      flutter: stable
+      # Version épinglée = build déterministe (validée : pub get OK,
+      # analyze 0 erreur, tests 40/40). Remplacer par "stable" pour suivre
+      # la dernière version — tester alors pub get + analyze en local avant.
+      flutter: 3.47.5
+      # Optionnel : ajouter ici un groupe de variables chiffrées si vous
+      # créez le groupe keystore_credentials dans Codemagic.
+      # groups:
+      #   - keystore_credentials
+
     scripts:
-      - name: Get packages
-        script: flutter packages pub get
-      - name: Build APK
-        script: flutter build apk --release
+      - name: Vérification de l'environnement
+        script: |
+          set -e
+          flutter --version
+          flutter doctor
+
+      - name: Récupération des dépendances
+        script: |
+          set -e
+          flutter packages pub get
+
+      - name: Génération du dossier android/ (si absent)
+        script: |
+          set -e
+          if [ ! -d "android" ]; then
+            echo "android/ absent — génération via flutter create…"
+            # --org mg.msn : cohérent avec le namespace versionné
+            # mg.msn.msn_manager_mobile (namespace dans build.gradle.kts,
+            # package du MainActivity.kt et applicationId).
+            flutter create --platforms=android --org mg.msn \
+              --project-name msn_manager_mobile .
+          else
+            echo "android/ versionné présent — Option A utilisée."
+          fi
+
+      - name: Patch du AndroidManifest (permissions + receivers notifications)
+        script: |
+          set -e
+          MANIFEST="android/app/src/main/AndroidManifest.xml"
+          test -f "$MANIFEST" || { echo "ERREUR : $MANIFEST introuvable"; exit 1; }
+          python3 - <<'PY'
+          import re
+
+          path = "android/app/src/main/AndroidManifest.xml"
+          src = open(path, encoding="utf-8").read()
+
+          PERMISSIONS = """    <!-- Permissions injectées par le pipeline Codemagic -->
+          <uses-permission android:name="android.permission.INTERNET" />
+          <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+          <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+          <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+          <uses-permission android:name="android.permission.VIBRATE" />
+          <uses-permission android:name="android.permission.WAKE_LOCK" />
+          """
+
+          RECEIVERS = """        <!-- Receivers injectés par le pipeline Codemagic (flutter_local_notifications) -->
+          <receiver android:exported="false"
+              android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
+          <receiver android:exported="false"
+              android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
+              <intent-filter>
+                  <action android:name="android.intent.action.BOOT_COMPLETED" />
+                  <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+              </intent-filter>
+          </receiver>
+          """
+
+          changed = False
+          if "android.permission.RECEIVE_BOOT_COMPLETED" not in src:
+              src = re.sub(r"(<manifest[^>]*>)", r"\1\n" + PERMISSIONS, src, count=1)
+              changed = True
+          if "ScheduledNotificationReceiver" not in src:
+              src = src.replace("</application>", RECEIVERS + "    </application>")
+              changed = True
+
+          if changed:
+              open(path, "w", encoding="utf-8").write(src)
+              print("AndroidManifest.xml patché (permissions + receivers).")
+          else:
+              print("AndroidManifest.xml déjà à jour — aucun patch appliqué.")
+          PY
+
+      - name: Génération du code Drift (build_runner)
+        script: |
+          set -e
+          # OBLIGATOIRE : les fichiers *.g.dart sont exclus du dépôt (.gitignore).
+          # Sans cette étape, le build échoue (app_database.g.dart introuvable).
+          dart run build_runner build --delete-conflicting-outputs
+
+      - name: Analyse statique (échoue uniquement sur des erreurs)
+        script: |
+          set -e
+          flutter analyze --no-fatal-infos --no-fatal-warnings
+
+      - name: Build APK release
+        script: |
+          set -e
+          flutter build apk --release
+
     artifacts:
       - build/**/outputs/apk/**/*.apk
+
+    publishing:
+      email:
+        recipients:
+          - ismaelrnd805@gmail.com   # TODO : remplacez par votre e-mail Codemagic
+        notify:
+          success: true
+          failure: true
+
+    # Déclenchement automatique à chaque push sur main (facultatif) :
+    # décommentez le bloc ci-dessous.
+    # triggering:
+    #   events:
+    #     - push
+    #   branch_patterns:
+    #     - pattern: main
+    #       include: true
+    #       source: true

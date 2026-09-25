@@ -36,7 +36,7 @@ class UsersScreen extends ConsumerWidget {
             return Card(
               child: ListTile(
                 leading: CircleAvatar(
-                  backgroundColor: MsnColors.primary.withOpacity(0.12),
+                  backgroundColor: MsnColors.primary.withValues(alpha: 0.12),
                   child: Text(u.nom.isNotEmpty ? u.nom[0].toUpperCase() : '?',
                       style: const TextStyle(
                           color: MsnColors.primary,

@@ -9,7 +9,6 @@ import 'package:go_router/go_router.dart';
 import '../../core/domain/enums.dart';
 import '../../core/domain/quote_calculator.dart';
 import '../../core/providers/database_provider.dart';
-import '../../core/providers/services_providers.dart';
 import '../../core/theme/msn_theme.dart';
 import '../../core/utils/formatters.dart';
 import '../../core/utils/validators.dart';

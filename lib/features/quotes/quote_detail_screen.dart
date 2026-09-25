@@ -13,13 +13,12 @@ import '../../core/domain/enums.dart';
 import '../../core/providers/database_provider.dart';
 import '../../core/providers/services_providers.dart';
 import '../../core/services/backup_service.dart';
-import '../../core/sync/sync_engine.dart';
 import '../../core/theme/msn_theme.dart';
 import '../../core/utils/formatters.dart';
+import '../../core/database/app_database.dart';
 import '../../shared/widgets/badges.dart';
 import '../../shared/widgets/copy_message_card.dart';
 import '../../shared/widgets/feedback.dart';
-import '../communication/communication_providers.dart';
 import 'quotes_providers.dart';
 
 class QuoteDetailScreen extends ConsumerWidget {
@@ -208,11 +207,11 @@ class QuoteDetailScreen extends ConsumerWidget {
                 ),
               const SizedBox(height: 24),
             ],
-          ),
-        );
+          );
       },
     ),
   );
+  }
 
   Widget _row(String label, String value, {bool bold = false}) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 2),

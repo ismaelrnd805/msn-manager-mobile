@@ -9,7 +9,6 @@ import '../../core/database/app_database.dart';
 import '../../core/domain/enums.dart';
 import '../../core/providers/database_provider.dart';
 import '../../core/providers/services_providers.dart';
-import '../../core/sync/sync_engine.dart';
 import '../../core/utils/validators.dart';
 import '../../shared/widgets/feedback.dart';
 import '../../shared/widgets/form_fields.dart';

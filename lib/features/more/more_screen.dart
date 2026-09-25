@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/modules/module_registry.dart';
-import '../../core/providers/services_providers.dart';
 import '../../core/theme/msn_theme.dart';
 import '../../shared/widgets/empty_state.dart';
 
@@ -80,12 +79,12 @@ class MoreScreen extends ConsumerWidget {
                       color: MsnColors.surface,
                       child: ListTile(
                         leading: Icon(e.$3,
-                            color: MsnColors.textSecondary.withOpacity(0.5)),
+                            color: MsnColors.textSecondary.withValues(alpha: 0.5)),
                         title: Text(e.$2,
                             style: TextStyle(
                                 fontSize: 14,
                                 color: MsnColors.textSecondary
-                                    .withOpacity(0.8))),
+                                    .withValues(alpha: 0.8))),
                         subtitle: const Text(
                             'Module désactivé — réactivez-le dans '
                             'Administration > Modules.',

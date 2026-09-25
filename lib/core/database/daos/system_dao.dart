@@ -5,10 +5,21 @@ library;
 import 'package:drift/drift.dart';
 
 import '../app_database.dart';
-import '../tables.dart';
+import '../../domain/enums.dart';
 
 class SystemDao extends DatabaseAccessor<AppDatabase> {
   SystemDao(super.db);
+
+  // Tables exposées via la base attachée (voir docs/01-architecture.md)
+  $UsersTable get users => attachedDatabase.users;
+  $RemindersTable get reminders => attachedDatabase.reminders;
+  $TasksTable get tasks => attachedDatabase.tasks;
+  $ActivityLogTable get activityLog => attachedDatabase.activityLog;
+  $SettingsTable get settings => attachedDatabase.settings;
+  $ModuleFlagsTable get moduleFlags => attachedDatabase.moduleFlags;
+  $SyncQueueTable get syncQueue => attachedDatabase.syncQueue;
+  $SyncConflictsTable get syncConflicts => attachedDatabase.syncConflicts;
+
 
   // ── Paramètres ────────────────────────────────────────────────────────────
 
@@ -25,9 +36,10 @@ class SystemDao extends DatabaseAccessor<AppDatabase> {
 
   // ── Journal d'activité ────────────────────────────────────────────────────
 
-  Future<void> insertActivity(ActivityLog row) => into(activityLog).insert(row);
+  Future<void> insertActivity(ActivityLogData row) =>
+      into(activityLog).insert(row);
 
-  Stream<List<ActivityLog>> watchRecentActivity({int limit = 50}) =>
+  Stream<List<ActivityLogData>> watchRecentActivity({int limit = 50}) =>
       (select(activityLog)
             ..orderBy([(a) => OrderingTerm.desc(a.timestamp)])
             ..limit(limit))
@@ -35,15 +47,15 @@ class SystemDao extends DatabaseAccessor<AppDatabase> {
 
   // ── File de synchronisation ───────────────────────────────────────────────
 
-  Future<void> enqueue(SyncQueue row) => into(syncQueue).insert(row);
+  Future<void> enqueue(SyncQueueData row) => into(syncQueue).insert(row);
 
-  Stream<List<SyncQueue>> watchQueue({int limit = 100}) =>
+  Stream<List<SyncQueueData>> watchQueue({int limit = 100}) =>
       (select(syncQueue)
             ..orderBy([(q) => OrderingTerm.desc(q.createdAt)])
             ..limit(limit))
           .watch();
 
-  Future<List<SyncQueue>> pending({int limit = 50}) =>
+  Future<List<SyncQueueData>> pending({int limit = 50}) =>
       (select(syncQueue)
             ..where((q) => q.statut.isIn(
                 [SyncQueueStatut.enAttente.name, SyncQueueStatut.erreur.name]))

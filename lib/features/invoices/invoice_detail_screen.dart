@@ -3,6 +3,7 @@
 library;
 
 import 'dart:io';
+import '../../core/database/app_database.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,7 +17,6 @@ import '../../core/services/backup_service.dart';
 import '../../core/theme/msn_theme.dart';
 import '../../core/utils/formatters.dart';
 import '../../shared/widgets/badges.dart';
-import '../../shared/widgets/empty_state.dart';
 import '../../shared/widgets/feedback.dart';
 import '../payments/payments_providers.dart';
 import 'invoices_providers.dart';

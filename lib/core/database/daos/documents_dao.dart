@@ -8,7 +8,7 @@ library;
 import 'package:drift/drift.dart';
 
 import '../app_database.dart';
-import '../tables.dart';
+import '../../domain/enums.dart';
 
 class QuoteWithClient {
   const QuoteWithClient(this.quote, this.client);
@@ -30,6 +30,12 @@ class InvoiceWithClient {
 
 class DocumentsDao extends DatabaseAccessor<AppDatabase> {
   DocumentsDao(super.db);
+
+  // Tables exposées via la base attachée (voir docs/01-architecture.md)
+  $ClientsTable get clients => attachedDatabase.clients;
+  $QuotesTable get quotes => attachedDatabase.quotes;
+  $InvoicesTable get invoices => attachedDatabase.invoices;
+
 
   // ── Devis ─────────────────────────────────────────────────────────────────
 
@@ -63,21 +69,21 @@ class DocumentsDao extends DatabaseAccessor<AppDatabase> {
       (select(quotes)..where((q) => q.id.equals(id))).getSingleOrNull();
 
   Future<List<QuoteItem>> quoteItems(String quoteId) =>
-      (select(quoteItems)..where((i) => i.quoteId.equals(quoteId)))
+      (select(attachedDatabase.quoteItems)..where((i) => i.quoteId.equals(quoteId)))
           .get()
           .then((list) => [...list]..sort((a, b) => a.ordre.compareTo(b.ordre)));
 
   Stream<List<QuoteItem>> watchQuoteItems(String quoteId) =>
-      (select(quoteItems)..where((i) => i.quoteId.equals(quoteId))
+      (select(attachedDatabase.quoteItems)..where((i) => i.quoteId.equals(quoteId))
             ..orderBy([(i) => OrderingTerm.asc(i.ordre)]))
           .watch();
 
   Future<void> upsertQuoteWithItems(Quote quote, List<QuoteItem> items) {
     return transaction(() async {
       await into(quotes).insertOnConflictUpdate(quote);
-      await (delete(quoteItems)..where((i) => i.quoteId.equals(quote.id))).go();
+      await (delete(attachedDatabase.quoteItems)..where((i) => i.quoteId.equals(quote.id))).go();
       for (final item in items) {
-        await into(quoteItems).insert(item);
+        await into(attachedDatabase.quoteItems).insert(item);
       }
     });
   }
@@ -131,17 +137,17 @@ class DocumentsDao extends DatabaseAccessor<AppDatabase> {
       (select(invoices)..where((i) => i.id.equals(id))).getSingleOrNull();
 
   Future<List<InvoiceItem>> invoiceItems(String invoiceId) =>
-      (select(invoiceItems)..where((i) => i.invoiceId.equals(invoiceId)))
+      (select(attachedDatabase.invoiceItems)..where((i) => i.invoiceId.equals(invoiceId)))
           .get()
           .then((list) => [...list]..sort((a, b) => a.ordre.compareTo(b.ordre)));
 
   Future<void> upsertInvoiceWithItems(Invoice invoice, List<InvoiceItem> items) {
     return transaction(() async {
       await into(invoices).insertOnConflictUpdate(invoice);
-      await (delete(invoiceItems)..where((i) => i.invoiceId.equals(invoice.id)))
+      await (delete(attachedDatabase.invoiceItems)..where((i) => i.invoiceId.equals(invoice.id)))
           .go();
       for (final item in items) {
-        await into(invoiceItems).insert(item);
+        await into(attachedDatabase.invoiceItems).insert(item);
       }
     });
   }

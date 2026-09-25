@@ -1,10 +1,11 @@
 /// Tests de la checklist TRANSFERT PC (section 20) : les 9 vérifications.
+library;
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:msn_manager_mobile/core/domain/transfer_checklist.dart';
 
 void main() {
-  final complet = const TransferContext(
+  const complet = TransferContext(
     clientIdentifie: true,
     serviceDefini: true,
     briefTermine: true,

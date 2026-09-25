@@ -6,10 +6,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/domain/enums.dart';
 import '../../core/providers/database_provider.dart';
+import '../../core/database/app_database.dart';
 import '../../core/theme/msn_theme.dart';
 import '../../core/utils/formatters.dart';
 
-final journalProvider = StreamProvider<List<ActivityLog>>((ref) {
+final journalProvider = StreamProvider<List<ActivityLogData>>((ref) {
   return ref.watch(systemDaoProvider).watchRecentActivity(limit: 200);
 });
 

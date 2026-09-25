@@ -15,7 +15,6 @@ import '../../core/database/app_database.dart';
 import '../../core/domain/enums.dart';
 import '../../core/providers/database_provider.dart';
 import '../../core/providers/services_providers.dart';
-import '../../core/sync/sync_engine.dart';
 import '../../shared/widgets/empty_state.dart';
 import '../../shared/widgets/feedback.dart';
 import '../../shared/widgets/form_fields.dart';
@@ -59,7 +58,7 @@ class _QualificationScreenState extends ConsumerState<QualificationScreen> {
             return const Center(child: Text('Demande introuvable'));
           }
           if (serviceId == null) {
-            return EmptyState(
+            return const EmptyState(
               icon: Icons.help_outline,
               title: 'Aucun service associé',
               message:
@@ -74,7 +73,7 @@ class _QualificationScreenState extends ConsumerState<QualificationScreen> {
             error: (e, _) => Center(child: Text('$e')),
             data: (form) {
               if (form == null) {
-                return EmptyState(
+                return const EmptyState(
                   icon: Icons.fact_check_outlined,
                   title: 'Pas de formulaire pour ce service',
                   message:

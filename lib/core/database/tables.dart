@@ -10,7 +10,6 @@ library;
 
 import 'package:drift/drift.dart';
 
-import '../domain/enums.dart';
 import 'converters.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────

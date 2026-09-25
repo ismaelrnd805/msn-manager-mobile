@@ -71,7 +71,7 @@ class PdfService {
         build: (ctx) => [
           pw.SizedBox(height: 12),
           pw.Text(s.nom,
-              style: pw.TextStyle(
+              style: const pw.TextStyle(
                   fontSize: 24,
                   fontWeight: pw.FontWeight.bold,
                   color: MsnPdfTheme.textDark)),
@@ -104,7 +104,7 @@ class PdfService {
               crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
                 pw.Text('Intéressé(e) par ce service ?',
-                    style: pw.TextStyle(
+                    style: const pw.TextStyle(
                         color: PdfColors.white,
                         fontSize: 13,
                         fontWeight: pw.FontWeight.bold)),
@@ -155,7 +155,7 @@ class PdfService {
           pw.SizedBox(height: 14),
           for (final entry in grouped.entries) ...[
             pw.Text(entry.key,
-                style: pw.TextStyle(
+                style: const pw.TextStyle(
                     fontSize: 15,
                     fontWeight: pw.FontWeight.bold,
                     color: MsnPdfTheme.primary)),
@@ -163,7 +163,7 @@ class PdfService {
             pw.TableHelper.fromTextArray(
               border: pw.TableBorder.all(
                   color: PdfColors.grey300, width: 0.5),
-              headerStyle: pw.TextStyle(
+              headerStyle: const pw.TextStyle(
                   fontWeight: pw.FontWeight.bold,
                   color: PdfColors.white,
                   fontSize: 9),
@@ -251,7 +251,7 @@ class PdfService {
           pw.SizedBox(height: 18),
           pw.TableHelper.fromTextArray(
             border: pw.TableBorder.all(color: PdfColors.grey300, width: 0.5),
-            headerStyle: pw.TextStyle(
+            headerStyle: const pw.TextStyle(
                 fontWeight: pw.FontWeight.bold,
                 color: PdfColors.white,
                 fontSize: 9),
@@ -356,7 +356,7 @@ class PdfService {
           pw.SizedBox(height: 18),
           pw.TableHelper.fromTextArray(
             border: pw.TableBorder.all(color: PdfColors.grey300, width: 0.5),
-            headerStyle: pw.TextStyle(
+            headerStyle: const pw.TextStyle(
                 fontWeight: pw.FontWeight.bold,
                 color: PdfColors.white,
                 fontSize: 9),
@@ -394,14 +394,14 @@ class PdfService {
           if (paiements.isNotEmpty) ...[
             pw.SizedBox(height: 14),
             pw.Text('Historique des paiements',
-                style: pw.TextStyle(
+                style: const pw.TextStyle(
                     fontSize: 11,
                     fontWeight: pw.FontWeight.bold,
                     color: MsnPdfTheme.primaryDark)),
             pw.SizedBox(height: 6),
             pw.TableHelper.fromTextArray(
               border: pw.TableBorder.all(color: PdfColors.grey300, width: 0.5),
-              headerStyle: pw.TextStyle(
+              headerStyle: const pw.TextStyle(
                   fontWeight: pw.FontWeight.bold,
                   color: PdfColors.white,
                   fontSize: 8),

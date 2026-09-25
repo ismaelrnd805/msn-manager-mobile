@@ -11,6 +11,7 @@ import '../../core/database/app_database.dart';
 import '../../core/domain/enums.dart';
 import '../../core/providers/database_provider.dart';
 import '../../core/providers/services_providers.dart';
+import '../../core/theme/msn_theme.dart';
 import '../../shared/widgets/feedback.dart';
 
 class AdminQualificationScreen extends ConsumerStatefulWidget {
@@ -39,7 +40,7 @@ class _AdminQualificationScreenState
             Padding(
               padding: const EdgeInsets.all(12),
               child: DropdownButtonFormField<String>(
-                value: _serviceId,
+                initialValue: _serviceId,
                 isExpanded: true,
                 decoration:
                     const InputDecoration(labelText: 'Service à configurer'),
@@ -207,7 +208,7 @@ class _QuestionsEditor extends ConsumerWidget {
                       const InputDecoration(labelText: 'Question *'),
                 ),
                 DropdownButtonFormField<QuestionType>(
-                  value: type,
+                  initialValue: type,
                   decoration:
                       const InputDecoration(labelText: 'Type de réponse'),
                   items: QuestionType.values

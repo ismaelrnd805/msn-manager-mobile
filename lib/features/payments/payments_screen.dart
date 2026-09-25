@@ -25,7 +25,7 @@ class PaymentsScreen extends ConsumerWidget {
             child: Text('Erreur : $e',
                 style: const TextStyle(color: MsnColors.danger))),
         data: (list) => list.isEmpty
-            ? EmptyState(
+            ? const EmptyState(
                 icon: Icons.payments_outlined,
                 title: 'Aucun paiement',
                 message:

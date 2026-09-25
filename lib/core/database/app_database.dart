@@ -13,6 +13,8 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 import 'tables.dart';
+import 'converters.dart';
+import '../domain/enums.dart';
 
 part 'app_database.g.dart';
 

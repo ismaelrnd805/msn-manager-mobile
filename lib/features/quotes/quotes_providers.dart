@@ -1,14 +1,12 @@
 /// Providers devis — liste, détail, lignes, conversion en commande.
 library;
 
-import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/database/app_database.dart';
 import '../../core/domain/enums.dart';
 import '../../core/providers/database_provider.dart';
 import '../../core/providers/services_providers.dart';
-import '../../core/sync/sync_engine.dart';
 import '../../core/workflow_bootstrap.dart';
 
 final quotesFilterProvider = StateProvider<String?>((ref) => null);
@@ -78,6 +76,9 @@ Future<String> convertQuoteToOrder(WidgetRef ref, String quoteId,
     montantTotal: quote.montantTotal,
     acompteRequis: quote.acompte,
     conditionsAcceptees: true,
+    briefComplet: false,
+    pretPourProduction: false,
+    transferePc: false,
     notes: notes,
     createdAt: now,
     updatedAt: now,
@@ -123,7 +124,7 @@ Future<String> convertQuoteToOrder(WidgetRef ref, String quoteId,
         entite: 'commande',
         entityId: orderId,
         details: 'Commande $reference créée depuis le devis '
-            '${quote.reference} (${titre}).',
+            '${quote.reference} ($titre).',
       );
   return orderId;
 }

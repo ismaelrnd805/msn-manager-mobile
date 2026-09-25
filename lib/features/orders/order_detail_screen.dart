@@ -9,14 +9,13 @@
 library;
 
 import 'dart:convert';
+import '../../shared/widgets/badges.dart';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/auth/session.dart';
-import '../../core/constants/app_constants.dart';
 import '../../core/database/app_database.dart';
 import '../../core/domain/business_rules.dart';
 import '../../core/domain/enums.dart';
@@ -27,7 +26,6 @@ import '../../core/providers/services_providers.dart';
 import '../../core/theme/msn_theme.dart';
 import '../../core/utils/formatters.dart';
 import '../../shared/widgets/feedback.dart';
-import '../catalog/catalog_providers.dart';
 import '../communication/communication_providers.dart';
 import 'orders_providers.dart';
 
@@ -102,7 +100,7 @@ class OrderDetailScreen extends ConsumerWidget {
               // ── Où suis-je ? ──────────────────────────────────────────
               if (instance != null && states.isNotEmpty) ...[
                 Card(
-                  color: MsnColors.primary.withOpacity(0.05),
+                  color: MsnColors.primary.withValues(alpha: 0.05),
                   child: Padding(
                     padding: const EdgeInsets.all(14),
                     child: Column(
@@ -172,7 +170,7 @@ class OrderDetailScreen extends ConsumerWidget {
                       'service dans le catalogue.',
                       style: TextStyle(
                           fontSize: 12.5,
-                          color: MsnColors.textSecondary.withOpacity(1)),
+                          color: MsnColors.textSecondary.withValues(alpha: 1)),
                     ),
                   ),
                 ),
@@ -244,11 +242,6 @@ class OrderDetailScreen extends ConsumerWidget {
     required bool isCurrent,
   }) {
     final done = step.statut == 'terminee';
-    final color = done
-        ? MsnColors.success
-        : isCurrent
-            ? MsnColors.primary
-            : MsnColors.textSecondary.withOpacity(0.5);
     return InkWell(
       onTap: isCurrent ? () => _confirmCompleteStep(context, ref, order, instance, states) : null,
       child: Padding(
@@ -266,7 +259,7 @@ class OrderDetailScreen extends ConsumerWidget {
                   ? MsnColors.success
                   : isCurrent
                       ? MsnColors.primary
-                      : MsnColors.textSecondary.withOpacity(0.6),
+                      : MsnColors.textSecondary.withValues(alpha: 0.6),
             ),
             const SizedBox(width: 8),
             Expanded(

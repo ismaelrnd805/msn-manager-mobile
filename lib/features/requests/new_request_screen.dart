@@ -14,13 +14,11 @@ import '../../core/database/app_database.dart';
 import '../../core/domain/enums.dart';
 import '../../core/providers/database_provider.dart';
 import '../../core/providers/services_providers.dart';
-import '../../core/sync/sync_engine.dart';
 import '../../core/theme/msn_theme.dart';
 import '../../core/utils/validators.dart';
 import '../../shared/widgets/feedback.dart';
 import '../../shared/widgets/form_fields.dart';
 import '../catalog/catalog_providers.dart';
-import '../clients/clients_providers.dart';
 
 class NewRequestScreen extends ConsumerStatefulWidget {
   const NewRequestScreen({super.key, this.initialClientId});
@@ -203,7 +201,7 @@ class _NewRequestScreenState extends ConsumerState<NewRequestScreen> {
               child: ListTile(
                 leading: const Icon(Icons.person_outline),
                 title: Text(_client?.nom ?? 'Sélectionner un client'),
-                subtitle: _client?.telephone,
+                subtitle: _client?.telephone == null ? null : Text(_client!.telephone ?? ''),
                 trailing: TextButton(
                   onPressed: _createClientInline,
                   child: const Text('+ Créer'),
@@ -280,7 +278,7 @@ class _NewRequestScreenState extends ConsumerState<NewRequestScreen> {
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 11,
-                  color: MsnColors.textSecondary.withOpacity(0.9)),
+                  color: MsnColors.textSecondary.withValues(alpha: 0.9)),
             ),
           ],
         ),

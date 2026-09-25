@@ -6,6 +6,8 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../providers/services_providers.dart';
+import '../../features/communication/communication_providers.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/auth/login_screen.dart';
@@ -20,7 +22,6 @@ import '../../features/communication/templates_screen.dart';
 import '../../features/dashboard/dashboard_screen.dart';
 import '../../features/documents/documents_screen.dart';
 import '../../features/invoices/invoice_detail_screen.dart';
-import '../../features/invoices/invoice_new_screen.dart';
 import '../../features/invoices/invoices_screen.dart';
 import '../../features/more/more_screen.dart';
 import '../../features/orders/order_detail_screen.dart';
@@ -45,7 +46,6 @@ import '../../features/shell/app_shell.dart';
 import '../../features/splash/splash_screen.dart';
 import '../../features/sync/sync_screen.dart';
 import '../../features/tasks/tasks_screen.dart';
-import '../auth/session.dart';
 
 /// Passe les changements de session au routeur (re-evaluation du redirect).
 class _SessionListenable extends ChangeNotifier {

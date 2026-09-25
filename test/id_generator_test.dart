@@ -1,4 +1,5 @@
 /// Tests de la numérotation : REQ-2026-0001, CMD-2026-0042…
+library;
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:msn_manager_mobile/core/utils/id_generator.dart';

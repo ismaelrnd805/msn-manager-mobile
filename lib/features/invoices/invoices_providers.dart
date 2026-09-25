@@ -1,15 +1,14 @@
 /// Providers factures — liste, détail, création depuis commande/devis.
 library;
 
-import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/database/app_database.dart';
+import '../../core/utils/formatters.dart';
 import '../../core/domain/enums.dart';
 import '../../core/domain/quote_calculator.dart';
 import '../../core/providers/database_provider.dart';
 import '../../core/providers/services_providers.dart';
-import '../../core/sync/sync_engine.dart';
 
 final invoicesFilterProvider = StateProvider<String?>((ref) => null);
 final invoicesSearchProvider = StateProvider<String>((ref) => '');
@@ -108,6 +107,7 @@ Future<String> createInvoiceFromOrder(
     quoteId: order.quoteId,
     statut: InvoiceStatut.brouillon,
     montantTotal: totals.total,
+    reduction: totals.reduction,
     dateEmission: now,
     dateEcheance: now.add(const Duration(days: 15)),
     createdAt: now,

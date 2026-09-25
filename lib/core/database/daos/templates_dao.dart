@@ -4,10 +4,18 @@ library;
 import 'package:drift/drift.dart';
 
 import '../app_database.dart';
-import '../tables.dart';
+import '../../domain/enums.dart';
 
 class TemplatesDao extends DatabaseAccessor<AppDatabase> {
   TemplatesDao(super.db);
+
+  // Tables exposées via la base attachée (voir docs/01-architecture.md)
+  $QualificationFormsTable get qualificationForms => attachedDatabase.qualificationForms;
+  $QualificationQuestionsTable get qualificationQuestions => attachedDatabase.qualificationQuestions;
+  $BusinessRulesTable get businessRules => attachedDatabase.businessRules;
+  $RuleExceptionsTable get ruleExceptions => attachedDatabase.ruleExceptions;
+  $MessageTemplatesTable get messageTemplates => attachedDatabase.messageTemplates;
+
 
   // ── Modèles de messages ───────────────────────────────────────────────────
 
@@ -16,7 +24,7 @@ class TemplatesDao extends DatabaseAccessor<AppDatabase> {
   }) {
     return (select(messageTemplates)
           ..where((t) => t.actif.equals(true))
-          ..where(categorie == null
+          ..where((t) => categorie == null
               ? const CustomExpression<bool>('1 = 1')
               : t.categorie.equals(categorie.name))
           ..orderBy([(t) => OrderingTerm.asc(t.ordre)]))

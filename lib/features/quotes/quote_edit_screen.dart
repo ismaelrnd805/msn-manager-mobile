@@ -2,7 +2,6 @@
 /// catalogue, calcul automatique des totaux (section 15).
 library;
 
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -12,15 +11,12 @@ import '../../core/domain/quote_calculator.dart';
 import '../../core/domain/enums.dart';
 import '../../core/providers/database_provider.dart';
 import '../../core/providers/services_providers.dart';
-import '../../core/sync/sync_engine.dart';
 import '../../core/theme/msn_theme.dart';
 import '../../core/utils/formatters.dart';
 import '../../core/utils/validators.dart';
 import '../../shared/widgets/feedback.dart';
 import '../../shared/widgets/form_fields.dart';
-import '../catalog/catalog_providers.dart';
-import '../clients/clients_providers.dart';
-import 'quotes_providers.dart';
+import '../../core/database/daos/catalog_dao.dart';
 
 class _LineDraft {
   final TextEditingController designation;
@@ -146,7 +142,7 @@ class _QuoteEditScreenState extends ConsumerState<QuoteEditScreen> {
     final services =
         await ref.read(catalogDaoProvider).watchServices(onlyActive: true).first;
     if (!mounted) return;
-    final picked = await showMsnPicker<ServiceWithCategoryRow>(
+    final picked = await showMsnPicker<ServiceWithCategory>(
       context: context,
       title: 'Ajouter un service du catalogue',
       items: services,
@@ -274,7 +270,7 @@ class _QuoteEditScreenState extends ConsumerState<QuoteEditScreen> {
             child: ListTile(
               leading: const Icon(Icons.person_outline),
               title: Text(_client?.nom ?? 'Choisir le client'),
-              subtitle: _client?.telephone,
+              subtitle: _client?.telephone == null ? null : Text(_client!.telephone ?? ''),
               onTap: _pickClient,
             ),
           ),

@@ -225,4 +225,3 @@ CLIENT → DEMANDE → QUALIFICATION → COMMUNICATION → SERVICE → TARIF
 Chaque brique est conçue pour évoluer (MSN Manager Desktop, Messenger,
 WhatsApp Business, email, paiements en ligne, IA, statistiques) **sans rien
 refaire** — voir [docs/12-feuille-de-route.md](docs/12-feuille-de-route.md).
-"# msn-manager-mobile" 

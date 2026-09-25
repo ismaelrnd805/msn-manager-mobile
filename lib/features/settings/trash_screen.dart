@@ -3,15 +3,13 @@
 /// définitive sans confirmation et permission).
 library;
 
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/auth/session.dart';
 import '../../core/domain/enums.dart';
 import '../../core/providers/database_provider.dart';
+import '../../core/database/app_database.dart';
 import '../../core/providers/services_providers.dart';
-import '../../core/sync/sync_engine.dart';
 import '../../core/theme/msn_theme.dart';
 import '../../shared/widgets/empty_state.dart';
 import '../../shared/widgets/feedback.dart';

@@ -10,8 +10,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../database/daos/system_dao.dart';
 import '../domain/enums.dart';
+import '../providers/database_provider.dart';
+import '../providers/services_providers.dart';
 import '../services/connectivity_service.dart';
-import '../services/reminder_service.dart';
 import 'sync_engine.dart';
 
 /// État de synchronisation observable par l'UI.
@@ -66,7 +67,7 @@ class SyncController extends Notifier<SyncState> {
       final status = await _engine.currentStatus();
       final pending = (await _system.pending(limit: 500)).length;
       state = state.copyWith(status: status, pendingCount: pending);
-      await flushDueReminders(ref);
+      await ref.read(reminderServiceProvider).flushDue();
     } catch (e) {
       debugPrint('SyncController bootstrap: $e');
     }

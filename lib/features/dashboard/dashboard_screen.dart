@@ -38,7 +38,7 @@ class DashboardScreen extends ConsumerWidget {
             Text('MSN — Multi-Services Numériques',
                 style: TextStyle(
                     fontSize: 11,
-                    color: Colors.white.withOpacity(0.75))),
+                    color: Colors.white.withValues(alpha: 0.75))),
           ],
         ),
         actions: [

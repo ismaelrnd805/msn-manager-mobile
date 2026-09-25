@@ -8,8 +8,6 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../auth/session.dart';
-import '../database/app_database.dart';
-import '../database/daos/system_dao.dart';
 import '../services/activity_logger.dart';
 import '../services/backup_service.dart';
 import '../services/connectivity_service.dart';
@@ -21,7 +19,6 @@ import '../services/reminder_service.dart';
 import '../services/share_service.dart';
 import '../sync/api_client.dart';
 import '../sync/sync_engine.dart';
-import '../sync/sync_provider.dart';
 import 'database_provider.dart';
 
 // ── Services ────────────────────────────────────────────────────────────────
@@ -87,5 +84,3 @@ final sessionProvider =
 // connectivity_plus : une instance par service, suffisante pour l'app.
 Connectivity _connectivityInstance() => Connectivity();
 
-// Ré-export pour éviter des imports dispersés d'AppDatabase dans l'UI.
-export '../database/app_database.dart' show AppDatabase;

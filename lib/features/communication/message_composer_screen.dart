@@ -7,7 +7,6 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../core/database/app_database.dart';
 import '../../core/domain/enums.dart';
@@ -91,7 +90,7 @@ class _MessageComposerScreenState extends ConsumerState<MessageComposerScreen> {
               children: [
                 // ── Sélecteur de modèle ────────────────────────────────
                 DropdownButtonFormField<MessageTemplate>(
-                  value: _selected,
+                  initialValue: _selected,
                   isExpanded: true,
                   decoration:
                       const InputDecoration(labelText: 'Modèle de message'),

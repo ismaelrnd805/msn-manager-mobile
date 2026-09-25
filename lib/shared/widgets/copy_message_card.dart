@@ -32,7 +32,7 @@ class CopyMessageCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: MsnColors.accentSoft,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: MsnColors.accent.withOpacity(0.5)),
+        border: Border.all(color: MsnColors.accent.withValues(alpha: 0.5)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,7 +57,7 @@ class CopyMessageCard extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                   decoration: BoxDecoration(
-                    color: MsnColors.accent.withOpacity(0.2),
+                    color: MsnColors.accent.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(

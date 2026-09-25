@@ -16,7 +16,7 @@ import '../../core/utils/formatters.dart';
 import '../../shared/widgets/badges.dart';
 import '../../shared/widgets/feedback.dart';
 
-final syncQueueProvider = StreamProvider<List<SyncQueue>>((ref) {
+final syncQueueProvider = StreamProvider<List<SyncQueueData>>((ref) {
   return ref.watch(systemDaoProvider).watchQueue();
 });
 

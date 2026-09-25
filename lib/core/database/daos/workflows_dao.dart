@@ -8,10 +8,16 @@ library;
 import 'package:drift/drift.dart';
 
 import '../app_database.dart';
-import '../tables.dart';
 
 class WorkflowsDao extends DatabaseAccessor<AppDatabase> {
   WorkflowsDao(super.db);
+
+  // Tables exposées via la base attachée (voir docs/01-architecture.md)
+  $WorkflowTemplatesTable get workflowTemplates => attachedDatabase.workflowTemplates;
+  $WorkflowStepsTable get workflowSteps => attachedDatabase.workflowSteps;
+  $WorkflowInstancesTable get workflowInstances => attachedDatabase.workflowInstances;
+  $WorkflowStepStatesTable get workflowStepStates => attachedDatabase.workflowStepStates;
+
 
   // ── Modèles ───────────────────────────────────────────────────────────────
 

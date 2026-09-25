@@ -22,7 +22,7 @@ class ActivityLogger {
     required String details,
     String? userName,
   }) {
-    final entry = ActivityLog(
+    final entry = ActivityLogData(
       id: DateTime.now().microsecondsSinceEpoch.toString() +
           entite.hashCode.toString(),
       timestamp: DateTime.now(),

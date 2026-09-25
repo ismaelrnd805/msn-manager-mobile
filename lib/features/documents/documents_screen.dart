@@ -12,7 +12,6 @@ import '../../core/services/backup_service.dart';
 import '../../core/theme/msn_theme.dart';
 import '../../core/utils/formatters.dart';
 import '../../shared/widgets/empty_state.dart';
-import '../../shared/widgets/feedback.dart';
 
 /// Écran simple et honnête : liste des fichiers du dossier documents
 /// de l'application, avec partage. Les nouveaux documents générés

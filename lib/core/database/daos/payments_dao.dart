@@ -4,7 +4,6 @@ library;
 import 'package:drift/drift.dart';
 
 import '../app_database.dart';
-import '../tables.dart';
 
 class PaymentWithInfo {
   const PaymentWithInfo(this.payment, this.client, this.invoice);
@@ -20,10 +19,16 @@ class PaymentWithInfo {
 class PaymentsDao extends DatabaseAccessor<AppDatabase> {
   PaymentsDao(super.db);
 
+  // Tables exposées via la base attachée (voir docs/01-architecture.md)
+  $ClientsTable get clients => attachedDatabase.clients;
+  $InvoicesTable get invoices => attachedDatabase.invoices;
+  $PaymentsTable get payments => attachedDatabase.payments;
+
+
   Stream<List<PaymentWithInfo>> watchAll({String? invoiceId}) {
     return (select(payments).join([
-      leftJoin(clients, clients.id.equalsExp(payments.clientId)),
-      leftJoin(invoices, invoices.id.equalsExp(payments.invoiceId)),
+      leftOuterJoin(clients, clients.id.equalsExp(payments.clientId)),
+      leftOuterJoin(invoices, invoices.id.equalsExp(payments.invoiceId)),
     ])
           ..where(invoiceId == null
               ? const CustomExpression<bool>('1 = 1')

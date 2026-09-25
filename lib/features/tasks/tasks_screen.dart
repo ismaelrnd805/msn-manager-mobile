@@ -15,7 +15,6 @@ import '../../core/theme/msn_theme.dart';
 import '../../core/utils/formatters.dart';
 import '../../shared/widgets/badges.dart';
 import '../../shared/widgets/empty_state.dart';
-import '../../shared/widgets/feedback.dart';
 import '../../shared/widgets/form_fields.dart';
 
 final remindersProvider = StreamProvider<List<Reminder>>((ref) {
@@ -190,7 +189,6 @@ class TasksScreen extends ConsumerWidget {
 
   Future<void> _addTask(BuildContext context, WidgetRef ref) async {
     final titre = TextEditingController();
-    final echeance = TextEditingController();
     DateTime? deadline;
     final picked = await showDialog<bool>(
       context: context,

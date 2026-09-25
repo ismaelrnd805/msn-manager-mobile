@@ -11,7 +11,7 @@ import 'providers/database_provider.dart';
 import 'providers/services_providers.dart';
 
 /// Instancie le workflow et les rappels pour une commande donnée.
-Future<void> bootstrapWorkflowForOrder(Ref ref, Order order) async {
+Future<void> bootstrapWorkflowForOrder(WidgetRef ref, Order order) async {
   final workflows = ref.read(workflowsDaoProvider);
   final template = await workflows.templateForService(order.serviceId);
   if (template == null) {
@@ -43,6 +43,8 @@ Future<void> bootstrapWorkflowForOrder(Ref ref, Order order) async {
       dateRappel: reminderDate.isBefore(DateTime.now())
           ? DateTime.now().add(const Duration(hours: 1))
           : reminderDate,
+      termine: false,
+      notifie: false,
       createdAt: DateTime.now(),
     );
     await system.upsertReminder(reminder);

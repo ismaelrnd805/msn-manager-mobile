@@ -9,7 +9,6 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../core/constants/app_constants.dart';
 import '../../core/providers/services_providers.dart';
-import '../../core/sync/sync_provider.dart';
 import '../../core/theme/msn_theme.dart';
 import '../../shared/widgets/feedback.dart';
 
@@ -41,7 +40,7 @@ class SettingsScreen extends ConsumerWidget {
           Card(
             child: ListTile(
               leading: CircleAvatar(
-                backgroundColor: MsnColors.primary.withOpacity(0.12),
+                backgroundColor: MsnColors.primary.withValues(alpha: 0.12),
                 child: Text(
                   (session?.userName.isNotEmpty ?? false)
                       ? session!.userName[0].toUpperCase()
@@ -111,25 +110,25 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 12),
 
           // ── À propos ─────────────────────────────────────────────────
-          Card(
+          const Card(
             child: Padding(
-              padding: const EdgeInsets.all(14),
+              padding: EdgeInsets.all(14),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('À PROPOS',
+                  Text('À PROPOS',
                       style: TextStyle(
                           fontSize: 11.5,
                           fontWeight: FontWeight.w800,
                           color: MsnColors.textSecondary)),
-                  const SizedBox(height: 8),
-                  const Text('MSN Manager Mobile',
+                  SizedBox(height: 8),
+                  Text('MSN Manager Mobile',
                       style: TextStyle(fontWeight: FontWeight.w700)),
                   Text(
                       'Version ${AppConstants.appVersion} · '
                       'Schéma base v${AppConstants.databaseSchemaVersion}',
-                      style: const TextStyle(fontSize: 12)),
-                  const Text(
+                      style: TextStyle(fontSize: 12)),
+                  Text(
                       'Offline-first : fonctionne intégralement sans '
                       'connexion. Synchronisation vers le serveur MSN '
                       'quand elle est configurée.',

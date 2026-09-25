@@ -4,7 +4,6 @@ library;
 import 'package:drift/drift.dart';
 
 import '../app_database.dart';
-import '../tables.dart';
 
 class ServiceWithCategory {
   const ServiceWithCategory(this.service, this.category);
@@ -17,6 +16,11 @@ class ServiceWithCategory {
 
 class CatalogDao extends DatabaseAccessor<AppDatabase> {
   CatalogDao(super.db);
+
+  // Tables exposées via la base attachée (voir docs/01-architecture.md)
+  $CategoriesTable get categories => attachedDatabase.categories;
+  $ServicesTable get services => attachedDatabase.services;
+
 
   // ── Catégories ────────────────────────────────────────────────────────────
 
@@ -36,7 +40,7 @@ class CatalogDao extends DatabaseAccessor<AppDatabase> {
   JoinedSelectStatement _serviceQuery({bool onlyActive = false, String query = ''}) {
     final q = query.trim().toLowerCase();
     return select(services).join([
-      leftJoin(categories, categories.id.equalsExp(services.categoryId)),
+      leftOuterJoin(categories, categories.id.equalsExp(services.categoryId)),
     ])
       ..where(services.deletedAt.isNull())
       ..where(onlyActive ? services.actif.equals(true) : const CustomExpression<bool>('1 = 1'))
@@ -59,7 +63,7 @@ class CatalogDao extends DatabaseAccessor<AppDatabase> {
 
   Future<ServiceWithCategory?> serviceById(String id) async {
     final rows = await (select(services).join([
-      leftJoin(categories, categories.id.equalsExp(services.categoryId)),
+      leftOuterJoin(categories, categories.id.equalsExp(services.categoryId)),
     ])
           ..where(services.id.equals(id)))
         .get();

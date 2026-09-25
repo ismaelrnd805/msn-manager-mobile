@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/auth/session.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/providers/services_providers.dart';
 import '../../core/services/backup_service.dart';
@@ -19,7 +18,6 @@ import '../../core/theme/msn_theme.dart';
 import '../../core/utils/formatters.dart';
 import '../../shared/widgets/copy_message_card.dart';
 import '../../shared/widgets/feedback.dart';
-import '../communication/communication_providers.dart';
 import 'catalog_providers.dart';
 
 class ServiceDetailScreen extends ConsumerWidget {
@@ -303,8 +301,8 @@ class StatusPill extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
         color: muted
-            ? MsnColors.textSecondary.withOpacity(0.12)
-            : MsnColors.accent.withOpacity(0.15),
+            ? MsnColors.textSecondary.withValues(alpha: 0.12)
+            : MsnColors.accent.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Text(text,

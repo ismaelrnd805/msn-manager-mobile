@@ -4,10 +4,13 @@ library;
 import 'package:drift/drift.dart';
 
 import '../app_database.dart';
-import '../tables.dart';
 
 class ClientsDao extends DatabaseAccessor<AppDatabase> {
   ClientsDao(super.db);
+
+  // Tables exposées via la base attachée (voir docs/01-architecture.md)
+  $ClientsTable get clients => attachedDatabase.clients;
+
 
   Stream<List<Client>> watchAll({String query = ''}) {
     final q = query.trim().toLowerCase();

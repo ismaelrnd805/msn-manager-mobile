@@ -7,7 +7,7 @@
 library;
 
 class TransferCheckItem {
-  const TransferCheckItem({required this.label, required this.ok, this.detail});
+  const TransferCheckItem(this.label, this.ok, [this.detail]);
 
   final String label;
   final bool ok;

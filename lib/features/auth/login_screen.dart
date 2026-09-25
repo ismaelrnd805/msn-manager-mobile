@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/database/daos/system_dao.dart';
 import '../../core/providers/database_provider.dart';
 import '../../core/providers/services_providers.dart';
 import '../../core/theme/msn_theme.dart';
@@ -109,7 +108,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   const SizedBox(height: 4),
                   Text('Connexion',
                       style: TextStyle(
-                          color: Colors.white.withOpacity(0.75),
+                          color: Colors.white.withValues(alpha: 0.75),
                           fontSize: 13)),
                   const SizedBox(height: 28),
                   Card(
@@ -130,7 +129,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             )
                           else ...[
                             DropdownButtonFormField<String>(
-                              value: _selectedUserId,
+                              initialValue: _selectedUserId,
                               decoration:
                                   const InputDecoration(labelText: 'Utilisateur'),
                               items: _users
@@ -182,7 +181,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             style: TextStyle(
                                 fontSize: 11,
                                 color: MsnColors.textSecondary
-                                    .withOpacity(0.8)),
+                                    .withValues(alpha: 0.8)),
                           ),
                         ],
                       ),

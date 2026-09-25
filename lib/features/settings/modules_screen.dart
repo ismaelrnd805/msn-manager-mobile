@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/modules/module_registry.dart';
 import '../../core/providers/database_provider.dart';
 import '../../core/providers/services_providers.dart';
+import '../../core/domain/enums.dart';
 import '../../core/theme/msn_theme.dart';
 
 class ModulesScreen extends ConsumerWidget {

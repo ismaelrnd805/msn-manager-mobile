@@ -29,7 +29,7 @@ dependencies:
   path: ^1.9.0
 
   # Utilitaires
-  intl: ^0.20.3          # <-- MODIFIÉ (était ^0.19.0)
+  intl: any # version épinglée par flutter_localizations du SDK
   uuid: ^4.5.1
   crypto: ^3.0.3
   http: ^1.2.2
@@ -61,6 +61,11 @@ dev_dependencies:
   # Génération de code Drift (base de données)
   drift_dev: ^2.20.3
   build_runner: ^2.4.13
+
+# Évite jni/NDK : la version 2.3+ de path_provider_android compile du C.
+dependency_overrides:
+  path_provider_android: 2.2.10
+  flutter_plugin_android_lifecycle: 2.0.24
 
 flutter:
   uses-material-design: true

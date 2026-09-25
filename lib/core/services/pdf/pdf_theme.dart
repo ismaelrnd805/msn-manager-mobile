@@ -49,8 +49,8 @@ class MsnPdfTheme {
   }) {
     return pw.Container(
       padding: const pw.EdgeInsets.only(bottom: 14),
-      decoration: const pw.Border(
-        bottom: pw.BorderSide(color: primary, width: 2),
+      decoration: const pw.BoxDecoration(
+        border: pw.Border(bottom: pw.BorderSide(color: primary, width: 2)),
       ),
       child: pw.Row(
         crossAxisAlignment: pw.CrossAxisAlignment.center,
@@ -73,7 +73,7 @@ class MsnPdfTheme {
               ),
               child: pw.Text(
                 'MSN',
-                style: pw.TextStyle(
+                style: const pw.TextStyle(
                   color: PdfColors.white,
                   fontSize: 14,
                   fontWeight: pw.FontWeight.bold,
@@ -85,13 +85,13 @@ class MsnPdfTheme {
               crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
                 pw.Text(companyName,
-                    style: pw.TextStyle(
+                    style: const pw.TextStyle(
                         fontSize: 12,
                         color: textMuted,
                         fontWeight: pw.FontWeight.bold)),
                 pw.SizedBox(height: 2),
                 pw.Text(title,
-                    style: pw.TextStyle(
+                    style: const pw.TextStyle(
                         fontSize: 20,
                         color: textDark,
                         fontWeight: pw.FontWeight.bold)),
@@ -122,8 +122,9 @@ class MsnPdfTheme {
     return pw.Container(
       margin: const pw.EdgeInsets.only(top: 8),
       padding: const pw.EdgeInsets.only(top: 6),
-      decoration: const pw.Border(
-        top: pw.BorderSide(color: PdfColors.grey300, width: 0.5),
+      decoration: const pw.BoxDecoration(
+        border:
+            pw.Border(top: pw.BorderSide(color: PdfColors.grey300, width: 0.5)),
       ),
       child: pw.Row(
         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
@@ -154,7 +155,7 @@ class MsnPdfTheme {
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
           pw.Text(title,
-              style: pw.TextStyle(
+              style: const pw.TextStyle(
                   fontSize: 10,
                   fontWeight: pw.FontWeight.bold,
                   color: primaryDark)),
@@ -168,7 +169,7 @@ class MsnPdfTheme {
                         style:
                             const pw.TextStyle(fontSize: 9, color: textMuted)),
                     pw.Text(r.$2,
-                        style: pw.TextStyle(
+                        style: const pw.TextStyle(
                             fontSize: 9,
                             fontWeight: pw.FontWeight.bold,
                             color: textDark)),
@@ -190,7 +191,7 @@ class MsnPdfTheme {
       ),
       child: pw.Text(
         text.toUpperCase(),
-        style: pw.TextStyle(
+        style: const pw.TextStyle(
             color: PdfColors.white,
             fontSize: 9,
             fontWeight: pw.FontWeight.bold),

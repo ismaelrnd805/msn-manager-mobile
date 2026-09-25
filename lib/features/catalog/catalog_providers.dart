@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/database/daos/catalog_dao.dart';
 
 import '../../core/database/app_database.dart';
 import '../../core/providers/database_provider.dart';
@@ -10,13 +11,13 @@ final catalogSearchProvider = StateProvider<String>((ref) => '');
 
 /// Liste enrichie (service + catégorie).
 final catalogServicesProvider =
-    StreamProvider<List<ServiceWithCategoryRow>>((ref) {
+    StreamProvider<List<ServiceWithCategory>>((ref) {
   final query = ref.watch(catalogSearchProvider);
   return ref
       .watch(catalogDaoProvider)
       .watchServices(query: query)
       .map((rows) => rows
-          .map((r) => ServiceWithCategoryRow(r.service, r.categoryNom))
+          .map((r) => r)
           .toList());
 });
 
@@ -32,14 +33,12 @@ final catalogCategoriesProvider = StreamProvider<List<Category>>((ref) {
 
 /// Détail d'un service.
 final serviceDetailProvider =
-    StreamProvider.family<ServiceWithCategoryRow?, String>((ref, id) {
+    StreamProvider.family<ServiceWithCategory?, String>((ref, id) {
   final dao = ref.watch(catalogDaoProvider);
   return dao.watchService(id).asyncMap((service) async {
     if (service == null) return null;
     final full = await dao.serviceById(id);
-    return full == null
-        ? null
-        : ServiceWithCategoryRow(full.service, full.categoryNom);
+    return full;
   });
 });
 
@@ -58,9 +57,3 @@ final serviceQualificationFormProvider =
   return dao.formForService(serviceId);
 });
 
-class ServiceWithCategoryRow {
-  const ServiceWithCategoryRow(this.service, this.categoryNom);
-
-  final Service service;
-  final String categoryNom;
-}

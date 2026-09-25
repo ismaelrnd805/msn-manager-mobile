@@ -16,7 +16,6 @@ library;
 
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:drift/drift.dart';
 
@@ -72,7 +71,7 @@ class SyncEngine {
     required Map<String, dynamic> payload,
   }) {
     return _system.enqueue(
-      SyncQueue(
+      SyncQueueData(
         id: 'sq_${DateTime.now().microsecondsSinceEpoch}_'
             '${entityId.hashCode.abs()}',
         entite: entite,
@@ -134,7 +133,7 @@ class SyncEngine {
             await _system.incrementTentative(
                 row.id, 'Serveur injoignable');
           }
-          return SyncRunReport(
+          return const SyncRunReport(
             status: SyncStatus.erreur,
             error: 'PUSH impossible — les changements restent en file.',
           );
@@ -188,7 +187,7 @@ class SyncEngine {
       // Entité encore sans mapper : conservée en file en conflit pour
       // traitement ultérieur — jamais perdue.
       await _system.enqueue(
-        SyncQueue(
+        SyncQueueData(
           id: 'sq_pull_${DateTime.now().microsecondsSinceEpoch}_'
               '${change.entityId.hashCode.abs()}',
           entite: change.entite,
@@ -229,7 +228,7 @@ class SyncEngine {
     return mapper(change.entityId, change.payload);
   }
 
-  Future<void> _createConflict(SyncQueue row, ApiClient api) async {
+  Future<void> _createConflict(SyncQueueData row, ApiClient api) async {
     await _system.markQueueStatut(
       row.id,
       SyncQueueStatut.conflit,
@@ -249,7 +248,7 @@ class SyncEngine {
   Future<int> _countOpenConflicts() async {
     final row = await _db.customSelect(
       'SELECT COUNT(*) AS c FROM sync_conflicts WHERE statut = ?',
-      variables: [Variable('ouvert')],
+      variables: [const Variable('ouvert')],
     ).getSingle();
     return row.data['c'] as int? ?? 0;
   }

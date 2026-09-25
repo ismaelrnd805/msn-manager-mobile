@@ -1,4 +1,5 @@
 /// Tests du moteur de workflow : progression « Où suis-je ? ».
+library;
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:msn_manager_mobile/core/domain/workflow_engine.dart';

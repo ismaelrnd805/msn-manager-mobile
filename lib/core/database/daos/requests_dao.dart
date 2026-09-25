@@ -4,7 +4,7 @@ library;
 import 'package:drift/drift.dart';
 
 import '../app_database.dart';
-import '../tables.dart';
+import '../../domain/enums.dart';
 
 /// Résultat enrichi : une demande + son client.
 class RequestWithClient {
@@ -18,6 +18,11 @@ class RequestWithClient {
 
 class RequestsDao extends DatabaseAccessor<AppDatabase> {
   RequestsDao(super.db);
+
+  // Tables exposées via la base attachée (voir docs/01-architecture.md)
+  $ClientsTable get clients => attachedDatabase.clients;
+  $RequestsTable get requests => attachedDatabase.requests;
+
 
   JoinedSelectStatement _baseQuery({String? statut, String query = ''}) {
     final q = query.trim().toLowerCase();

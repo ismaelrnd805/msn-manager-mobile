@@ -69,7 +69,7 @@ class SplashScreen extends ConsumerWidget {
             Text(
               'Multi-Services Numériques',
               style: TextStyle(
-                  color: Colors.white.withOpacity(0.8), fontSize: 13),
+                  color: Colors.white.withValues(alpha: 0.8), fontSize: 13),
             ),
             const SizedBox(height: 40),
             if (startup.isLoading)

@@ -26,15 +26,15 @@ class MsnTheme {
   MsnTheme._();
 
   static ThemeData light() {
-    final scheme = ColorScheme.light(
+    const scheme = ColorScheme.light(
       primary: MsnColors.primary,
       onPrimary: Colors.white,
-      primaryContainer: const Color(0xFFD6E4FB),
+      primaryContainer: Color(0xFFD6E4FB),
       onPrimaryContainer: Color(0xFF0A2A55),
       secondary: MsnColors.accent,
       onSecondary: Colors.white,
       secondaryContainer: MsnColors.accentSoft,
-      onSecondaryContainer: const Color(0xFF08424D),
+      onSecondaryContainer: Color(0xFF08424D),
       surface: MsnColors.card,
       onSurface: MsnColors.textPrimary,
       surfaceContainerHighest: MsnColors.surface,

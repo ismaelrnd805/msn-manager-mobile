@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'core/database/app_database.dart';
 import 'core/database/seed/demo_data.dart';
 import 'core/providers/database_provider.dart';
 import 'core/providers/services_providers.dart';

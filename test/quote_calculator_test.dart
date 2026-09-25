@@ -1,5 +1,6 @@
 /// Tests du calculateur de devis et factures — la logique financière
 /// doit être parfaite (montants entiers en Ariary).
+library;
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:msn_manager_mobile/core/domain/quote_calculator.dart';

@@ -40,12 +40,16 @@ class DemoData {
       nom: 'Admin',
       pinHash: hashPin('1234'),
       role: UserRole.admin,
+      actif: true,
+      createdAt: now,
     ));
     await system.upsertUser(User(
       id: 'user_operateur',
       nom: 'Faniry',
       pinHash: hashPin('1111'),
       role: UserRole.operateur,
+      actif: true,
+      createdAt: now,
     ));
 
     // ── Modules ───────────────────────────────────────────────────────────
@@ -263,7 +267,7 @@ class DemoData {
     for (final entry in logoRules.entries) {
       await db.into(db.businessRules).insert(BusinessRulesCompanion.insert(
             id: 'rule_logo_${entry.key}',
-            serviceId: Value('svc_logo'),
+            serviceId: const Value('svc_logo'),
             cle: entry.key,
             valeur: entry.value,
           ));
@@ -591,7 +595,7 @@ class DemoData {
               id: 'wfi_demo1_s$stepIdx',
               instanceId: 'wfi_demo1',
               stepId: 'wf_logo_s$stepIdx',
-              ordre: Value(stepIdx),
+              ordre: stepIdx,
               nom: step,
               actionsJson: Value(jsonEncode(_actionsFor(step))),
               statut: Value(done ? 'terminee' : 'en_attente'),
@@ -674,8 +678,7 @@ class DemoData {
           action: ActivityAction.creation,
           entite: 'commande',
           entityId: const Value('cmd_demo1'),
-          details: const Value(
-              'Commande de démonstration créée (données fictives).'),
+          details: 'Commande de démonstration créée (données fictives).',
         ));
 
     await system.setValue(AppConstants.keySeeded, '1');

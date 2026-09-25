@@ -4,7 +4,7 @@ library;
 import 'package:drift/drift.dart';
 
 import '../app_database.dart';
-import '../tables.dart';
+import '../../domain/enums.dart';
 
 class OrderWithClient {
   const OrderWithClient(this.order, this.client);
@@ -17,6 +17,12 @@ class OrderWithClient {
 
 class OrdersDao extends DatabaseAccessor<AppDatabase> {
   OrdersDao(super.db);
+
+  // Tables exposées via la base attachée (voir docs/01-architecture.md)
+  $ClientsTable get clients => attachedDatabase.clients;
+  $OrdersTable get orders => attachedDatabase.orders;
+  $OrderFilesTable get orderFiles => attachedDatabase.orderFiles;
+
 
   Stream<List<OrderWithClient>> watchOrders({String? statut, String query = ''}) {
     final q = query.trim().toLowerCase();

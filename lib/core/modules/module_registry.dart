@@ -9,7 +9,6 @@ library;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../database/daos/system_dao.dart';
 import '../providers/database_provider.dart';
 
 class ModuleDescriptor {

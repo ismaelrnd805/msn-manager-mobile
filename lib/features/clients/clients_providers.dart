@@ -1,7 +1,7 @@
 /// Providers CRM clients — liste, recherche, historique par client.
 library;
 
-import 'package:drift/drift.dart' show OrderingTerm;
+import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/database/app_database.dart';

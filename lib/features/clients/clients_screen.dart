@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/domain/enums.dart';
 import '../../core/theme/msn_theme.dart';
 import '../../shared/widgets/empty_state.dart';
 import 'clients_providers.dart';
@@ -83,7 +82,7 @@ class ClientsScreen extends ConsumerWidget {
                           child: ListTile(
                             leading: CircleAvatar(
                               backgroundColor:
-                                  MsnColors.primary.withOpacity(0.12),
+                                  MsnColors.primary.withValues(alpha: 0.12),
                               child: Text(
                                 client.nom.isNotEmpty
                                     ? client.nom[0].toUpperCase()
