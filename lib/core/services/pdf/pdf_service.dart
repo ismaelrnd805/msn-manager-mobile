@@ -84,8 +84,11 @@ class PdfService {
                     fontSize: 11, color: MsnPdfTheme.textDark, lineSpacing: 4)),
           pw.SizedBox(height: 20),
           MsnPdfTheme.box(title: 'Tarification', rows: [
-            ('Prix', '${Formatters.ar(s.prixBase)} / ${s.unite}'),
-            ('Délai', s.delaiJours == null ? 'À convenir' : '${s.delaiJours} jours'),
+            ('Prix', Formatters.tarif(s.prixBase, s.unite)),
+            ('Délai',
+                s.delaiJours == null || s.delaiJours! <= 0
+                    ? 'À convenir'
+                    : '${s.delaiJours} jours'),
           ]),
           pw.SizedBox(height: 12),
           MsnPdfTheme.box(title: 'Ce qui est inclus', rows: [
@@ -166,18 +169,25 @@ class PdfService {
               headerStyle: const pw.TextStyle(
                   fontWeight: pw.FontWeight.bold,
                   color: PdfColors.white,
-                  fontSize: 9),
+                  fontSize: 10.5),
               headerDecoration: const pw.BoxDecoration(
                   color: MsnPdfTheme.primary),
-              cellStyle: const pw.TextStyle(fontSize: 9),
+              cellStyle: const pw.TextStyle(fontSize: 11),
+              cellPadding: const pw.EdgeInsets.symmetric(vertical: 6, horizontal: 8),
               cellAlignment: pw.Alignment.centerLeft,
               headers: ['Service', 'Prix', 'Unité', 'Délai'],
               data: entry.value
                   .map((swc) => [
                         swc.service.nom,
-                        Formatters.ar(swc.service.prixBase),
-                        swc.service.unite,
-                        swc.service.delaiJours == null
+                        swc.service.prixBase <= 0
+                            ? 'Sur devis'
+                            : Formatters.ar(swc.service.prixBase),
+                        swc.service.unite == 'devis' ||
+                                swc.service.unite == 'à partir de'
+                            ? '—'
+                            : swc.service.unite,
+                        swc.service.delaiJours == null ||
+                                swc.service.delaiJours! <= 0
                             ? '—'
                             : '${swc.service.delaiJours} j',
                       ])
@@ -254,9 +264,10 @@ class PdfService {
             headerStyle: const pw.TextStyle(
                 fontWeight: pw.FontWeight.bold,
                 color: PdfColors.white,
-                fontSize: 9),
+                fontSize: 10.5),
             headerDecoration: const pw.BoxDecoration(color: MsnPdfTheme.primary),
-            cellStyle: const pw.TextStyle(fontSize: 9),
+            cellStyle: const pw.TextStyle(fontSize: 11),
+            cellPadding: const pw.EdgeInsets.symmetric(vertical: 6, horizontal: 8),
             cellAlignment: pw.Alignment.centerLeft,
             headers: ['Désignation', 'Qté', 'Prix unitaire', 'Total'],
             data: [
@@ -288,9 +299,8 @@ class PdfService {
           ),
           if (quote.conditions != null && quote.conditions!.isNotEmpty) ...[
             pw.SizedBox(height: 14),
-            MsnPdfTheme.box(title: 'Conditions', rows: [
-              ('', quote.conditions!),
-            ]),
+            MsnPdfTheme.conditions(
+                quote.conditions!.split('\n').where((l) => l.trim().isNotEmpty).toList()),
           ],
         ],
       ),
@@ -359,9 +369,10 @@ class PdfService {
             headerStyle: const pw.TextStyle(
                 fontWeight: pw.FontWeight.bold,
                 color: PdfColors.white,
-                fontSize: 9),
+                fontSize: 10.5),
             headerDecoration: const pw.BoxDecoration(color: MsnPdfTheme.primary),
-            cellStyle: const pw.TextStyle(fontSize: 9),
+            cellStyle: const pw.TextStyle(fontSize: 11),
+            cellPadding: const pw.EdgeInsets.symmetric(vertical: 6, horizontal: 8),
             cellAlignment: pw.Alignment.centerLeft,
             headers: ['Désignation', 'Qté', 'Prix unitaire', 'Total'],
             data: [
@@ -404,10 +415,10 @@ class PdfService {
               headerStyle: const pw.TextStyle(
                   fontWeight: pw.FontWeight.bold,
                   color: PdfColors.white,
-                  fontSize: 8),
+                  fontSize: 10.5),
               headerDecoration: const pw.BoxDecoration(
                   color: MsnPdfTheme.primaryDark),
-              cellStyle: const pw.TextStyle(fontSize: 8),
+              cellStyle: const pw.TextStyle(fontSize: 10.5),
               cellAlignment: pw.Alignment.centerLeft,
               headers: ['Date', 'Méthode', 'Référence', 'Montant'],
               data: paiements

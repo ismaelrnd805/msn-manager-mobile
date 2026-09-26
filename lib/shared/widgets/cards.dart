@@ -14,6 +14,7 @@ class StatTile extends StatelessWidget {
     this.color = MsnColors.primary,
     this.onTap,
     this.alert = false,
+    this.valueLabel,
   });
 
   final String label;
@@ -23,6 +24,9 @@ class StatTile extends StatelessWidget {
   final VoidCallback? onTap;
   final bool alert;
 
+  /// Texte affiché à la place du chiffre (ex. « Voir ») quand fourni.
+  final String? valueLabel;
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -30,14 +34,22 @@ class StatTile extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(14),
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(14),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Row(
                 children: [
-                  Icon(icon, size: 16, color: color),
+                  Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      color: color.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(9),
+                    ),
+                    child: Icon(icon, size: 16, color: color),
+                  ),
                   const Spacer(),
                   if (alert)
                     Container(
@@ -50,21 +62,23 @@ class StatTile extends StatelessWidget {
                     ),
                 ],
               ),
-              const Spacer(),
+              const SizedBox(height: 10),
               Text(
-                '$value',
-                style: TextStyle(
+                valueLabel ?? '$value',
+                style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w800,
-                  color: color,
+                  color: MsnColors.textPrimary,
                 ),
               ),
+              const SizedBox(height: 2),
               Text(
                 label,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
-                  fontSize: 10.5,
+                  fontSize: 11.5,
+                  fontWeight: FontWeight.w600,
                   color: MsnColors.textSecondary,
                   height: 1.2,
                 ),
@@ -146,8 +160,16 @@ class EmptyState extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 44, color: MsnColors.textSecondary.withValues( alpha: 0.5)),
-            const SizedBox(height: 12),
+            Container(
+              width: 64,
+              height: 64,
+              decoration: BoxDecoration(
+                color: MsnColors.textSecondary.withValues(alpha: 0.08),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, size: 28, color: MsnColors.textSecondary.withValues(alpha: 0.6)),
+            ),
+            const SizedBox(height: 14),
             Text(
               title,
               textAlign: TextAlign.center,

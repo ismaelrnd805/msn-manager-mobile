@@ -1,9 +1,12 @@
-/// Connexion locale par PIN — le téléphone reste verrouillé tant que
-/// l'opérateur ne s'est pas identifié. Session en mémoire (expire au
-/// redémarrage de l'app).
+/// Connexion — saisie libre du nom d'utilisateur et du mot de passe.
+///
+/// Aucune identifiante n'est affichée dans l'interface (jamais de mot de
+/// passe, jamais de compte de démonstration suggéré). Les comptes sont
+/// créés par l'administration ; plusieurs comptes peuvent se connecter.
+/// La session est persistante : après la première connexion, l'application
+/// s'ouvre directement sur le dernier écran consulté.
 library;
 
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -20,43 +23,45 @@ class LoginScreen extends ConsumerStatefulWidget {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
-  List<(String, String)> _users = const []; // (id, nom)
-  String? _selectedUserId;
-  final _pinController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _obscure = true;
   bool _loading = false;
   String? _error;
 
   @override
   void initState() {
     super.initState();
-    _loadUsers();
+    _prefillLastUser();
   }
 
-  Future<void> _loadUsers() async {
-    final users = await ref.read(systemDaoProvider).activeUsers();
-    final lastUser = await ref.read(systemDaoProvider).getValue('last_user');
-    setState(() {
-      _users = users.map((u) => (u.id, u.nom)).toList();
-      _selectedUserId = _users
-          .where((u) => u.$2 == lastUser)
-          .map((u) => u.$1)
-          .firstOrNull ??
-          (_users.isNotEmpty ? _users.first.$1 : null);
-    });
+  /// Pré-remplit le nom d'utilisateur (jamais le mot de passe).
+  Future<void> _prefillLastUser() async {
+    try {
+      final last =
+          await ref.read(systemDaoProvider).getValue('last_user');
+      if (last != null && mounted) {
+        setState(() => _usernameController.text = last);
+      }
+    } catch (_) {}
   }
 
   Future<void> _login() async {
-    if (_selectedUserId == null) return;
-    final user = _users.firstWhere((u) => u.$1 == _selectedUserId);
+    if (!_formKey.currentState!.validate()) return;
     setState(() {
       _loading = true;
       _error = null;
     });
     try {
-      await ref.read(sessionProvider.notifier).login(user.$2, _pinController.text);
+      await ref
+          .read(sessionProvider.notifier)
+          .login(_usernameController.text, _passwordController.text);
+      _passwordController.clear();
       if (mounted) context.go('/dashboard');
     } catch (e) {
-      setState(() => _error = e.toString());
+      setState(() =>
+          _error = e.toString().replaceFirst('AppException: ', ''));
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -81,12 +86,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               child: Column(
                 children: [
                   Container(
-                    width: 72,
-                    height: 72,
+                    width: 84,
+                    height: 84,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(18),
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.18),
+                          blurRadius: 18,
+                          offset: const Offset(0, 6),
+                        ),
+                      ],
                     ),
+                    padding: const EdgeInsets.all(10),
                     child: Image.asset(
                       'assets/logo/msn_logo.png',
                       fit: BoxFit.contain,
@@ -99,91 +112,108 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 14),
+                  const SizedBox(height: 16),
                   const Text('MSN Manager',
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: 22,
+                          fontSize: 24,
                           fontWeight: FontWeight.w800)),
                   const SizedBox(height: 4),
-                  Text('Connexion',
+                  Text('Multi-Services Numériques',
                       style: TextStyle(
                           color: Colors.white.withValues(alpha: 0.75),
                           fontSize: 13)),
-                  const SizedBox(height: 28),
+                  const SizedBox(height: 32),
                   Card(
                     child: Padding(
                       padding: const EdgeInsets.all(18),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          if (_users.isEmpty)
-                            const Padding(
-                              padding: EdgeInsets.all(8),
-                              child: Text(
-                                'Aucun utilisateur actif. '
-                                'Réinstallez l’application ou restaurez une sauvegarde.',
-                                style:
-                                    TextStyle(color: MsnColors.textSecondary),
-                              ),
-                            )
-                          else ...[
-                            DropdownButtonFormField<String>(
-                              initialValue: _selectedUserId,
-                              decoration:
-                                  const InputDecoration(labelText: 'Utilisateur'),
-                              items: _users
-                                  .map((u) => DropdownMenuItem(
-                                        value: u.$1,
-                                        child: Text(u.$2),
-                                      ))
-                                  .toList(),
-                              onChanged: (v) =>
-                                  setState(() => _selectedUserId = v),
-                            ),
-                            const SizedBox(height: 12),
-                            TextField(
-                              controller: _pinController,
-                              obscureText: true,
-                              keyboardType: TextInputType.number,
-                              autofocus: true,
-                              onSubmitted: (_) => _login(),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            TextFormField(
+                              controller: _usernameController,
+                              autofillHints: const [AutofillHints.username],
+                              textInputAction: TextInputAction.next,
+                              validator: (v) =>
+                                  (v == null || v.trim().isEmpty)
+                                      ? 'Saisissez votre nom d\'utilisateur'
+                                      : null,
                               decoration: const InputDecoration(
-                                labelText: 'Code PIN',
-                                prefixIcon: Icon(Icons.lock_outline, size: 20),
+                                labelText: 'Nom d\'utilisateur',
+                                prefixIcon:
+                                    Icon(Icons.person_outline, size: 20),
                               ),
                             ),
-                          ],
-                          if (_error != null) ...[
+                            const SizedBox(height: 14),
+                            TextFormField(
+                              controller: _passwordController,
+                              obscureText: _obscure,
+                              autofillHints: const [AutofillHints.password],
+                              onFieldSubmitted: (_) => _login(),
+                              validator: (v) =>
+                                  (v == null || v.isEmpty)
+                                      ? 'Saisissez votre mot de passe'
+                                      : null,
+                              decoration: InputDecoration(
+                                labelText: 'Mot de passe',
+                                prefixIcon:
+                                    const Icon(Icons.lock_outline, size: 20),
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    _obscure
+                                        ? Icons.visibility_outlined
+                                        : Icons.visibility_off_outlined,
+                                    size: 20,
+                                  ),
+                                  onPressed: () =>
+                                      setState(() => _obscure = !_obscure),
+                                ),
+                              ),
+                            ),
+                            if (_error != null) ...[
+                              const SizedBox(height: 10),
+                              Row(
+                                children: [
+                                  const Icon(Icons.error_outline,
+                                      size: 16, color: MsnColors.danger),
+                                  const SizedBox(width: 6),
+                                  Expanded(
+                                    child: Text(_error!,
+                                        style: const TextStyle(
+                                            color: MsnColors.danger,
+                                            fontSize: 12.5)),
+                                  ),
+                                ],
+                              ),
+                            ],
+                            const SizedBox(height: 18),
+                            FilledButton(
+                              onPressed: _loading ? null : _login,
+                              child: _loading
+                                  ? const SizedBox(
+                                      width: 20,
+                                      height: 20,
+                                      child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          color: Colors.white),
+                                    )
+                                  : const Text('SE CONNECTER'),
+                            ),
                             const SizedBox(height: 10),
-                            Text(_error!,
-                                style: const TextStyle(
-                                    color: MsnColors.danger, fontSize: 12.5)),
+                            Text(
+                              'Fonctionne 100% hors connexion. '
+                              'Mot de passe oublié ? Contactez '
+                              'l\'administrateur.',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 11,
+                                  color: MsnColors.textSecondary
+                                      .withValues(alpha: 0.85)),
+                            ),
                           ],
-                          const SizedBox(height: 16),
-                          FilledButton(
-                            onPressed:
-                                _loading || _users.isEmpty ? null : _login,
-                            child: _loading
-                                ? const SizedBox(
-                                    width: 20,
-                                    height: 20,
-                                    child: CircularProgressIndicator(
-                                        strokeWidth: 2, color: Colors.white),
-                                  )
-                                : const Text('SE CONNECTER'),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'Fonctionne 100% hors connexion. '
-                            'Démo : Admin / 1234',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 11,
-                                color: MsnColors.textSecondary
-                                    .withValues(alpha: 0.8)),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   ),
@@ -198,7 +228,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   void dispose() {
-    _pinController.dispose();
+    _usernameController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 }

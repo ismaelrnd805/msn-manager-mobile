@@ -165,7 +165,15 @@ class SystemDao extends DatabaseAccessor<AppDatabase> {
   Future<User?> userByName(String nom) =>
       (select(users)..where((u) => u.nom.equals(nom))).getSingleOrNull();
 
+  Future<User?> userById(String id) =>
+      (select(users)..where((u) => u.id.equals(id))).getSingleOrNull();
+
   Future<void> upsertUser(User row) => into(users).insertOnConflictUpdate(row);
+
+  /// Active / désactive un compte utilisateur (sans le supprimer).
+  Future<void> setUserActif(String id, bool actif) =>
+      (update(users)..where((u) => u.id.equals(id)))
+          .write(UsersCompanion(actif: Value(actif)));
 
   // ── Modules ───────────────────────────────────────────────────────────────
 

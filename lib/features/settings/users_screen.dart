@@ -49,7 +49,7 @@ class UsersScreen extends ConsumerWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TextButton(
-                      onPressed: () => _changePin(context, ref, u),
+                      onPressed: () => _changePassword(context, ref, u),
                       child: const Text('PIN'),
                     ),
                     Switch(
@@ -85,29 +85,29 @@ class UsersScreen extends ConsumerWidget {
     );
   }
 
-  Future<void> _changePin(
+  Future<void> _changePassword(
       BuildContext context, WidgetRef ref, User user) async {
-    final pin = TextEditingController();
+    final secret = TextEditingController();
     final confirm = TextEditingController();
     final ok = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Changer le PIN de ${user.nom}'),
+        title: Text('Mot de passe de ${user.nom}'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
-              controller: pin,
+              controller: secret,
               obscureText: true,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(labelText: 'Nouveau PIN (4+)'),
+              autofocus: true,
+              decoration: const InputDecoration(
+                  labelText: 'Nouveau mot de passe (4+ caractères)'),
             ),
             TextField(
               controller: confirm,
               obscureText: true,
-              keyboardType: TextInputType.number,
               decoration:
-                  const InputDecoration(labelText: 'Confirmer le PIN'),
+                  const InputDecoration(labelText: 'Confirmer le mot de passe'),
             ),
           ],
         ),
@@ -122,17 +122,19 @@ class UsersScreen extends ConsumerWidget {
       ),
     );
     if (ok != true) return;
-    if (pin.text != confirm.text || pin.text.length < 4) {
+    if (secret.text != confirm.text || secret.text.length < 4) {
       if (context.mounted) {
         showMsnSnack(
-            context, 'PINs différents ou trop courts (4 minimum).',
+            context, 'Mots de passe différents ou trop courts (4 minimum).',
             error: true);
       }
       return;
     }
     try {
-      await ref.read(sessionProvider.notifier).changePin(user.id, pin.text);
-      if (context.mounted) showMsnSnack(context, 'PIN mis à jour.');
+      await ref
+          .read(sessionProvider.notifier)
+          .changePassword(user.id, secret.text);
+      if (context.mounted) showMsnSnack(context, 'Mot de passe mis à jour.');
     } catch (e) {
       if (context.mounted) showMsnSnack(context, e.toString(), error: true);
     }

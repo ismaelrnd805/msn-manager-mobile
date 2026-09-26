@@ -53,6 +53,7 @@ class AdminTemplatesScreen extends ConsumerWidget {
       BuildContext context, WidgetRef ref, MessageTemplate template) async {
     final titre = TextEditingController(text: template.titre);
     final corps = TextEditingController(text: template.corps);
+    final corpsMg = TextEditingController(text: template.corpsMg ?? '');
     final ok = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -71,7 +72,15 @@ class AdminTemplatesScreen extends ConsumerWidget {
                 controller: corps,
                 maxLines: 8,
                 decoration:
-                    const InputDecoration(labelText: 'Corps du message'),
+                    const InputDecoration(labelText: 'Corps du message (français)'),
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: corpsMg,
+                maxLines: 8,
+                decoration: const InputDecoration(
+                    labelText:
+                        'Traduction malagasy (optionnelle — utilisée si saisie)'),
               ),
               const SizedBox(height: 10),
               const Text('Variables disponibles :',
@@ -117,6 +126,7 @@ class AdminTemplatesScreen extends ConsumerWidget {
             titre: titre.text.trim(),
             categorie: template.categorie,
             corps: corps.text,
+            corpsMg: corpsMg.text.trim().isEmpty ? null : corpsMg.text,
             actif: template.actif,
             ordre: template.ordre,
             updatedAt: DateTime.now(),

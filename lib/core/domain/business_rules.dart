@@ -7,6 +7,7 @@
 library;
 
 import '../constants/app_constants.dart';
+import '../utils/formatters.dart';
 
 /// Règles d'un service (clé → valeur texte) parsées en accès typés.
 class RuleSet {
@@ -118,14 +119,19 @@ class BusinessRuleEngine {
       ));
     }
 
-    // 5. Paiement final avant livraison.
+    // 5. Livraison IMPOSSIBLE sans encaissement complet (règle MSN).
+    //    Exception autorisée possible en cas exceptionnel (raison, admin,
+    //    date — enregistrées dans `rule_exceptions` et le journal).
     if (rules.paiementFinalAvantLivraison &&
         etapeLivraison &&
         ctx.totalCommande > 0 &&
         ctx.totalPaye < ctx.totalCommande) {
-      violations.add(const RuleViolation(
+      final reste = ctx.totalCommande - ctx.totalPaye;
+      violations.add(RuleViolation(
         RuleKeys.paiementFinalAvantLivraison,
-        'Le paiement final doit être enregistré avant la livraison.',
+        'La livraison ne peut pas être validée sans encaissement complet : '
+            'il reste ${Formatters.ar(reste)} à encaisser. Enregistrez le '
+            'paiement final, ou acceptez une exception en cas exceptionnel.',
       ));
     }
 

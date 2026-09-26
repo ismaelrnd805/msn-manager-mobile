@@ -17,6 +17,33 @@ class WorkflowsDao extends DatabaseAccessor<AppDatabase> {
   $WorkflowStepsTable get workflowSteps => attachedDatabase.workflowSteps;
   $WorkflowInstancesTable get workflowInstances => attachedDatabase.workflowInstances;
   $WorkflowStepStatesTable get workflowStepStates => attachedDatabase.workflowStepStates;
+  $ProcessStepsTable get processSteps => attachedDatabase.processSteps;
+
+  // ── Processus client (présentation, administrable) ─────────────────────────
+
+  Stream<List<ProcessStep>> watchActiveProcessSteps() =>
+      (select(processSteps)
+            ..where((s) => s.actif.equals(true))
+            ..orderBy([(s) => OrderingTerm.asc(s.ordre)]))
+          .watch();
+
+  Stream<List<ProcessStep>> watchAllProcessSteps() =>
+      (select(processSteps)
+            ..orderBy([(s) => OrderingTerm.asc(s.ordre)]))
+          .watch();
+
+  Future<void> upsertProcessStep(ProcessStep row) =>
+      into(processSteps).insertOnConflictUpdate(row);
+
+  Future<void> deleteProcessStep(String id) =>
+      (delete(processSteps)..where((s) => s.id.equals(id))).go();
+
+  Future<int> countProcessSteps() async {
+    final count = countAll();
+    final query = selectOnly(processSteps)..addColumns([count]);
+    final row = await query.getSingle();
+    return row.read(count) ?? 0;
+  }
 
 
   // ── Modèles ───────────────────────────────────────────────────────────────
@@ -119,12 +146,17 @@ class WorkflowsDao extends DatabaseAccessor<AppDatabase> {
             ..orderBy([(s) => OrderingTerm.asc(s.ordre)]))
           .get();
 
+  /// Met à jour les instructions d'une étape (édition admin).
+  Future<void> updateStepInstructions(WorkflowStep step) =>
+      into(workflowSteps).insertOnConflictUpdate(step);
+
   /// Termine l'étape donnée et avance le curseur de l'instance.
   Future<void> completeStep({
     required String instanceId,
     required String stepStateId,
     required int newStepIndex,
     String? note,
+    String? completedBy,
   }) {
     return transaction(() async {
       await (update(workflowStepStates)
@@ -133,6 +165,9 @@ class WorkflowsDao extends DatabaseAccessor<AppDatabase> {
         statut: const Value('terminee'),
         completedAt: Value(DateTime.now()),
         note: Value(note),
+        completedBy: Value(completedBy),
+        annuleLe: const Value(null),
+        annulePar: const Value(null),
       ));
       final isLast = await (select(workflowStepStates)
             ..where((s) =>
@@ -146,6 +181,45 @@ class WorkflowsDao extends DatabaseAccessor<AppDatabase> {
         currentStepIndex: Value(newStepIndex),
         statut: Value(isLast ? 'termine' : 'actif'),
         completedAt: Value(isLast ? DateTime.now() : null),
+      ));
+    });
+  }
+
+  /// Annule la validation d'une étape (retour en arrière) : remet l'étape
+  /// en attente, remet les étapes suivantes validées en attente si
+  /// nécessaire et recule le curseur de l'instance.
+  Future<void> cancelStep({
+    required String instanceId,
+    required String stepStateId,
+    required int stepOrdre,
+    String? annulePar,
+  }) {
+    return transaction(() async {
+      // Les étapes suivantes déjà validées sont remises en attente —
+      // la progression reste cohérente (une étape en aval ne peut pas
+      // rester validée quand une étape en amont est annulée).
+      final states = await (select(workflowStepStates)
+            ..where((s) =>
+                s.instanceId.equals(instanceId) &
+                s.ordre.isBiggerOrEqualValue(stepOrdre)))
+          .get();
+      for (final s in states) {
+        await (update(workflowStepStates)
+              ..where((w) => w.id.equals(s.id)))
+            .write(WorkflowStepStatesCompanion(
+          statut: const Value('en_attente'),
+          completedAt: const Value(null),
+          completedBy: const Value(null),
+          annuleLe: Value(DateTime.now()),
+          annulePar: Value(annulePar),
+        ));
+      }
+      await (update(workflowInstances)
+            ..where((i) => i.id.equals(instanceId)))
+          .write(WorkflowInstancesCompanion(
+        currentStepIndex: Value(stepOrdre),
+        statut: const Value('actif'),
+        completedAt: const Value(null),
       ));
     });
   }

@@ -2,6 +2,8 @@
 
 Le mobile est déjà branché sur les contrats ci-dessous (`lib/core/sync/api_client.dart`, `api_contracts.dart`). **Aucun serveur n'est requis pour faire tourner l'application** : tant que `server_url` n'est pas configurée, tout reste local. Le backend cible est NestJS + PostgreSQL, exposé sous `/api/v1`.
 
+> 📘 **Mise en œuvre** : ce document est la *spécification* (contrats, schéma, règles de conflit). L'installation, la configuration, le déploiement (Nginx, HTTPS, systemd), les sauvegardes et la maintenance du serveur sont détaillés pas à pas dans le **[13 — Guide de configuration serveur et d'exploitation](13-guide-serveur-exploitation.md)**.
+
 ## 1. Contrats consommés par le mobile
 
 | Endpoint | Méthode | Requête | Réponse |

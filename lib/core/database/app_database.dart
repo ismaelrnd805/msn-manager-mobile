@@ -1,6 +1,6 @@
-/// Base de données applicative Drift — version de schéma 3.
+/// Base de données applicative Drift — version de schéma 4.
 ///
-/// La chaîne de migrations 1 → 2 → 3 est implémentée dans [migration] :
+/// La chaîne de migrations 1 → 2 → 3 → 4 est implémentée dans [migration] :
 /// chaque évolution future du schéma doit ajouter un bloc `onUpgrade`
 /// (jamais de modification directe — voir docs/02-donnees-et-migrations.md).
 library;
@@ -43,6 +43,11 @@ part 'app_database.g.dart';
   Reminders,
   Tasks,
   ActivityLog,
+  Conditions,
+  DictionaryEntries,
+  ServiceTranslations,
+  ProcessSteps,
+  CatalogImages,
   Settings,
   ModuleFlags,
   SyncQueue,
@@ -52,7 +57,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -70,6 +75,48 @@ class AppDatabase extends _$AppDatabase {
                 'CREATE INDEX IF NOT EXISTS idx_sync_queue_statut ON sync_queue (statut);');
             await customStatement(
                 'CREATE INDEX IF NOT EXISTS idx_payments_invoice ON payments (invoice_id);');
+          }
+          // Migration v3 → v4 : contenus administrables (conditions,
+          // dictionnaire FR/MG, traductions, processus, images) +
+          // enrichissement étapes / journal / modèles / documents.
+          if (from < 4) {
+            await m.createTable(conditions);
+            await m.createTable(dictionaryEntries);
+            await m.createTable(serviceTranslations);
+            await m.createTable(processSteps);
+            await m.createTable(catalogImages);
+
+            await m.addColumn(services, services.descriptionDetaillee);
+            await m.addColumn(services, services.avantages);
+            await m.addColumn(services, services.faq);
+            await m.addColumn(services, services.icone);
+            await m.addColumn(services, services.ordre);
+
+            await m.addColumn(workflowSteps, workflowSteps.description);
+            await m.addColumn(workflowSteps, workflowSteps.responsable);
+            await m.addColumn(workflowSteps, workflowSteps.fichiersRequis);
+            await m.addColumn(workflowSteps, workflowSteps.resultatAttendu);
+            await m.addColumn(
+                workflowSteps, workflowSteps.conditionsValidation);
+
+            await m.addColumn(workflowStepStates, workflowStepStates.completedBy);
+            await m.addColumn(workflowStepStates, workflowStepStates.annuleLe);
+            await m.addColumn(workflowStepStates, workflowStepStates.annulePar);
+
+            await m.addColumn(quotes, quotes.conditionsJson);
+            await m.addColumn(invoices, invoices.conditionsJson);
+            await m.addColumn(messageTemplates, messageTemplates.corpsMg);
+
+            await m.addColumn(activityLog, activityLog.champ);
+            await m.addColumn(activityLog, activityLog.ancienneValeur);
+            await m.addColumn(activityLog, activityLog.nouvelleValeur);
+
+            await customStatement(
+                'CREATE INDEX IF NOT EXISTS idx_conditions_actif '
+                'ON conditions (actif, ordre);');
+            await customStatement(
+                'CREATE INDEX IF NOT EXISTS idx_dictionary_fr '
+                'ON dictionary_entries (terme_fr);');
           }
         },
         beforeOpen: (details) async {

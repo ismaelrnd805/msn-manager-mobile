@@ -121,4 +121,50 @@ void main() {
     );
     expect(BusinessRuleEngine.exceptionPossible(violations), isTrue);
   });
+
+  // ── Règle MSN : livraison impossible sans encaissement complet ──────────
+
+  test('la règle paiement final avant livraison est ACTIVE par défaut', () {
+    expect(
+      RuleSet.fromRows(RuleKeys.defaults).paiementFinalAvantLivraison,
+      isTrue,
+      reason: 'Règle MSN : livraison bloquée sans encaissement complet, '
+          'sauf exception en cas exceptionnel.',
+    );
+  });
+
+  test('le message de blocage affiche le reste à encaisser', () {
+    final violations = BusinessRuleEngine.verifier(
+      rulesLogo,
+      const RuleContext(
+        nomEtape: 'Livraison',
+        totalPaye: 60000,
+        totalCommande: 150000,
+        validationClient: true,
+      ),
+    );
+    final v = violations
+        .firstWhere((v) => v.cle == RuleKeys.paiementFinalAvantLivraison);
+    expect(v.message, contains('90 000'));
+    expect(v.message, contains('encaissement'));
+  });
+
+  test('livraison acceptée une fois TOUT encaissé (pas d\u2019exception requise)',
+      () {
+    final violations = BusinessRuleEngine.verifier(
+      rulesLogo,
+      const RuleContext(
+        nomEtape: 'Livraison',
+        totalPaye: 150000,
+        totalCommande: 150000,
+        validationClient: true,
+        devisAccepte: true,
+        briefComplet: true,
+      ),
+    );
+    expect(
+      violations.any((v) => v.cle == RuleKeys.paiementFinalAvantLivraison),
+      isFalse,
+    );
+  });
 }

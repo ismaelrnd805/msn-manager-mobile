@@ -20,6 +20,66 @@ class CatalogDao extends DatabaseAccessor<AppDatabase> {
   // Tables exposées via la base attachée (voir docs/01-architecture.md)
   $CategoriesTable get categories => attachedDatabase.categories;
   $ServicesTable get services => attachedDatabase.services;
+  $CatalogImagesTable get catalogImages => attachedDatabase.catalogImages;
+  $ServiceTranslationsTable get serviceTranslations =>
+      attachedDatabase.serviceTranslations;
+
+  // ── Images de catalogue (v4) ───────────────────────────────────────────────
+
+  Stream<List<CatalogImage>> watchCatalogImages({bool onlyActive = false}) =>
+      (select(catalogImages)
+            ..where((i) =>
+                i.deletedAt.isNull() &
+                (onlyActive
+                    ? i.actif.equals(true)
+                    : const CustomExpression<bool>('1 = 1')))
+            ..orderBy([(i) => OrderingTerm.asc(i.ordre)]))
+          .watch();
+
+  Future<CatalogImage?> catalogImageById(String id) =>
+      (select(catalogImages)..where((i) => i.id.equals(id)))
+          .getSingleOrNull();
+
+  Future<void> upsertCatalogImage(CatalogImage row) =>
+      into(catalogImages).insertOnConflictUpdate(row);
+
+  Future<void> softDeleteCatalogImage(String id) =>
+      (update(catalogImages)..where((i) => i.id.equals(id))).write(
+        CatalogImagesCompanion(
+          deletedAt: Value(DateTime.now()),
+          actif: const Value(false),
+        ),
+      );
+
+  Future<int> countCatalogImages() async {
+    final count = countAll();
+    final query = selectOnly(catalogImages)
+      ..where(catalogImages.deletedAt.isNull());
+    query.addColumns([count]);
+    final row = await query.getSingle();
+    return row.read(count) ?? 0;
+  }
+
+  // ── Traductions de services (v4) ───────────────────────────────────────────
+
+  Stream<List<ServiceTranslation>> watchServiceTranslations(
+          String serviceId) =>
+      (select(serviceTranslations)
+            ..where((t) => t.serviceId.equals(serviceId)))
+          .watch();
+
+  Future<ServiceTranslation?> serviceTranslation(
+          String serviceId, String langue) =>
+      (select(serviceTranslations)
+            ..where((t) => t.serviceId.equals(serviceId) &
+                t.langue.equals(langue)))
+          .getSingleOrNull();
+
+  Future<void> upsertServiceTranslation(ServiceTranslation row) =>
+      into(serviceTranslations).insertOnConflictUpdate(row);
+
+  Future<void> deleteServiceTranslation(String id) =>
+      (delete(serviceTranslations)..where((t) => t.id.equals(id))).go();
 
 
   // ── Catégories ────────────────────────────────────────────────────────────

@@ -17,6 +17,7 @@ import '../../core/utils/validators.dart';
 import '../../shared/widgets/feedback.dart';
 import '../../shared/widgets/form_fields.dart';
 import '../../core/database/daos/catalog_dao.dart';
+import 'dart:convert';
 
 class _LineDraft {
   final TextEditingController designation;
@@ -61,8 +62,11 @@ class _QuoteEditScreenState extends ConsumerState<QuoteEditScreen> {
   final _reduction = TextEditingController(text: '0');
   final _acompte = TextEditingController(text: '0');
   final _delai = TextEditingController();
-  final _conditions = TextEditingController();
+  final _extraConditions = TextEditingController();
   final _validite = TextEditingController(text: '15');
+  // Conditions contractuelles cochées (identifiants de la bibliothèque).
+  final _selectedConditions = <String>{};
+  List<Condition> _allConditions = const [];
   bool _loaded = false;
   bool _saving = false;
 
@@ -73,6 +77,9 @@ class _QuoteEditScreenState extends ConsumerState<QuoteEditScreen> {
   }
 
   Future<void> _init() async {
+    // Bibliothèque de conditions (pour les cases à cocher).
+    _allConditions =
+        await ref.read(templatesDaoProvider).allActiveConditions();
     if (widget.quoteId != null) {
       // Édition d'un devis existant.
       final quote =
@@ -84,8 +91,32 @@ class _QuoteEditScreenState extends ConsumerState<QuoteEditScreen> {
         _reduction.text = quote.reduction.toString();
         _acompte.text = quote.acompte.toString();
         _delai.text = quote.delaiJours?.toString() ?? '';
-        _conditions.text = quote.conditions ?? '';
         _validite.text = quote.validiteJours.toString();
+        // Conditions pré-cochées depuis la bibliothèque (v4) ; en secours,
+        // on recrée les cases dont le texte figure dans le texte sauvegardé.
+        final allConditions = _allConditions;
+        final savedIds = <String>{};
+        if (quote.conditionsJson != null) {
+          try {
+            final decoded = jsonDecode(quote.conditionsJson!) as List;
+            savedIds.addAll(decoded.map((e) => e.toString()));
+          } catch (_) {}
+        }
+        _selectedConditions.addAll(
+          allConditions
+              .where((c) =>
+                  savedIds.contains(c.id) ||
+                  (quote.conditions?.contains(c.contenu) ?? false))
+              .map((c) => c.id),
+        );
+        // Conditions libres historiques non reconnues → champ extra.
+        final libres = (quote.conditions ?? '')
+            .split('\n')
+            .where((ligne) => ligne.trim().isNotEmpty)
+            .where((ligne) => !allConditions
+                .any((c) => ligne.contains(c.contenu)))
+            .toList();
+        _extraConditions.text = libres.join('\n');
         _lines.clear();
         for (final i in items) {
           _lines.add(_LineDraft(
@@ -164,6 +195,14 @@ class _QuoteEditScreenState extends ConsumerState<QuoteEditScreen> {
 
   int get _validiteJours => int.tryParse(_validite.text) ?? 15;
 
+  /// Texte des conditions = conditions cochées de la bibliothèque +
+  /// conditions libres. Le PDF n'affiche que ce texte consolidé.
+  String? _conditionsText() {
+    final text = ref.read(templatesDaoProvider).conditionsTextFrom(
+        _allConditions, _selectedConditions, _extraConditions.text);
+    return text.isEmpty ? null : text;
+  }
+
   DocumentTotals get _totals => QuoteCalculator.devis(
         lignes: _lines.map((l) => l.toLine()).toList(),
         reduction: Validators.parseMontant(_reduction.text) ?? 0,
@@ -205,8 +244,8 @@ class _QuoteEditScreenState extends ConsumerState<QuoteEditScreen> {
         reduction: totals.reduction,
         acompte: totals.acompte,
         delaiJours: int.tryParse(_delai.text.trim()),
-        conditions:
-            _conditions.text.trim().isEmpty ? null : _conditions.text.trim(),
+        conditions: _conditionsText(),
+        conditionsJson: jsonEncode(_selectedConditions.toList()),
         validiteJours: _validiteJours,
         montantTotal: totals.total,
         dateEmission: now,
@@ -284,64 +323,74 @@ class _QuoteEditScreenState extends ConsumerState<QuoteEditScreen> {
                   color: MsnColors.textSecondary)),
           const SizedBox(height: 6),
           for (var i = 0; i < _lines.length; i++)
-            Card(
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text('Ligne ${i + 1}',
-                              style: const TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w700,
-                                  color: MsnColors.primaryDark)),
-                        ),
-                        if (_lines.length > 1)
-                          IconButton(
-                            icon: const Icon(Icons.close, size: 18),
-                            onPressed: () =>
-                                setState(() => _lines.removeAt(i)),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Card(
+                color: Colors.white,
+                child: Padding(
+                  padding: const EdgeInsets.all(14),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text('Ligne ${i + 1}',
+                                style: const TextStyle(
+                                    fontSize: 12.5,
+                                    fontWeight: FontWeight.w800,
+                                    color: MsnColors.primaryDark)),
                           ),
-                      ],
-                    ),
-                    MsnTextField(
-                      label: 'Désignation',
-                      controller: _lines[i].designation,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: MsnTextField(
-                            label: 'Qté',
-                            controller: _lines[i].quantite,
-                            keyboardType:
-                                const TextInputType.numberWithOptions(
-                                    decimal: true),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          flex: 2,
-                          child: MsnMoneyField(
-                            label: 'Prix unitaire',
-                            controller: _lines[i].prixUnitaire,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        'Total ligne : '
-                        '${Formatters.ar(_lines[i].toLine().totalLigne)}',
-                        style: const TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.w700),
+                          if (_lines.length > 1)
+                            IconButton(
+                              tooltip: 'Supprimer la ligne',
+                              icon: const Icon(Icons.delete_outline,
+                                  size: 20,
+                                  color: MsnColors.danger),
+                              onPressed: () =>
+                                  setState(() => _lines.removeAt(i)),
+                            ),
+                        ],
                       ),
-                    ),
-                  ],
+                      MsnTextField(
+                        label: 'Désignation',
+                        controller: _lines[i].designation,
+                      ),
+                      const SizedBox(height: 6),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: MsnTextField(
+                              label: 'Qté',
+                              controller: _lines[i].quantite,
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                      decimal: true),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            flex: 2,
+                            child: MsnMoneyField(
+                              label: 'Prix unitaire',
+                              controller: _lines[i].prixUnitaire,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 6),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          'Total ligne : '
+                          '${Formatters.ar(_lines[i].toLine().totalLigne)}',
+                          style: const TextStyle(
+                              fontSize: 12.5,
+                              fontWeight: FontWeight.w800,
+                              color: MsnColors.primary),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -402,11 +451,54 @@ class _QuoteEditScreenState extends ConsumerState<QuoteEditScreen> {
               ),
             ],
           ),
+          // ── Conditions contractuelles (bibliothèque administrable) ──
+          Text('CONDITIONS'.toUpperCase(),
+              style: const TextStyle(
+                  fontSize: 11.5,
+                  fontWeight: FontWeight.w800,
+                  color: MsnColors.textSecondary)),
+          const SizedBox(height: 4),
+          if (_allConditions.isEmpty)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 6),
+              child: Text(
+                  'Aucune condition dans la bibliothèque '
+                  '(Administration > Conditions).',
+                  style: TextStyle(
+                      fontSize: 12, color: MsnColors.textSecondary)),
+            )
+          else
+            Card(
+              child: Column(
+                children: _allConditions
+                    .map((c) => CheckboxListTile(
+                          dense: true,
+                          contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 10),
+                          value: _selectedConditions.contains(c.id),
+                          onChanged: (checked) {
+                            if (checked == null) return;
+                            setState(() {
+                              checked
+                                  ? _selectedConditions.add(c.id)
+                                  : _selectedConditions.remove(c.id);
+                            });
+                          },
+                          title: Text(c.titre,
+                              style: const TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700)),
+                          subtitle: Text(c.contenu,
+                              style: const TextStyle(fontSize: 11.5)),
+                        ))
+                    .toList(),
+              ),
+            ),
           MsnTextField(
-            label: 'Conditions',
-            controller: _conditions,
+            label: 'Conditions supplémentaires (optionnel)',
+            controller: _extraConditions,
             maxLines: 2,
-            hint: 'Ex. 2 propositions, 2 corrections incluses…',
+            hint: 'Conditions spécifiques à ce devis…',
           ),
           const SizedBox(height: 12),
 
@@ -473,7 +565,7 @@ class _QuoteEditScreenState extends ConsumerState<QuoteEditScreen> {
     _reduction.dispose();
     _acompte.dispose();
     _delai.dispose();
-    _conditions.dispose();
+    _extraConditions.dispose();
     _validite.dispose();
     super.dispose();
   }

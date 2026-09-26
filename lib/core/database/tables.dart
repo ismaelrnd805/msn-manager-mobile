@@ -1,9 +1,10 @@
-/// Schéma de la base de données locale (Drift / SQLite) — version 3.
+/// Schéma de la base de données locale (Drift / SQLite) — version 4.
 ///
 /// Principes offline-first :
 /// - chaque table métier porte des colonnes de synchronisation
 ///   (lastSyncedAt) et de corbeille (deletedAt — suppression douce) ;
-/// - les données de démonstration sont insérées au premier lancement ;
+/// - les données par défaut (conditions, dictionnaire FR/MG, processus)
+///   sont insérées au premier lancement puis administrables ;
 /// - toute évolution du schéma passe par une migration (voir
 ///   docs/02-donnees-et-migrations.md).
 library;
@@ -73,6 +74,13 @@ class Services extends Table {
   TextColumn get inclus => text().nullable()();
   TextColumn get exclusions => text().nullable()();
   TextColumn get conditions => text().nullable()();
+  // v4 — présentation riche du service (contenus français par défaut,
+  // traductions gérées dans service_translations).
+  TextColumn get descriptionDetaillee => text().nullable()();
+  TextColumn get avantages => text().nullable()();
+  TextColumn get faq => text().nullable()();
+  TextColumn get icone => text().nullable()();
+  IntColumn get ordre => integer().withDefault(const Constant(0))();
   BoolColumn get actif => boolean().withDefault(const Constant(true))();
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
@@ -155,6 +163,13 @@ class WorkflowSteps extends Table {
   IntColumn get ordre => integer()();
   TextColumn get nom => text()();
   TextColumn get actionsJson => text().withDefault(const Constant('[]'))();
+  // v4 — fiche d'instructions de l'étape (administrable) : quoi faire,
+  // pourquoi, qui, fichiers nécessaires, résultat attendu, validation.
+  TextColumn get description => text().nullable()();
+  TextColumn get responsable => text().nullable()();
+  TextColumn get fichiersRequis => text().nullable()();
+  TextColumn get resultatAttendu => text().nullable()();
+  TextColumn get conditionsValidation => text().nullable()();
   @override
   Set<Column> get primaryKey => {id};
 }
@@ -181,6 +196,10 @@ class WorkflowStepStates extends Table {
   TextColumn get statut => text().withDefault(const Constant('en_attente'))();
   DateTimeColumn get completedAt => dateTime().nullable()();
   TextColumn get note => text().nullable()();
+  // v4 — traçabilité : qui a validé / annulé l'étape.
+  TextColumn get completedBy => text().nullable()();
+  DateTimeColumn get annuleLe => dateTime().nullable()();
+  TextColumn get annulePar => text().nullable()();
   @override
   Set<Column> get primaryKey => {id};
 }
@@ -226,6 +245,8 @@ class Quotes extends Table {
   IntColumn get acompte => integer().withDefault(const Constant(0))();
   IntColumn get delaiJours => integer().nullable()();
   TextColumn get conditions => text().nullable()();
+  // v4 — identifiants des conditions cochées (bibliothèque administrable).
+  TextColumn get conditionsJson => text().nullable()();
   IntColumn get validiteJours => integer().withDefault(const Constant(15))();
   IntColumn get montantTotal => integer().withDefault(const Constant(0))();
   DateTimeColumn get dateEmission => dateTime().withDefault(currentDateAndTime)();
@@ -263,6 +284,8 @@ class Invoices extends Table {
   IntColumn get reduction => integer().withDefault(const Constant(0))();
   IntColumn get montantTotal => integer().withDefault(const Constant(0))();
   TextColumn get conditions => text().nullable()();
+  // v4 — identifiants des conditions cochées (bibliothèque administrable).
+  TextColumn get conditionsJson => text().nullable()();
   DateTimeColumn get dateEmission => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get dateEcheance => dateTime().nullable()();
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
@@ -364,6 +387,8 @@ class MessageTemplates extends Table {
   TextColumn get titre => text()();
   TextColumn get categorie => text().map(const TemplateCategorieConverter())();
   TextColumn get corps => text()();
+  // v4 — traduction Malagasy du modèle (administrable, optionnelle).
+  TextColumn get corpsMg => text().nullable()();
   BoolColumn get actif => boolean().withDefault(const Constant(true))();
   IntColumn get ordre => integer().withDefault(const Constant(0))();
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
@@ -416,6 +441,99 @@ class ActivityLog extends Table {
   TextColumn get entite => text()();
   TextColumn get entityId => text().nullable()();
   TextColumn get details => text()();
+  // v4 — traçabilité structurée des modifications (champ, avant, après).
+  TextColumn get champ => text().nullable()();
+  TextColumn get ancienneValeur => text().nullable()();
+  TextColumn get nouvelleValeur => text().nullable()();
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Contenus administrables — v4 : conditions, dictionnaire FR/MG,
+// traductions de services, processus client, images de catalogue
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Bibliothèque de conditions contractuelles (cochées dans les devis /
+/// factures). Toute condition affichée au client vit ici, plus aucun texte
+/// codé en dur dans les formulaires.
+class Conditions extends Table {
+  TextColumn get id => text()();
+  TextColumn get titre => text()();
+  TextColumn get contenu => text()();
+  TextColumn get categorie =>
+      text().withDefault(const Constant('devis'))(); // devis | facture
+  BoolColumn get actif => boolean().withDefault(const Constant(true))();
+  IntColumn get ordre => integer().withDefault(const Constant(0))();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+  DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
+  DateTimeColumn get lastSyncedAt => dateTime().nullable()();
+  DateTimeColumn get deletedAt => dateTime().nullable()();
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+/// Dictionnaire français → malagasy (traduction progressive des documents
+/// et messages). Administrable : chaque terme peut être corrigé, désactivé.
+class DictionaryEntries extends Table {
+  TextColumn get id => text()();
+  TextColumn get termeFr => text()();
+  TextColumn get traductionMg => text()();
+  TextColumn get categorie => text().nullable()(); // commercial, technique…
+  TextColumn get contexte => text().nullable()();
+  BoolColumn get actif => boolean().withDefault(const Constant(true))();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+  DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
+  DateTimeColumn get lastSyncedAt => dateTime().nullable()();
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+/// Traduction d'un service par langue (fr par défaut dans la table services,
+/// mg et autres langues ici). Source unique de vérité des contenus traduits.
+class ServiceTranslations extends Table {
+  TextColumn get id => text()();
+  TextColumn get serviceId => text().references(Services, #id)();
+  TextColumn get langue => text()(); // 'mg', 'fr' (surcharge), …
+  TextColumn get nom => text().nullable()();
+  TextColumn get description => text().nullable()();
+  TextColumn get descriptionDetaillee => text().nullable()();
+  TextColumn get avantages => text().nullable()();
+  TextColumn get faq => text().nullable()();
+  DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
+  @override
+  Set<Column> get primaryKey => {id};
+  @override
+  List<Set<Column>> get uniqueKeys => [{serviceId, langue}];
+}
+
+/// Processus client (présentation publique : les 10 étapes de prise en
+/// charge). Administrable depuis l'administration.
+class ProcessSteps extends Table {
+  TextColumn get id => text()();
+  TextColumn get titre => text()();
+  TextColumn get description => text().nullable()();
+  TextColumn get icone => text().nullable()(); // nom d'icône Material
+  IntColumn get ordre => integer().withDefault(const Constant(0))();
+  BoolColumn get actif => boolean().withDefault(const Constant(true))();
+  DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+/// Catalogues importés en image (présentation / catalogues scannés).
+/// Gérés par l'administration, affichés dans le catalogue.
+class CatalogImages extends Table {
+  TextColumn get id => text()();
+  TextColumn get nom => text()();
+  TextColumn get cheminLocal => text().nullable()();
+  TextColumn get note => text().nullable()();
+  BoolColumn get actif => boolean().withDefault(const Constant(true))();
+  IntColumn get ordre => integer().withDefault(const Constant(0))();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+  DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
+  DateTimeColumn get lastSyncedAt => dateTime().nullable()();
+  DateTimeColumn get deletedAt => dateTime().nullable()();
   @override
   Set<Column> get primaryKey => {id};
 }

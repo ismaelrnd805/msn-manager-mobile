@@ -242,8 +242,14 @@ class OrderDetailScreen extends ConsumerWidget {
     required bool isCurrent,
   }) {
     final done = step.statut == 'terminee';
-    return InkWell(
-      onTap: isCurrent ? () => _confirmCompleteStep(context, ref, order, instance, states) : null,
+    final fiches =
+        ref.watch(workflowStepsForInstanceProvider(order.id)).value ?? const {};
+    final fiche = fiches[step.stepId];
+
+    final tile = InkWell(
+      onTap: isCurrent
+          ? () => _confirmCompleteStep(context, ref, order, instance, states)
+          : null,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 4),
         child: Row(
@@ -274,16 +280,132 @@ class OrderDetailScreen extends ConsumerWidget {
                 ),
               ),
             ),
+            if (done && step.completedBy != null)
+              Text(
+                'par ${step.completedBy}',
+                style: TextStyle(
+                    fontSize: 10.5,
+                    color:
+                        MsnColors.textSecondary.withValues(alpha: 0.85)),
+              ),
             if (isCurrent && !done)
               TextButton(
                 onPressed: () =>
                     _confirmCompleteStep(context, ref, order, instance, states),
                 child: const Text('Terminer'),
               ),
+            if (done)
+              IconButton(
+                icon: const Icon(Icons.undo, size: 18),
+                tooltip: 'Annuler la validation',
+                onPressed: () => _confirmCancelStep(
+                    context, ref, order, instance, step),
+              ),
           ],
         ),
       ),
     );
+
+    // Fiche d'instructions (quoi/pourquoi/qui/fichiers/résultat/conditions)
+    // dépliable pour l'étape courante — alimentée par l'administration.
+    if (!isCurrent || fiche == null) return tile;
+    final hasDetails = (fiche.description?.trim().isNotEmpty ?? false) ||
+        (fiche.resultatAttendu?.trim().isNotEmpty ?? false);
+    if (!hasDetails) return tile;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        tile,
+        Padding(
+          padding: const EdgeInsets.only(left: 26, right: 4, bottom: 6),
+          child: Theme(
+            data: Theme.of(context)
+                .copyWith(dividerColor: Colors.transparent),
+            child: ExpansionTile(
+              tilePadding: EdgeInsets.zero,
+              childrenPadding: const EdgeInsets.only(bottom: 8),
+              initiallyExpanded: true,
+              iconColor: MsnColors.textSecondary,
+              collapsedIconColor: MsnColors.textSecondary,
+              title: const Text('Instructions de l\'étape',
+                  style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      color: MsnColors.primary)),
+              children: [
+                if (fiche.description != null)
+                  _instructionRow(Icons.help_outline,
+                      fiche.description!),
+                if (fiche.responsable != null)
+                  _instructionRow(Icons.person_outline,
+                      'Qui : ${fiche.responsable}'),
+                if (fiche.fichiersRequis != null)
+                  _instructionRow(Icons.attach_file,
+                      'Fichiers : ${fiche.fichiersRequis}'),
+                if (fiche.resultatAttendu != null)
+                  _instructionRow(Icons.flag_outlined,
+                      'Résultat attendu : ${fiche.resultatAttendu}'),
+                if (fiche.conditionsValidation != null)
+                  _instructionRow(Icons.rule_outlined,
+                      'Validation : ${fiche.conditionsValidation}'),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _instructionRow(IconData icon, String text) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, size: 14, color: MsnColors.textSecondary),
+          const SizedBox(width: 6),
+          Expanded(
+            child: Text(text,
+                style: const TextStyle(
+                    fontSize: 12, height: 1.4)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Annulation d'une étape validée (retour en arrière) avec confirmation.
+  Future<void> _confirmCancelStep(
+    BuildContext context,
+    WidgetRef ref,
+    Order order,
+    WorkflowInstance instance,
+    WorkflowStepState step,
+  ) async {
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Annuler cette étape ?'),
+        content: Text(
+          'L\'étape « ${step.nom} » sera remise en attente. Les étapes '
+          'suivantes déjà validées le seront aussi (retour en arrière '
+          'cohérent). L\'annulation est tracée dans le journal.',
+          style: const TextStyle(fontSize: 13, height: 1.4),
+        ),
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Non')),
+          FilledButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Oui, annuler l\'étape')),
+        ],
+      ),
+    );
+    if (ok != true) return;
+    await cancelStep(ref,
+        order: order, instance: instance, stepState: step);
   }
 
   /// Validation des règles métier avant de terminer l'étape (section 23).
@@ -383,7 +505,8 @@ class OrderDetailScreen extends ConsumerWidget {
                 controller: raisonController,
                 decoration: const InputDecoration(
                   labelText: 'EXCEPTION AUTORISÉE — raison obligatoire',
-                  hintText: 'Ex. client de confiance, acompte promis demain…',
+                  hintText: 'Cas exceptionnel uniquement : client de '
+                      'confiance, paiement promis demain…',
                 ),
               ),
             ],
@@ -487,14 +610,17 @@ class OrderDetailScreen extends ConsumerWidget {
           break;
         case ActionType.fichiers:
           try {
-            final file = await ref.read(fileIngestServiceProvider).pickAndAttach(
-                  orderId: order.id,
-                  requestId: null,
-                  dossier: DossierFichier.source,
-                  note: 'Étape : $label',
-                );
-            if (file != null && context.mounted) {
-              showMsnSnack(context, 'Fichier ajouté : ${file.nom}');
+            final files =
+                await ref.read(fileIngestServiceProvider).pickAndAttach(
+                      orderId: order.id,
+                      requestId: null,
+                      dossier: DossierFichier.source,
+                      note: 'Étape : $label',
+                    );
+            if (files.isNotEmpty && context.mounted) {
+              showMsnSnack(context,
+                  '${files.length} fichier(s) ajouté(s) : '
+                  '${files.map((f) => f.nom).join(', ')}');
             }
           } catch (e) {
             if (context.mounted) showMsnSnack(context, e.toString(), error: true);
@@ -714,16 +840,17 @@ class OrderDetailScreen extends ConsumerWidget {
                   icon: const Icon(Icons.add, size: 20),
                   onSelected: (dossier) async {
                     try {
-                      final file = await ref
+                      final files = await ref
                           .read(fileIngestServiceProvider)
                           .pickAndAttach(
                             orderId: order.id,
                             requestId: null,
                             dossier: dossier,
                           );
-                      if (file != null && context.mounted) {
+                      if (files.isNotEmpty && context.mounted) {
                         showMsnSnack(context,
-                            'Fichier ajouté dans ${dossier.label}.');
+                            '${files.length} fichier(s) ajouté(s) '
+                            'dans ${dossier.label}.');
                       }
                     } catch (e) {
                       if (context.mounted) {

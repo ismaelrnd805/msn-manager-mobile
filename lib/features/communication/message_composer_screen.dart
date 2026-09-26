@@ -10,12 +10,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/database/app_database.dart';
 import '../../core/domain/enums.dart';
+import '../../core/domain/translator.dart';
+import '../../core/providers/client_language_provider.dart';
 import '../../core/providers/database_provider.dart';
 import '../../core/providers/services_providers.dart';
 import '../../core/theme/msn_theme.dart';
 import '../../shared/widgets/copy_message_card.dart';
 import '../../shared/widgets/feedback.dart';
+import '../../shared/widgets/language_toggle.dart';
 import 'communication_providers.dart';
+import 'translation_sheet.dart';
 
 class MessageComposerScreen extends ConsumerStatefulWidget {
   const MessageComposerScreen({super.key, this.args});
@@ -69,13 +73,36 @@ class _MessageComposerScreenState extends ConsumerState<MessageComposerScreen> {
       return;
     }
     final service = ref.read(communicationServiceProvider);
-    final rendered = await service.render(code: template.code, args: widget.args);
+    final langue = ref.read(clientLangueProvider).value ?? ClientLangue.fr;
+    final rendered =
+        await service.render(code: template.code, args: widget.args, langue: langue);
     setState(() {
       _selected = template;
       _rendered = rendered;
       _body.text = rendered.rendered;
       _loading = false;
     });
+  }
+
+  /// Re-rend le modèle courant dans la langue choisie par la bascule.
+  Future<void> _changerLangue(ClientLangue langue) async {
+    final template = _selected;
+    if (template == null) return;
+    final service = ref.read(communicationServiceProvider);
+    final rendered = await service.render(
+        code: template.code, args: widget.args, langue: langue);
+    setState(() {
+      _rendered = rendered;
+      _body.text = rendered.rendered;
+    });
+    if (langue == ClientLangue.mg && rendered.traductionAuto) {
+      if (mounted) {
+        showMsnSnack(
+            context,
+            'Traduction automatique (dictionnaire) — utilisez « MENU DE '
+            'TRADUCTION » pour saisir la version malagasy de ce modèle.');
+      }
+    }
   }
 
   @override
@@ -88,6 +115,12 @@ class _MessageComposerScreenState extends ConsumerState<MessageComposerScreen> {
           : ListView(
               padding: const EdgeInsets.all(14),
               children: [
+                // ── Bascule FR / Malagasy des textes client ────────────
+                LanguageToggleBar(
+                  title: 'Message au client',
+                  onChanged: _changerLangue,
+                ),
+                const SizedBox(height: 12),
                 // ── Sélecteur de modèle ────────────────────────────────
                 DropdownButtonFormField<MessageTemplate>(
                   initialValue: _selected,
@@ -105,6 +138,39 @@ class _MessageComposerScreenState extends ConsumerState<MessageComposerScreen> {
                   onChanged: _select,
                 ),
                 const SizedBox(height: 8),
+                if (_rendered != null &&
+                    _rendered!.langue == ClientLangue.mg)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Row(
+                      children: [
+                        Icon(
+                          _rendered!.traductionAuto
+                              ? Icons.info_outline
+                              : Icons.verified_outlined,
+                          size: 14,
+                          color: _rendered!.traductionAuto
+                              ? MsnColors.warning
+                              : MsnColors.success,
+                        ),
+                        const SizedBox(width: 6),
+                        Expanded(
+                          child: Text(
+                            _rendered!.traductionAuto
+                                ? 'Version malagasy automatique (dictionnaire) '
+                                    '— traduction manuelle non saisie.'
+                                : 'Version malagasy officielle de ce modèle.',
+                            style: TextStyle(
+                              fontSize: 11.5,
+                              color: _rendered!.traductionAuto
+                                  ? MsnColors.warning
+                                  : MsnColors.success,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 if (_rendered != null &&
                     _rendered!.missingVariables.isNotEmpty)
                   Text(
@@ -170,6 +236,55 @@ class _MessageComposerScreenState extends ConsumerState<MessageComposerScreen> {
                         },
                         icon: const Icon(Icons.share, size: 18),
                         label: const Text('PARTAGER'),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                // Traduction malagasy à la volée via le dictionnaire.
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: () async {
+                          final entries = await ref
+                              .read(templatesDaoProvider)
+                              .activeDictionary();
+                          if (!context.mounted) return;
+                          setState(() {
+                            _body.text = DictionaryTranslator.translate(
+                                _body.text, entries);
+                          });
+                          final cov = DictionaryTranslator.coverage(
+                              _body.text, entries);
+                          showMsnSnack(
+                              context,
+                              cov >= 0.5
+                                  ? 'Traduit en malagasy (couverture du '
+                                      'dictionnaire : ${(cov * 100).round()}%).'
+                                  : 'Traduction partielle — complétez le '
+                                      'dictionnaire FR → MG dans '
+                                      'l\'administration.');
+                        },
+                        icon: const Icon(Icons.translate, size: 18),
+                        label: const Text('TRADUIRE ICI',
+                            style: TextStyle(fontSize: 12.5)),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    // Menu de traduction du modèle FR courant (éditable).
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: _selected == null
+                            ? null
+                            : () async {
+                                final maj = await showTranslationSheet(
+                                    context, ref, _selected!);
+                                if (maj) await _select(_selected);
+                              },
+                        icon: const Icon(Icons.menu_book_outlined, size: 18),
+                        label: const Text('MENU DE TRADUCTION',
+                            style: TextStyle(fontSize: 12.5)),
                       ),
                     ),
                   ],

@@ -42,6 +42,9 @@ dependencies:
   # Partage natif Android/iOS
   share_plus: ^10.0.2
 
+  # Ouverture de fichiers avec l'app Android appropriée
+  open_filex: ^4.5.0
+
   # Connectivité & notifications
   connectivity_plus: ^6.0.5
   flutter_local_notifications: ^17.2.3

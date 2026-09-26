@@ -1,6 +1,7 @@
 /// Écran de démarrage : attend la fin de l'initialisation (base locale,
-/// seed, services) puis laisse le router rediriger vers /login ou
-/// /dashboard selon la session.
+/// contenus par défaut, restauration de session persistante, services)
+/// puis redirige vers /login ou vers le DERNIER ÉCRAN consulté — la
+/// session persistante permet de retrouver exactement où l'on était.
 library;
 
 import 'package:flutter/material.dart';
@@ -14,14 +15,36 @@ import '../../core/theme/msn_theme.dart';
 class SplashScreen extends ConsumerWidget {
   const SplashScreen({super.key});
 
+  /// Préfixes de routes valides : protège contre la restauration d'une
+  /// route supprimée dans une future version.
+  static const List<String> _routePrefixes = [
+    '/dashboard', '/requests', '/orders', '/clients', '/more', '/catalog',
+    '/quotes', '/invoices', '/payments', '/communication', '/documents',
+    '/tasks', '/sync', '/settings',
+  ];
+
+  Future<String> _destination(WidgetRef ref) async {
+    final session = ref.read(sessionProvider);
+    if (session == null) return '/login';
+    try {
+      final last = await ref.read(sessionProvider.notifier).lastRoute();
+      if (last != null &&
+          last.isNotEmpty &&
+          _routePrefixes.any((p) => last.startsWith(p))) {
+        return last;
+      }
+    } catch (_) {}
+    return '/dashboard';
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final startup = ref.watch(appStartupProvider);
 
-    ref.listen(appStartupProvider, (prev, next) {
+    ref.listen(appStartupProvider, (prev, next) async {
       if (next.hasValue) {
-        final session = ref.read(sessionProvider);
-        context.go(session == null ? '/login' : '/dashboard');
+        final destination = await _destination(ref);
+        if (context.mounted) context.go(destination);
       }
     });
 
@@ -39,12 +62,20 @@ class SplashScreen extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: 88,
-              height: 88,
+              width: 96,
+              height: 96,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(22),
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.2),
+                    blurRadius: 24,
+                    offset: const Offset(0, 8),
+                  ),
+                ],
               ),
+              padding: const EdgeInsets.all(12),
               child: Image.asset(
                 'assets/logo/msn_logo.png',
                 fit: BoxFit.contain,

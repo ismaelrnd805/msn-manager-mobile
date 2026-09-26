@@ -2,13 +2,21 @@
 ///
 /// Garde de session : toute route exige une session active sauf /login.
 /// Les routes d'administration sont en plus protégées par le rôle.
+///
+/// v4 — animations : toutes les pages secondaires s'ouvrent avec une
+/// transition cohérente (fondu + glissement vertical léger). Le dernier
+/// écran consulté est mémorisé (session persistante) pour restaurer la
+/// navigation au redémarrage de l'application.
 library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+import '../database/app_database.dart';
+import '../domain/enums.dart';
 import '../providers/services_providers.dart';
 import '../../features/communication/communication_providers.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../features/auth/login_screen.dart';
 import '../../features/catalog/catalog_screen.dart';
@@ -31,12 +39,18 @@ import '../../features/payments/payments_screen.dart';
 import '../../features/quotes/quote_detail_screen.dart';
 import '../../features/quotes/quote_edit_screen.dart';
 import '../../features/quotes/quotes_screen.dart';
-import '../../features/requests/new_request_screen.dart';
+import '../../features/requests/request_form_screen.dart';
 import '../../features/requests/qualification_screen.dart' as qual;
 import '../../features/requests/request_detail_screen.dart';
 import '../../features/requests/requests_screen.dart';
+import '../../features/documents/file_viewer_screen.dart';
 import '../../features/settings/admin_qualification_screen.dart';
 import '../../features/settings/admin_templates_screen.dart';
+import '../../features/settings/admin_conditions_screen.dart';
+import '../../features/settings/admin_catalog_images_screen.dart';
+import '../../features/settings/admin_dictionary_screen.dart';
+import '../../features/settings/admin_process_screen.dart';
+import '../../features/settings/admin_workflows_screen.dart';
 import '../../features/settings/journal_screen.dart';
 import '../../features/settings/modules_screen.dart';
 import '../../features/settings/settings_screen.dart';
@@ -54,11 +68,36 @@ class _SessionListenable extends ChangeNotifier {
   }
 }
 
+/// Transition de page standard MSN : fondu + glissement vers le haut.
+/// Légère (280 ms) pour fluidifier sans ralentir la navigation.
+CustomTransitionPage<void> msnPage({required Widget child, GoRouterState? state}) {
+  return CustomTransitionPage<void>(
+    key: state?.pageKey,
+    child: child,
+    transitionDuration: const Duration(milliseconds: 280),
+    reverseTransitionDuration: const Duration(milliseconds: 220),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      final curved = CurvedAnimation(
+          parent: animation, curve: Curves.easeOutCubic);
+      return FadeTransition(
+        opacity: curved,
+        child: SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(0, 0.035),
+            end: Offset.zero,
+          ).animate(curved),
+          child: child,
+        ),
+      );
+    },
+  );
+}
+
 final appRouterProvider = Provider<GoRouter>((ref) {
   final listenable = _SessionListenable(ref);
   ref.onDispose(listenable.dispose);
 
-  return GoRouter(
+  final router = GoRouter(
     initialLocation: '/',
     refreshListenable: listenable,
     redirect: (context, state) {
@@ -88,7 +127,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/login',
-        builder: (context, state) => const LoginScreen(),
+        pageBuilder: (context, state) =>
+            msnPage(child: const LoginScreen(), state: state),
       ),
       // ── Onglets principaux ───────────────────────────────────────────────
       StatefulShellRoute.indexedStack(
@@ -98,146 +138,271 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(routes: [
             GoRoute(
                 path: '/dashboard',
-                builder: (_, __) => const DashboardScreen()),
+                pageBuilder: (_, state) => msnPage(
+                    child: const DashboardScreen(), state: state)),
           ]),
           StatefulShellBranch(routes: [
             GoRoute(
                 path: '/requests',
-                builder: (_, __) => const RequestsScreen()),
+                pageBuilder: (_, state) =>
+                    msnPage(child: const RequestsScreen(), state: state)),
           ]),
           StatefulShellBranch(routes: [
             GoRoute(
-                path: '/orders', builder: (_, __) => const OrdersScreen()),
+                path: '/orders',
+                pageBuilder: (_, state) =>
+                    msnPage(child: const OrdersScreen(), state: state)),
           ]),
           StatefulShellBranch(routes: [
             GoRoute(
-                path: '/clients', builder: (_, __) => const ClientsScreen()),
+                path: '/clients',
+                pageBuilder: (_, state) =>
+                    msnPage(child: const ClientsScreen(), state: state)),
           ]),
           StatefulShellBranch(routes: [
-            GoRoute(path: '/more', builder: (_, __) => const MoreScreen()),
+            GoRoute(
+                path: '/more',
+                pageBuilder: (_, state) =>
+                    msnPage(child: const MoreScreen(), state: state)),
           ]),
         ],
       ),
       // ── Demandes ─────────────────────────────────────────────────────────
       GoRoute(
           path: '/requests/new',
-          builder: (_, __) => const NewRequestScreen()),
+          pageBuilder: (_, state) => msnPage(
+              child: RequestFormScreen(
+                  initialClientId: state.uri.queryParameters['clientId']),
+              state: state)),
+      GoRoute(
+          path: '/requests/:id/edit',
+          pageBuilder: (_, state) => msnPage(
+              child: RequestFormScreen(
+                  requestId: state.pathParameters['id']),
+              state: state)),
       GoRoute(
           path: '/requests/:id',
-          builder: (_, state) => RequestDetailScreen(
-              requestId: state.pathParameters['id']!)),
+          pageBuilder: (_, state) => msnPage(
+              child: RequestDetailScreen(
+                  requestId: state.pathParameters['id']!),
+              state: state)),
       GoRoute(
           path: '/requests/:id/qualify',
-          builder: (_, state) => qual.QualificationScreen(
-              requestId: state.pathParameters['id']!)),
+          pageBuilder: (_, state) => msnPage(
+              child: qual.QualificationScreen(
+                  requestId: state.pathParameters['id']!),
+              state: state)),
       // ── Clients ──────────────────────────────────────────────────────────
       GoRoute(
           path: '/clients/new',
-          builder: (_, __) => const ClientEditScreen()),
+          pageBuilder: (_, state) =>
+              msnPage(child: const ClientEditScreen(), state: state)),
       GoRoute(
           path: '/clients/:id',
-          builder: (_, state) =>
-              ClientDetailScreen(clientId: state.pathParameters['id']!)),
+          pageBuilder: (_, state) => msnPage(
+              child: ClientDetailScreen(
+                  clientId: state.pathParameters['id']!),
+              state: state)),
       GoRoute(
           path: '/clients/:id/edit',
-          builder: (_, state) =>
-              ClientEditScreen(clientId: state.pathParameters['id'])),
+          pageBuilder: (_, state) => msnPage(
+              child: ClientEditScreen(
+                  clientId: state.pathParameters['id']),
+              state: state)),
       // ── Catalogue ────────────────────────────────────────────────────────
       GoRoute(
-          path: '/catalog', builder: (_, __) => const CatalogScreen()),
+          path: '/catalog',
+          pageBuilder: (_, state) =>
+              msnPage(child: const CatalogScreen(), state: state)),
       GoRoute(
           path: '/catalog/new',
-          builder: (_, __) => const ServiceEditScreen()),
+          pageBuilder: (_, state) =>
+              msnPage(child: const ServiceEditScreen(), state: state)),
       GoRoute(
           path: '/catalog/:id',
-          builder: (_, state) =>
-              ServiceDetailScreen(serviceId: state.pathParameters['id']!)),
+          pageBuilder: (_, state) => msnPage(
+              child: ServiceDetailScreen(
+                  serviceId: state.pathParameters['id']!),
+              state: state)),
       GoRoute(
           path: '/catalog/:id/edit',
-          builder: (_, state) =>
-              ServiceEditScreen(serviceId: state.pathParameters['id'])),
+          pageBuilder: (_, state) => msnPage(
+              child: ServiceEditScreen(
+                  serviceId: state.pathParameters['id']),
+              state: state)),
       // ── Devis ────────────────────────────────────────────────────────────
       GoRoute(
-          path: '/quotes', builder: (_, __) => const QuotesScreen()),
+          path: '/quotes',
+          pageBuilder: (_, state) =>
+              msnPage(child: const QuotesScreen(), state: state)),
       GoRoute(
           path: '/quotes/new',
-          builder: (_, state) => QuoteEditScreen(
-            requestId: state.uri.queryParameters['requestId'],
-            clientId: state.uri.queryParameters['clientId'],
+          pageBuilder: (_, state) => msnPage(
+            child: QuoteEditScreen(
+              requestId: state.uri.queryParameters['requestId'],
+              clientId: state.uri.queryParameters['clientId'],
+            ),
+            state: state,
           )),
       GoRoute(
           path: '/quotes/:id',
-          builder: (_, state) =>
-              QuoteDetailScreen(quoteId: state.pathParameters['id']!)),
+          pageBuilder: (_, state) => msnPage(
+              child: QuoteDetailScreen(
+                  quoteId: state.pathParameters['id']!),
+              state: state)),
       GoRoute(
           path: '/quotes/:id/edit',
-          builder: (_, state) =>
-              QuoteEditScreen(quoteId: state.pathParameters['id'])),
+          pageBuilder: (_, state) => msnPage(
+              child: QuoteEditScreen(
+                  quoteId: state.pathParameters['id']),
+              state: state)),
       // ── Factures ─────────────────────────────────────────────────────────
       GoRoute(
-          path: '/invoices', builder: (_, __) => const InvoicesScreen()),
+          path: '/invoices',
+          pageBuilder: (_, state) =>
+              msnPage(child: const InvoicesScreen(), state: state)),
       GoRoute(
           path: '/invoices/new',
-          builder: (_, state) => InvoiceNewScreen(
-            orderId: state.uri.queryParameters['orderId'],
-            quoteId: state.uri.queryParameters['quoteId'],
-            clientId: state.uri.queryParameters['clientId'],
+          pageBuilder: (_, state) => msnPage(
+            child: InvoiceNewScreen(
+              orderId: state.uri.queryParameters['orderId'],
+              quoteId: state.uri.queryParameters['quoteId'],
+              clientId: state.uri.queryParameters['clientId'],
+            ),
+            state: state,
           )),
       GoRoute(
           path: '/invoices/:id',
-          builder: (_, state) =>
-              InvoiceDetailScreen(invoiceId: state.pathParameters['id']!)),
+          pageBuilder: (_, state) => msnPage(
+              child: InvoiceDetailScreen(
+                  invoiceId: state.pathParameters['id']!),
+              state: state)),
       // ── Paiements ────────────────────────────────────────────────────────
       GoRoute(
-          path: '/payments', builder: (_, __) => const PaymentsScreen()),
+          path: '/payments',
+          pageBuilder: (_, state) =>
+              msnPage(child: const PaymentsScreen(), state: state)),
       GoRoute(
           path: '/payments/new',
-          builder: (_, state) => PaymentFormScreen(
+          pageBuilder: (_, state) => msnPage(
+            child: PaymentFormScreen(
               invoiceId: state.uri.queryParameters['invoiceId'],
-              orderId: state.uri.queryParameters['orderId'])),
+              orderId: state.uri.queryParameters['orderId'],
+            ),
+            state: state,
+          )),
       // ── Commandes ────────────────────────────────────────────────────────
       GoRoute(
           path: '/orders/:id',
-          builder: (_, state) =>
-              OrderDetailScreen(orderId: state.pathParameters['id']!)),
+          pageBuilder: (_, state) => msnPage(
+              child: OrderDetailScreen(
+                  orderId: state.pathParameters['id']!),
+              state: state)),
       // ── Communication ────────────────────────────────────────────────────
       GoRoute(
           path: '/communication/templates',
-          builder: (_, __) => const TemplatesScreen()),
+          pageBuilder: (_, state) =>
+              msnPage(child: const TemplatesScreen(), state: state)),
       GoRoute(
           path: '/communication/composer',
-          builder: (_, state) {
+          pageBuilder: (context, state) {
             final args = state.extra is ComposerArgs
                 ? state.extra as ComposerArgs
                 : null;
-            return MessageComposerScreen(args: args);
+            return msnPage(
+                child: MessageComposerScreen(args: args), state: state);
+          }),
+      // ── Fichiers (aperçu in-app : images, TXT, PDF) ──────────────────────
+      GoRoute(
+          path: '/files/view',
+          pageBuilder: (context, state) {
+            final file =
+                state.extra is OrderFile ? state.extra as OrderFile : null;
+            return msnPage(
+                child: FileViewerScreen(
+                    file: file ??
+                        OrderFile(
+                            id: '',
+                            nom: 'fichier',
+                            dossier: DossierFichier.documents,
+                            origine: 'mobile',
+                            createdAt: DateTime.now())),
+                state: state);
           }),
       // ── Modules support ──────────────────────────────────────────────────
       GoRoute(
-          path: '/documents', builder: (_, __) => const DocumentsScreen()),
-      GoRoute(path: '/tasks', builder: (_, __) => const TasksScreen()),
-      GoRoute(path: '/sync', builder: (_, __) => const SyncScreen()),
+          path: '/documents',
+          pageBuilder: (_, state) =>
+              msnPage(child: const DocumentsScreen(), state: state)),
+      GoRoute(
+          path: '/tasks',
+          pageBuilder: (_, state) =>
+              msnPage(child: const TasksScreen(), state: state)),
+      GoRoute(
+          path: '/sync',
+          pageBuilder: (_, state) =>
+              msnPage(child: const SyncScreen(), state: state)),
       // ── Administration ───────────────────────────────────────────────────
       GoRoute(
-          path: '/settings', builder: (_, __) => const SettingsScreen()),
+          path: '/settings',
+          pageBuilder: (_, state) =>
+              msnPage(child: const SettingsScreen(), state: state)),
       GoRoute(
           path: '/settings/modules',
-          builder: (_, __) => const ModulesScreen()),
+          pageBuilder: (_, state) =>
+              msnPage(child: const ModulesScreen(), state: state)),
       GoRoute(
           path: '/settings/templates',
-          builder: (_, __) => const AdminTemplatesScreen()),
+          pageBuilder: (_, state) =>
+              msnPage(child: const AdminTemplatesScreen(), state: state)),
       GoRoute(
           path: '/settings/qualification',
-          builder: (_, __) => const AdminQualificationScreen()),
+          pageBuilder: (_, state) => msnPage(
+              child: const AdminQualificationScreen(), state: state)),
       GoRoute(
           path: '/settings/users',
-          builder: (_, __) => const UsersScreen()),
+          pageBuilder: (_, state) =>
+              msnPage(child: const UsersScreen(), state: state)),
       GoRoute(
           path: '/settings/journal',
-          builder: (_, __) => const JournalScreen()),
+          pageBuilder: (_, state) =>
+              msnPage(child: const JournalScreen(), state: state)),
       GoRoute(
           path: '/settings/trash',
-          builder: (_, __) => const TrashScreen()),
+          pageBuilder: (_, state) =>
+              msnPage(child: const TrashScreen(), state: state)),
+      // ── Administration v4 : contenus administrables ──────────────────────
+      GoRoute(
+          path: '/settings/conditions',
+          pageBuilder: (_, state) =>
+              msnPage(child: const AdminConditionsScreen(), state: state)),
+      GoRoute(
+          path: '/settings/dictionary',
+          pageBuilder: (_, state) =>
+              msnPage(child: const AdminDictionaryScreen(), state: state)),
+      GoRoute(
+          path: '/settings/process',
+          pageBuilder: (_, state) =>
+              msnPage(child: const AdminProcessScreen(), state: state)),
+      GoRoute(
+          path: '/settings/catalog-images',
+          pageBuilder: (_, state) => msnPage(
+              child: const AdminCatalogImagesScreen(), state: state)),
+      GoRoute(
+          path: '/settings/workflows',
+          pageBuilder: (_, state) =>
+              msnPage(child: const AdminWorkflowsScreen(), state: state)),
     ],
   );
+
+  // Mémorise le dernier écran consulté (restauration au démarrage).
+  // Les routes /login et / sont ignorées côté session.saveLastRoute.
+  router.routerDelegate.addListener(() {
+    final location = router.routeInformationProvider.value.uri.toString();
+    if (location.isNotEmpty && location != '/') {
+      ref.read(sessionProvider.notifier).saveLastRoute(location);
+    }
+  });
+
+  return router;
 });

@@ -56,10 +56,17 @@ class RequestDetailScreen extends ConsumerWidget {
           appBar: AppBar(
             title: Text(r.reference),
             actions: [
+              IconButton(
+                icon: const Icon(Icons.edit_outlined),
+                tooltip: 'Modifier la demande',
+                onPressed: () => context.push('/requests/$requestId/edit'),
+              ),
               PopupMenuButton<String>(
                 onSelected: (value) =>
                     _onMenu(context, ref, value, r, row.client.nom),
                 itemBuilder: (_) => const [
+                  PopupMenuItem(
+                      value: 'edit', child: Text('Modifier la demande')),
                   PopupMenuItem(
                       value: 'attente',
                       child: Text('Marquer en attente client')),
@@ -268,16 +275,19 @@ class RequestDetailScreen extends ConsumerWidget {
                         children: files.value!
                             .map((f) => ListTile(
                                   dense: true,
-                                  leading: const Icon(Icons.insert_drive_file,
-                                      size: 18),
+                                  leading: Icon(_fileIcon(f),
+                                      size: 20, color: MsnColors.primary),
                                   title: Text(f.nom,
-                                      style:
-                                          const TextStyle(fontSize: 13)),
+                                      style: const TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w600)),
                                   subtitle: f.note != null
                                       ? Text(f.note!,
                                           style: const TextStyle(
                                               fontSize: 11))
                                       : null,
+                                  onTap: () =>
+                                      context.push('/files/view', extra: f),
                                   trailing: IconButton(
                                     icon: const Icon(Icons.delete_outline,
                                         size: 18),
@@ -324,6 +334,16 @@ class RequestDetailScreen extends ConsumerWidget {
         ),
       );
 
+  IconData _fileIcon(OrderFile f) {
+    final ext = (f.mime ?? '').toLowerCase();
+    if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'].contains(ext)) {
+      return Icons.image_outlined;
+    }
+    if (ext == 'pdf') return Icons.picture_as_pdf_outlined;
+    if (ext == 'txt') return Icons.article_outlined;
+    return Icons.insert_drive_file_outlined;
+  }
+
   List<MapEntry<String, String>> _qualificationEntries(String json) {
     try {
       final decoded = jsonDecode(json) as Map<String, dynamic>;
@@ -338,14 +358,16 @@ class RequestDetailScreen extends ConsumerWidget {
   Future<void> _attachFile(
       BuildContext context, WidgetRef ref, Request r) async {
     try {
-      final file = await ref.read(fileIngestServiceProvider).pickAndAttach(
+      final files = await ref.read(fileIngestServiceProvider).pickAndAttach(
             orderId: null,
             requestId: r.id,
             dossier: DossierFichier.source,
             note: 'Fichier reçu du client',
           );
-      if (file != null && context.mounted) {
-        showMsnSnack(context, 'Fichier « ${file.nom} » ajouté à SOURCE.');
+      if (files.isNotEmpty && context.mounted) {
+        showMsnSnack(context,
+            '${files.length} fichier(s) ajouté(s) à SOURCE : '
+            '${files.map((f) => f.nom).join(', ')}');
       }
     } catch (e) {
       if (context.mounted) showMsnSnack(context, e.toString(), error: true);
@@ -357,6 +379,11 @@ class RequestDetailScreen extends ConsumerWidget {
     final dao = ref.read(requestsDaoProvider);
     final logger = ref.read(activityLoggerProvider);
     switch (value) {
+      case 'edit':
+        if (context.mounted) {
+          context.push('/requests/${r.id}/edit');
+        }
+        break;
       case 'attente':
         await dao.updateStatut(r.id, RequestStatut.enAttente);
         await logger.log(

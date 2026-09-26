@@ -32,6 +32,9 @@ class _ServiceEditScreenState extends ConsumerState<ServiceEditScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nom = TextEditingController();
   final _description = TextEditingController();
+  final _descriptionDetaillee = TextEditingController();
+  final _avantages = TextEditingController();
+  final _faq = TextEditingController();
   final _prix = TextEditingController();
   final _unite = TextEditingController(text: 'forfait');
   final _delai = TextEditingController();
@@ -68,6 +71,9 @@ class _ServiceEditScreenState extends ConsumerState<ServiceEditScreen> {
         final s = full.service;
         _nom.text = s.nom;
         _description.text = s.description ?? '';
+        _descriptionDetaillee.text = s.descriptionDetaillee ?? '';
+        _avantages.text = s.avantages ?? '';
+        _faq.text = s.faq ?? '';
         _prix.text = s.prixBase.toString();
         _unite.text = s.unite;
         _delai.text = s.delaiJours?.toString() ?? '';
@@ -119,6 +125,12 @@ class _ServiceEditScreenState extends ConsumerState<ServiceEditScreen> {
         nom: _nom.text.trim(),
         description:
             _description.text.trim().isEmpty ? null : _description.text.trim(),
+        descriptionDetaillee: _descriptionDetaillee.text.trim().isEmpty
+            ? null
+            : _descriptionDetaillee.text.trim(),
+        avantages:
+            _avantages.text.trim().isEmpty ? null : _avantages.text.trim(),
+        faq: _faq.text.trim().isEmpty ? null : _faq.text.trim(),
         categoryId: _category?.id,
         prixBase: Validators.parseMontant(_prix.text) ?? 0,
         unite: _unite.text.trim().isEmpty ? 'forfait' : _unite.text.trim(),
@@ -129,6 +141,7 @@ class _ServiceEditScreenState extends ConsumerState<ServiceEditScreen> {
         conditions:
             _conditions.text.trim().isEmpty ? null : _conditions.text.trim(),
         actif: _actif,
+        ordre: old?.service.ordre ?? 0,
         createdAt: old?.service.createdAt ?? now,
         updatedAt: now,
       );
@@ -243,6 +256,24 @@ class _ServiceEditScreenState extends ConsumerState<ServiceEditScreen> {
               label: 'Description commerciale',
               controller: _description,
               maxLines: 3,
+            ),
+            MsnTextField(
+              label: 'Description détaillée (présentation)',
+              controller: _descriptionDetaillee,
+              maxLines: 5,
+              hint: 'Présentation complète du service pour la fiche client…',
+            ),
+            MsnTextField(
+              label: 'Avantages (un par ligne)',
+              controller: _avantages,
+              maxLines: 4,
+              hint: 'Ex. Retouches incluses\nFichiers haute définition',
+            ),
+            MsnTextField(
+              label: 'FAQ (une ligne par question — format Question ? Réponse.)',
+              controller: _faq,
+              maxLines: 4,
+              hint: 'Ex. Quels formats livrez-vous ? PDF, PNG et source.',
             ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -421,6 +452,9 @@ class _ServiceEditScreenState extends ConsumerState<ServiceEditScreen> {
   void dispose() {
     _nom.dispose();
     _description.dispose();
+    _descriptionDetaillee.dispose();
+    _avantages.dispose();
+    _faq.dispose();
     _prix.dispose();
     _unite.dispose();
     _delai.dispose();

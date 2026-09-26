@@ -8,6 +8,8 @@ class MsnColors {
   static const Color primaryDark = Color(0xFF083B7F);
   static const Color accent = Color(0xFF00B8D4);
   static const Color accentSoft = Color(0xFFE0F7FB);
+  static const Color purple = Color(0xFF6E56CF);
+  static const Color purpleSoft = Color(0xFFEBE6FB);
 
   static const Color success = Color(0xFF2E7D32);
   static const Color warning = Color(0xFFF9A825);
@@ -110,10 +112,22 @@ class MsnTheme {
       ),
       chipTheme: base.chipTheme.copyWith(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(999),
           side: const BorderSide(color: MsnColors.border),
         ),
-        labelStyle: const TextStyle(fontSize: 12),
+        // WidgetStateTextStyle : couleur du label résolue par état —
+        // corrige le bug « texte blanc sur bouton blanc » des filtres.
+        labelStyle: WidgetStateTextStyle.resolveWith((states) {
+          final selected = states.contains(WidgetState.selected);
+          return TextStyle(
+            fontSize: 12.5,
+            fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+            color: selected ? Colors.white : MsnColors.textPrimary,
+          );
+        }),
+        backgroundColor: Colors.white,
+        selectedColor: MsnColors.primary,
+        checkmarkColor: Colors.white,
       ),
       dividerTheme: const DividerThemeData(color: MsnColors.border, thickness: 1),
       snackBarTheme: SnackBarThemeData(

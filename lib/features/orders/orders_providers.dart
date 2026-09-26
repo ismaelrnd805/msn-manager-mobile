@@ -73,6 +73,7 @@ final orderExceptionsProvider =
 
 /// Termine l'étape courante (après validation des règles par l'appelant)
 /// et met à jour le statut de la commande en conséquence.
+/// v4 : l'utilisateur qui valide est tracé (completedBy).
 Future<void> completeStep(
   WidgetRef ref, {
   required Order order,
@@ -81,11 +82,13 @@ Future<void> completeStep(
   required int nextIndex,
   String? note,
 }) async {
+  final userName = ref.read(sessionProvider)?.userName;
   await ref.read(workflowsDaoProvider).completeStep(
         instanceId: instance.id,
         stepStateId: stepState.id,
         newStepIndex: nextIndex,
         note: note,
+        completedBy: userName,
       );
 
   // Statut de la commande synchronisé avec les étapes clés.
@@ -105,9 +108,48 @@ Future<void> completeStep(
         entite: 'commande',
         entityId: order.id,
         details:
-            '${order.reference} : étape « ${stepState.nom} » terminée.',
+            '${order.reference} : étape « ${stepState.nom} » terminée'
+            '${userName != null ? ' par $userName' : ''}.',
       );
 }
+
+/// Annule la validation d'une étape (retour en arrière) — v4.
+/// Les étapes suivantes déjà validées sont remises en attente et le
+/// curseur de la progression recule. Toute l'opération est tracée.
+Future<void> cancelStep(
+  WidgetRef ref, {
+  required Order order,
+  required WorkflowInstance instance,
+  required WorkflowStepState stepState,
+}) async {
+  final userName = ref.read(sessionProvider)?.userName;
+  await ref.read(workflowsDaoProvider).cancelStep(
+        instanceId: instance.id,
+        stepStateId: stepState.id,
+        stepOrdre: stepState.ordre,
+        annulePar: userName,
+      );
+  await ref.read(activityLoggerProvider).log(
+        action: ActivityAction.changementStatut,
+        entite: 'commande',
+        entityId: order.id,
+        details: '${order.reference} : étape « ${stepState.nom} » ANNULÉE'
+            '${userName != null ? ' par $userName' : ''} le '
+            '${Formatters.dateTime(DateTime.now())}.',
+      );
+}
+
+/// Fiches d'instructions des étapes du workflow d'une commande (par
+/// stepId) — v4. Sert à afficher « quoi faire, pourquoi, qui, fichiers,
+/// résultat, conditions » pour chaque étape de la progression.
+/// Clé de family : l'ID de la COMMANDE.
+final workflowStepsForInstanceProvider =
+    FutureProvider.family<Map<String, WorkflowStep>, String>((ref, orderId) async {
+  final instance = await ref.watch(workflowsDaoProvider).instanceForOrder(orderId);
+  if (instance == null) return const {};
+  final steps = await ref.watch(workflowsDaoProvider).stepsForTemplate(instance.workflowId);
+  return {for (final s in steps) s.id: s};
+});
 
 /// Construit le contexte de règles pour la commande (moteur section 23).
 Future<RuleContext> buildRuleContext(

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'core/database/seed/default_content.dart';
 import 'core/database/seed/demo_data.dart';
 import 'core/providers/database_provider.dart';
 import 'core/providers/services_providers.dart';
@@ -15,13 +16,26 @@ import 'core/sync/sync_provider.dart';
 import 'core/theme/msn_theme.dart';
 
 /// Démarrage : ouvre la base, insère les données de démo au premier
-/// lancement, initialise les notifications et lance un cycle de sync.
+/// lancement, garantit les contenus par défaut administrables,
+/// restaure la session persistante, initialise les notifications et
+/// lance un cycle de sync.
 final appStartupProvider = FutureProvider<void>((ref) async {
   final db = ref.watch(appDatabaseProvider);
   await DemoData.seedIfNeeded(db);
+  // Contenus administrables garantis (conditions, dictionnaire FR/MG,
+  // processus client, instructions d'étapes) — sans eux l'app ne peut
+  // pas fonctionner correctement, ils ne dépendent pas du seed démo.
+  await DefaultContent.ensureDefaults(db);
+
+  // Restauration de la session persistante (secure storage) — AVANT
+  // toute redirection du splash, pour retrouver le dernier écran.
+  await ref.read(sessionProvider.notifier).restore();
 
   final notifications = ref.read(notificationServiceProvider);
   await notifications.init();
+  // Demande de permission (Android 13+) : au premier besoin réel — les
+  // rappels planifiés ci-dessous. Le refus ne bloque jamais l'application.
+  await notifications.requestPermission();
 
   // Déclenche l'initialisation du contrôleur de synchronisation.
   ref.watch(syncControllerProvider);

@@ -48,6 +48,26 @@ class NotificationService {
 
   bool get canSchedule => _initialized;
 
+  /// Demande la permission de notifications (Android 13+, POST_NOTIFICATIONS).
+  ///
+  /// Appelée au démarrage, juste avant la planification des premiers
+  /// rappels : l'utilisateur voit une demande système claire au moment
+  /// réel où les notifications deviennent utiles. En cas de refus, rien ne
+  /// bloque : les rappels restent visibles dans l'application et la
+  /// permission peut être accordée plus tard depuis les réglages Android.
+  Future<bool> requestPermission() async {
+    if (!_initialized) return false;
+    try {
+      final android = _plugin.resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>();
+      final granted = await android?.requestNotificationsPermission();
+      return granted ?? false;
+    } catch (e) {
+      debugPrint('NotificationService: demande de permission impossible ($e).');
+      return false;
+    }
+  }
+
   /// Planifie une notification locale à [when] (rappel de deadline…).
   Future<void> schedule({
     required int id,

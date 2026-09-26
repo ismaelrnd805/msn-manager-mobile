@@ -7,11 +7,11 @@ class AppConstants {
   static const String appName = 'MSN Manager';
   static const String companyLegalName = 'MSN — Multi-Services Numériques';
   static const String appVersion = '1.0.0';
-  static const int databaseSchemaVersion = 3;
+  static const int databaseSchemaVersion = 4;
 
-  // Contact par défaut (modifiable dans les paramètres / sauvegarde).
-  static const String defaultCompanyPhone = '+261 34 00 000 00';
-  static const String defaultCompanyEmail = 'contact@msn.mg';
+  // Contact officiel MSN (modifiable dans les paramètres / sauvegarde).
+  static const String defaultCompanyPhone = '+261 34 39 67 744';
+  static const String defaultCompanyEmail = 'multi.snumeriques@gmail.com';
 
   /// Année courante utilisée par la numérotation (recalculée dynamiquement
   /// par [NumberingService], cette valeur ne sert qu'aux tests).
@@ -44,6 +44,10 @@ class AppConstants {
   static const String keyCompanyPhone = 'company_phone';
   static const String keyCompanyEmail = 'company_email';
   static const String keyDefaultAcomptePercent = 'default_acompte_percent';
+
+  /// Langue des textes envoyés au client (« fr » ou « mg ») — bascule
+  /// mémorisée entre les sessions (voir ClientLangueNotifier).
+  static const String keyClientLanguage = 'langue_client';
 }
 
 /// Clés de règles métier configurables par service
@@ -69,7 +73,9 @@ class RuleKeys {
     acompteObligatoire: 'false',
     propositionsIncluses: '2',
     correctionsIncluses: '2',
-    paiementFinalAvantLivraison: 'false',
+    // Règle MSN : une livraison ne peut PAS être validée sans encaissement
+    // complet (exception possible en cas exceptionnel, tracée au journal).
+    paiementFinalAvantLivraison: 'true',
     validationFinaleObligatoire: 'false',
   };
 }

@@ -18,6 +18,7 @@ import '../../utils/id_generator.dart';
 import '../../constants/app_constants.dart';
 import '../app_database.dart';
 import '../daos/system_dao.dart';
+import 'default_content.dart';
 
 class DemoData {
   DemoData._();
@@ -92,16 +93,9 @@ class DemoData {
         AppConstants.keyCompanyEmail, AppConstants.defaultCompanyEmail);
     await system.setValue(AppConstants.keyDefaultAcomptePercent, '40');
 
-    // ── Catégories ────────────────────────────────────────────────────────
-    const categories = {
-      'cat_bureautique': 'Bureautique',
-      'cat_design': 'Design',
-      'cat_communication': 'Communication',
-      'cat_web': 'Web',
-      'cat_impression': 'Impression',
-    };
+    // ── Catégories (6 branches) — source unique : DefaultCatalog ─────────
     var catOrdre = 0;
-    for (final entry in categories.entries) {
+    for (final entry in DefaultContent.defaultCategories.entries) {
       await db.into(db.categories).insert(CategoriesCompanion.insert(
             id: entry.key,
             nom: entry.value,
@@ -109,68 +103,8 @@ class DemoData {
           ));
     }
 
-    // ── Services & tarifs ─────────────────────────────────────────────────
-    final services = <String, ({
-      String nom,
-      String cat,
-      int prix,
-      String unite,
-      int delai,
-      String desc,
-    })>{
-      'svc_logo': (
-        nom: 'Création de logo',
-        cat: 'cat_design',
-        prix: 150000,
-        unite: 'forfait',
-        delai: 7,
-        desc: 'Logo professionnel avec 2 propositions, 2 corrections incluses '
-            'et fichiers finaux (PNG, PDF, source).'
-      ),
-      'svc_affiche': (
-        nom: 'Affiche',
-        cat: 'cat_design',
-        prix: 45000,
-        unite: 'pièce',
-        delai: 3,
-        desc: 'Affiche événementielle prête à imprimer, format au choix.'
-      ),
-      'svc_cv': (
-        nom: 'CV',
-        cat: 'cat_bureautique',
-        prix: 10000,
-        unite: 'pièce',
-        delai: 1,
-        desc: 'CV professionnel moderne, mis en page et exporté en PDF.'
-      ),
-      'svc_saisie': (
-        nom: 'Saisie de document',
-        cat: 'cat_bureautique',
-        prix: 700,
-        unite: 'page',
-        delai: 2,
-        desc: 'Saisie rapide et fidèle de vos documents manuscrits ou PDF.'
-      ),
-      'svc_memoire': (
-        nom: 'Mise en page mémoire',
-        cat: 'cat_bureautique',
-        prix: 3000,
-        unite: 'page',
-        delai: 10,
-        desc: 'Mise en page conforme aux normes universitaires, sommaire, '
-            'pagination.'
-      ),
-      'svc_site': (
-        nom: 'Site web',
-        cat: 'cat_web',
-        prix: 450000,
-        unite: 'forfait',
-        delai: 21,
-        desc: 'Site vitrine responsive avec formulaire de contact et '
-            'référencement de base.'
-      ),
-    };
-    for (final entry in services.entries) {
+    // ── Services & tarifs — source unique : DefaultCatalog ────────────────
+    for (final entry in DefaultContent.defaultServices.entries) {
       final s = entry.value;
       await db.into(db.services).insert(ServicesCompanion.insert(
             id: entry.key,
@@ -180,9 +114,13 @@ class DemoData {
             unite: Value(s.unite),
             delaiJours: Value(s.delai),
             description: Value(s.desc),
-            inclus: const Value('Fichiers finaux PDF + PNG'),
-            exclusions: const Value('Impression physique'),
-            conditions: const Value('Acompte requis selon règles du service'),
+            inclus: Value(s.inclus),
+            exclusions: const Value(
+                'Tout ce qui n\u2019est pas listé dans « inclus » fait '
+                'l\u2019objet d\u2019un devis séparé.'),
+            conditions: const Value(
+                'Tarif « à partir de » : le prix final dépend de la '
+                'complexité et du volume du projet.'),
           ));
     }
 
@@ -323,7 +261,7 @@ class DemoData {
       ('Type de mise en page', QuestionType.liste, false),
     ]);
 
-    await createForm('form_affiche', 'svc_affiche', const [
+    await createForm('form_affiche', 'svc_affiche_simple', const [
       ('Format (A5, A4, A3…)', QuestionType.liste, true),
       ('Événement', QuestionType.texte, true),
       ('Texte principal', QuestionType.multiligne, true),

@@ -12,12 +12,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/constants/app_constants.dart';
+import '../../core/providers/database_provider.dart';
 import '../../core/providers/services_providers.dart';
 import '../../core/services/backup_service.dart';
 import '../../core/theme/msn_theme.dart';
 import '../../core/utils/formatters.dart';
 import '../../shared/widgets/copy_message_card.dart';
 import '../../shared/widgets/feedback.dart';
+import '../../core/database/app_database.dart';
 import 'catalog_providers.dart';
 
 class ServiceDetailScreen extends ConsumerWidget {
@@ -73,7 +75,7 @@ class ServiceDetailScreen extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${Formatters.ar(s.prixBase)} / ${s.unite}',
+                        Formatters.tarif(s.prixBase, s.unite),
                         style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w800,
@@ -81,9 +83,7 @@ class ServiceDetailScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        s.delaiJours == null
-                            ? 'Délai à convenir'
-                            : 'Délai habituel : ${s.delaiJours} jours',
+                        Formatters.delai(s.delaiJours),
                         style: const TextStyle(
                             fontSize: 12, color: MsnColors.textSecondary),
                       ),
@@ -170,6 +170,115 @@ class ServiceDetailScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 12),
 
+              // ── Présentation enrichie (v4) ────────────────────────────
+              if (s.descriptionDetaillee != null &&
+                  s.descriptionDetaillee!.trim().isNotEmpty)
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(14),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('PRÉSENTATION DÉTAILLÉE',
+                            style: TextStyle(
+                                fontSize: 11.5,
+                                fontWeight: FontWeight.w800,
+                                color: MsnColors.textSecondary)),
+                        const SizedBox(height: 8),
+                        Text(s.descriptionDetaillee!,
+                            style: const TextStyle(
+                                fontSize: 13, height: 1.5)),
+                      ],
+                    ),
+                  ),
+                ),
+              if (s.avantages != null && s.avantages!.trim().isNotEmpty)
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(14),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('AVANTAGES',
+                            style: TextStyle(
+                                fontSize: 11.5,
+                                fontWeight: FontWeight.w800,
+                                color: MsnColors.textSecondary)),
+                        const SizedBox(height: 8),
+                        ...s.avantages!
+                            .split('\n')
+                            .where((l) => l.trim().isNotEmpty)
+                            .map((l) => Padding(
+                                  padding:
+                                      const EdgeInsets.only(bottom: 5),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Icon(Icons.check_circle,
+                                          size: 15,
+                                          color: MsnColors.success),
+                                      const SizedBox(width: 7),
+                                      Expanded(
+                                          child: Text(l.trim(),
+                                              style: const TextStyle(
+                                                  fontSize: 13))),
+                                    ],
+                                  ),
+                                )),
+                      ],
+                    ),
+                  ),
+                ),
+              if (s.faq != null && s.faq!.trim().isNotEmpty)
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(14),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('QUESTIONS FRÉQUENTES',
+                            style: TextStyle(
+                                fontSize: 11.5,
+                                fontWeight: FontWeight.w800,
+                                color: MsnColors.textSecondary)),
+                        const SizedBox(height: 8),
+                        ...s.faq!
+                            .split('\n')
+                            .where((l) => l.trim().isNotEmpty)
+                            .map((l) => Padding(
+                                  padding:
+                                      const EdgeInsets.only(bottom: 5),
+                                  child: Text(l.trim(),
+                                      style: const TextStyle(
+                                          fontSize: 12.5, height: 1.45)),
+                                )),
+                      ],
+                    ),
+                  ),
+                ),
+              const SizedBox(height: 12),
+
+              // ── Processus de prise en charge (administrable) ──────────
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(14),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('PROCESSUS DE PRISE EN CHARGE',
+                          style: TextStyle(
+                              fontSize: 11.5,
+                              fontWeight: FontWeight.w800,
+                              color: MsnColors.textSecondary)),
+                      const SizedBox(height: 10),
+                      _ProcessSteps(ref: ref),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+
               // ── Règles métier ─────────────────────────────────────────
               if (rules.value?.isNotEmpty ?? false)
                 Card(
@@ -230,9 +339,16 @@ class ServiceDetailScreen extends ConsumerWidget {
 
   String _tarifMessage(
       String nom, int prix, String unite, int? delaiJours) {
+    final surDevis = prix <= 0 || unite.trim() == 'devis';
+    final tarif = surDevis
+        ? 'Sur devis : le tarif est établi après étude de votre projet.'
+        : Formatters.tarif(prix, unite);
+    final delai = (delaiJours == null || delaiJours <= 0)
+        ? 'à convenir selon le projet'
+        : '$delaiJours jours';
     return 'Bonjour, voici notre tarif pour $nom :\n\n'
-        '${Formatters.ar(prix)} / $unite\n'
-        'Délai : ${delaiJours == null ? 'à convenir' : '$delaiJours jours'}\n\n'
+        '$tarif\n'
+        'Délai : $delai\n\n'
         'Le prix inclut les fichiers finaux. Souhaitez-vous un devis '
         'officiel ?';
   }
@@ -310,6 +426,81 @@ class StatusPill extends StatelessWidget {
               fontSize: 11,
               fontWeight: FontWeight.w700,
               color: muted ? MsnColors.textSecondary : MsnColors.primaryDark)),
+    );
+  }
+}
+
+/// Liste des étapes du processus client (table process_steps, v4) —
+/// contenu administrable depuis Administration > Processus client.
+class _ProcessSteps extends StatelessWidget {
+  const _ProcessSteps({required this.ref});
+
+  final WidgetRef ref;
+
+  @override
+  Widget build(BuildContext context) {
+    final stepsAsync = ref
+        .watch(workflowsDaoProvider)
+        .watchActiveProcessSteps();
+    return StreamBuilder<List<ProcessStep>>(
+      stream: stepsAsync,
+      builder: (context, snapshot) {
+        final steps = snapshot.data ?? const <ProcessStep>[];
+        if (steps.isEmpty) {
+          return Text(
+              'Le parcours client sera affiché ici une fois configuré '
+              'dans l\'administration.',
+              style: TextStyle(
+                  fontSize: 12,
+                  color: MsnColors.textSecondary.withValues(alpha: 0.9)));
+        }
+        return Column(
+          children: [
+            for (var i = 0; i < steps.length; i++)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 24,
+                      height: 24,
+                      alignment: Alignment.center,
+                      decoration: const BoxDecoration(
+                        color: MsnColors.accentSoft,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Text('${i + 1}',
+                          style: const TextStyle(
+                              fontSize: 11.5,
+                              fontWeight: FontWeight.w800,
+                              color: MsnColors.primaryDark)),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(steps[i].titre,
+                              style: const TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700)),
+                          if (steps[i].description != null)
+                            Text(steps[i].description!,
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    height: 1.4,
+                                    color: MsnColors.textSecondary
+                                        .withValues(alpha: 0.95))),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 }

@@ -186,6 +186,16 @@ class _QualificationScreenState extends ConsumerState<QualificationScreen> {
         );
       case QuestionType.liste:
         final options = _options(q);
+        // Robustesse : une question de liste sans options (config
+        // incomplète) ne doit jamais être inutilisable — champ texte.
+        if (options.isEmpty) {
+          return MsnTextField(
+            label: '${q.label}$obligatoire',
+            controller: _answers.putIfAbsent(
+                q.label, () => TextEditingController()),
+            hint: 'Liste d\'options non configurée — saisissez la valeur',
+          );
+        }
         return MsnDropdown<String>(
           label: '${q.label}$obligatoire',
           value: _choices[q.label],

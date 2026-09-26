@@ -63,7 +63,17 @@ class SettingsScreen extends ConsumerWidget {
             ('Modèles de messages', Icons.forum, '/settings/templates'),
             ('Questions de qualification', Icons.quiz_outlined,
                 '/settings/qualification'),
-            ('Utilisateurs & PIN', Icons.manage_accounts, '/settings/users'),
+            ('Utilisateurs & mots de passe', Icons.manage_accounts,
+                '/settings/users'),
+          ]),
+          _section(context, 'CONTENUS CLIENT', [
+            ('Conditions contractuelles', Icons.rule, '/settings/conditions'),
+            ('Catalogues en image', Icons.image_outlined,
+                '/settings/catalog-images'),
+            ('Processus client', Icons.route, '/settings/process'),
+            ('Workflows & instructions', Icons.account_tree,
+                '/settings/workflows'),
+            ('Dictionnaire FR → MG', Icons.translate, '/settings/dictionary'),
           ]),
           _section(context, 'DONNÉES', [
             ('Journal d\u2019activité', Icons.history, '/settings/journal'),
