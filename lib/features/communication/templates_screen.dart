@@ -9,6 +9,7 @@ import '../../core/domain/enums.dart';
 import '../../core/theme/msn_theme.dart';
 import '../../shared/widgets/empty_state.dart';
 import 'communication_providers.dart';
+import 'translation_sheet.dart';
 
 class TemplatesScreen extends ConsumerStatefulWidget {
   const TemplatesScreen({super.key});
@@ -72,12 +73,26 @@ class _TemplatesScreenState extends ConsumerState<TemplatesScreen> {
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(fontSize: 11.5),
                             ),
-                            trailing: const Icon(Icons.chevron_right,
-                                size: 18, color: MsnColors.textSecondary),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                if (t.corpsMg?.trim().isNotEmpty ?? false)
+                                  const Padding(
+                                    padding: EdgeInsets.only(right: 6),
+                                    child: Icon(Icons.verified_outlined,
+                                        size: 16, color: MsnColors.success),
+                                  ),
+                                const Icon(Icons.chevron_right,
+                                    size: 18,
+                                    color: MsnColors.textSecondary),
+                              ],
+                            ),
                             onTap: () => context.push(
                               '/communication/composer',
                               extra: ComposerArgs(templateCode: t.code),
                             ),
+                            onLongPress: () => showTranslationSheet(
+                                context, ref, t),
                           ),
                         );
                       },

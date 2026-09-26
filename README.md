@@ -7,7 +7,7 @@ transfert des commandes vers le PC de production.
 
 > Le téléphone est le premier outil de travail. L'application ne fait pas que
 > rappeler ce qu'il faut faire : **elle prépare le travail** (messages prêts à
-> copier, visuels et PDF prêts à partager, étapes pré-remplies).
+> copier, PDF prêts à partager, étapes pré-remplies).
 
 ---
 
@@ -34,13 +34,14 @@ transfert des commandes vers le PC de production.
 |---|---|
 | Demandes | Enregistrement des demandes reçues (Messenger, WhatsApp, appel, SMS, présentiel), référence automatique `REQ-2026-0001`, priorités, fichiers joints |
 | Qualification | Formulaires dynamiques **par service** (logo, mémoire, affiche…), modifiables par l'administrateur sans toucher au code |
-| Catalogue | Services, catégories, tarifs (Ariary), délais, inclus/exclusions — présentable en **message / image / PDF** |
+| Catalogue | **6 branches numérotées (1 à 6)**, services et tarifs (Ariary), délais, inclus/exclusions — présentable en **message / image / PDF** ; en-têtes « BRANCHE n » dans l'écran catalogue |
 | Devis | Lignes pré-remplies depuis le catalogue, calcul automatique (réduction, acompte, solde), conversion `DEMANDE → DEVIS → COMMANDE` sans ressaisie |
-| Factures & paiements | Factures depuis commandes/devis, acomptes et soldes (espèces, MVola, Orange Money, Airtel Money, virement), statuts automatiques |
+| Factures & paiements | Factures depuis commandes/devis, acomptes et soldes (espèces, MVola, Orange Money, Airtel Money, virement), statuts automatiques ; **livraison bloquée sans encaissement complet** (exception admin en cas exceptionnel, tracée) |
 | Commandes & workflows | Machine à étapes par service (« Où suis-je ? Que dois-je faire ? Quelle action est prête ? »), règles métier bloquantes + **EXCEPTION AUTORISÉE** |
 | Transfert PC | Checklist des 9 vérifications obligatoires puis `TRANSFÉRER AU PC` |
-| Communication | 14 catégories de modèles avec variables `{{PRENOM}}`, `{{MONTANT}}`… remplacées automatiquement |
+| Communication | 14 catégories de modèles avec variables `{{PRENOM}}`, `{{MONTANT}}`… remplacées automatiquement ; **bascule FR / Malagasy persistante** des textes client + **menu de traduction éditable par modèle** (corps MG) |
 | Documents | PDF professionnels (devis, factures, fiches, catalogue) + images PNG rastérisées, partage natif |
+| Catalogue | **Tarification officielle MSN en 6 branches** (bureautique, design, communication, web, packs entreprises, personnalisés) : 56 services, prix exacts, « à partir de » et « sur devis » gérés |
 | Rappels & tâches | Deadlines, relances, acomptes, soldes — notifications locales |
 | Administration | Modules activables, modèles de messages, questions de qualification, règles, utilisateurs/PIN, journal d'activité, corbeille, sauvegarde JSON |
 

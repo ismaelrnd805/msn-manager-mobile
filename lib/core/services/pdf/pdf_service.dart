@@ -84,8 +84,11 @@ class PdfService {
                     fontSize: 11, color: MsnPdfTheme.textDark, lineSpacing: 4)),
           pw.SizedBox(height: 20),
           MsnPdfTheme.box(title: 'Tarification', rows: [
-            ('Prix', '${Formatters.ar(s.prixBase)} / ${s.unite}'),
-            ('Délai', s.delaiJours == null ? 'À convenir' : '${s.delaiJours} jours'),
+            ('Prix', Formatters.tarif(s.prixBase, s.unite)),
+            ('Délai',
+                s.delaiJours == null || s.delaiJours! <= 0
+                    ? 'À convenir'
+                    : '${s.delaiJours} jours'),
           ]),
           pw.SizedBox(height: 12),
           MsnPdfTheme.box(title: 'Ce qui est inclus', rows: [
@@ -176,9 +179,15 @@ class PdfService {
               data: entry.value
                   .map((swc) => [
                         swc.service.nom,
-                        Formatters.ar(swc.service.prixBase),
-                        swc.service.unite,
-                        swc.service.delaiJours == null
+                        swc.service.prixBase <= 0
+                            ? 'Sur devis'
+                            : Formatters.ar(swc.service.prixBase),
+                        swc.service.unite == 'devis' ||
+                                swc.service.unite == 'à partir de'
+                            ? '—'
+                            : swc.service.unite,
+                        swc.service.delaiJours == null ||
+                                swc.service.delaiJours! <= 0
                             ? '—'
                             : '${swc.service.delaiJours} j',
                       ])

@@ -75,7 +75,7 @@ class ServiceDetailScreen extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${Formatters.ar(s.prixBase)} / ${s.unite}',
+                        Formatters.tarif(s.prixBase, s.unite),
                         style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w800,
@@ -83,9 +83,7 @@ class ServiceDetailScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        s.delaiJours == null
-                            ? 'Délai à convenir'
-                            : 'Délai habituel : ${s.delaiJours} jours',
+                        Formatters.delai(s.delaiJours),
                         style: const TextStyle(
                             fontSize: 12, color: MsnColors.textSecondary),
                       ),
@@ -341,9 +339,16 @@ class ServiceDetailScreen extends ConsumerWidget {
 
   String _tarifMessage(
       String nom, int prix, String unite, int? delaiJours) {
+    final surDevis = prix <= 0 || unite.trim() == 'devis';
+    final tarif = surDevis
+        ? 'Sur devis : le tarif est établi après étude de votre projet.'
+        : Formatters.tarif(prix, unite);
+    final delai = (delaiJours == null || delaiJours <= 0)
+        ? 'à convenir selon le projet'
+        : '$delaiJours jours';
     return 'Bonjour, voici notre tarif pour $nom :\n\n'
-        '${Formatters.ar(prix)} / $unite\n'
-        'Délai : ${delaiJours == null ? 'à convenir' : '$delaiJours jours'}\n\n'
+        '$tarif\n'
+        'Délai : $delai\n\n'
         'Le prix inclut les fichiers finaux. Souhaitez-vous un devis '
         'officiel ?';
   }

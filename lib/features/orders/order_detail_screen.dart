@@ -505,7 +505,8 @@ class OrderDetailScreen extends ConsumerWidget {
                 controller: raisonController,
                 decoration: const InputDecoration(
                   labelText: 'EXCEPTION AUTORISÉE — raison obligatoire',
-                  hintText: 'Ex. client de confiance, acompte promis demain…',
+                  hintText: 'Cas exceptionnel uniquement : client de '
+                      'confiance, paiement promis demain…',
                 ),
               ),
             ],
