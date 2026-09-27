@@ -42,7 +42,7 @@ class MsnStore extends ChangeNotifier {
     data.addAll(Map<String,dynamic>.from(jsonDecode(raw)));
   }
   void normalize(){
-    for(final k in ['users','clients','services','commands','quotes','invoices','tasks','notifications','portfolio','templates','messages','files','receptions','activity','presentations','payment_accounts']){
+    for(final k in ['users','clients','services','commands','quotes','invoices','tasks','notifications','portfolio','templates','messages','files','receptions','activity','presentations']){
       if(data[k] is! List)data[k]=[];
     }
     if(data['workflows'] is! Map)data['workflows']={};
@@ -61,42 +61,7 @@ class MsnStore extends ChangeNotifier {
   Map<String,dynamic>? byId(String collection,String id){ for(final x in maps(collection)){if(x['id']==id)return x;} return null; }
   Map<String,dynamic>? command(String id)=>byId('commands',id);
   String nextId(String prefix,String collection){ final n=maps(collection).length+1; return '$prefix-${n.toString().padLeft(4,'0')}'; }
-
-  // ---------- Coordonnées de paiement (comptes MVola, Orange, Airtel, banque…) ----------
-  List<Map<String,dynamic>> paymentAccounts()=>maps('payment_accounts');
-  List<Map<String,dynamic>> activePaymentAccounts()=>paymentAccounts().where((a)=>a['active']!=false).toList();
-  Map<String,dynamic>? defaultPaymentAccount(){final act=activePaymentAccounts();if(act.isEmpty)return null;return act.firstWhere((a)=>a['default']==true,orElse:()=>act.first);}
-  Future<void> savePaymentAccount({String? id,required String mode,required String name,required String number,String label='',required bool isDefault,required bool active})async{
-    final accs=paymentAccounts();
-    Map<String,dynamic> a;
-    final idx=id==null?-1:accs.indexWhere((x)=>x['id']==id);
-    if(idx>=0){a=accs[idx];}
-    else{a={'id':'PA-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}'};accs.add(a);}
-    a.addAll({'mode':mode,'name':name,'number':number,'label':label,'active':active});
-    if(isDefault){for(final x in accs){x['default']=identical(x,a);}}
-    else if(a['default']==true){a['default']=false;final f=accs.firstWhere((x)=>x['active']!=false,orElse:()=>{});if(f.isNotEmpty)f['default']=true;}
-    data['payment_accounts']=accs;
-    await save();
-  }
-  Future<void> deletePaymentAccount(String id)async{
-    final accs=paymentAccounts();
-    final a=accs.firstWhere((x)=>x['id']==id,orElse:()=>{});
-    if(a.isEmpty)return;
-    final wasDefault=a['default']==true;
-    accs.removeWhere((x)=>x['id']==id);
-    if(wasDefault){final f=accs.firstWhere((x)=>x['active']!=false,orElse:()=>{});if(f.isNotEmpty)f['default']=true;}
-    data['payment_accounts']=accs;
-    await save();
-  }
-  Future<void> makeDefaultPaymentAccount(String id)async{
-    final accs=paymentAccounts();
-    for(final x in accs){x['default']=x['id']==id;if(x['id']==id)x['active']=true;}
-    data['payment_accounts']=accs;
-    await save();
-  }
 }
-String payAccText(Map<String,dynamic> a)=>'${a['mode']} — ${a['name']}\nNuméro / Compte : ${a['number']}${(a['label']!=null&&'${a['label']}'.isNotEmpty&&a['label']!=a['mode'])?'\nIntitulé : ${a['label']}':''}';
-Future<void> copyPaymentAccount(BuildContext c,Map<String,dynamic> a)async{ await Clipboard.setData(ClipboardData(text:payAccText(a))); if(c.mounted)snack(c,'Coordonnées copiées'); }
 
 class SessionManager {
   static const key='msn_session_v2';
@@ -134,8 +99,9 @@ class MsnApp extends StatelessWidget { final MsnStore store; const MsnApp({super
 class LoginGate extends StatefulWidget {final MsnStore store;const LoginGate({super.key,required this.store});@override State<LoginGate> createState()=>_LoginGateState();}
 class _LoginGateState extends State<LoginGate>{Map<String,dynamic>? session;bool loading=true;@override void initState(){super.initState();_load();}Future<void> _load() async {final s=await SessionManager.load(); if(mounted)setState((){session=s;loading=false;});}Future<void> _login(Map<String,dynamic> s) async {await SessionManager.save(s);if(mounted)setState(()=>session=s);}Future<void> _logout() async {await SessionManager.clear();if(mounted)setState(()=>session=null);}@override Widget build(BuildContext context){if(loading)return const Scaffold(body:Center(child:CircularProgressIndicator()));return session==null?LoginScreen(store:widget.store,onLogin:_login):Home(store:widget.store,user:'${session!['username']}',onLogout:_logout);}}
 class LoginScreen extends StatefulWidget {final MsnStore store;final Future<void> Function(Map<String,dynamic>) onLogin;const LoginScreen({super.key,required this.store,required this.onLogin});@override State<LoginScreen> createState()=>_LoginScreenState();}
-class _LoginScreenState extends State<LoginScreen>{final u=TextEditingController(),p=TextEditingController();bool obscure=true;bool busy=false;@override void dispose(){u.dispose();p.dispose();super.dispose();}@override Widget build(BuildContext c)=>Scaffold(body:Container(decoration:const BoxDecoration(gradient:LinearGradient(colors:[Color(0xFFEEF2EA),Color(0xFFF3E9DF)],begin:Alignment.topLeft,end:Alignment.bottomRight)),child:Center(child:SingleChildScrollView(padding:const EdgeInsets.all(22),child:Card(shape:RoundedRectangleBorder(borderRadius:BorderRadius.circular(26)),child:Padding(padding:const EdgeInsets.all(24),child:Column(crossAxisAlignment:CrossAxisAlignment.stretch,children:[Container(width:60,height:60,decoration:BoxDecoration(color:primary,borderRadius:BorderRadius.circular(18)),alignment:Alignment.center,child:const Text('MSN',style:TextStyle(color:Colors.white,fontWeight:FontWeight.w900,fontSize:18))),const SizedBox(height:18),const Text('MSN Manager',style:TextStyle(fontSize:24,fontWeight:FontWeight.w800)),const SizedBox(height:6),const Text('Connectez-vous pour accéder à votre espace de gestion client.',style:TextStyle(color:text2)),const SizedBox(height:20),TextField(controller:u,autofocus:true,decoration:const InputDecoration(labelText:"Nom d'utilisateur",border:OutlineInputBorder())),const SizedBox(height:12),TextField(controller:p,obscureText:obscure,decoration:InputDecoration(labelText:'Mot de passe',border:const OutlineInputBorder(),suffixIcon:IconButton(onPressed:()=>setState(()=>obscure=!obscure),icon:Icon(obscure?Icons.visibility:Icons.visibility_off)))),const SizedBox(height:18),FilledButton.icon(onPressed:busy?null:login,icon:busy?const SizedBox(width:18,height:18,child:CircularProgressIndicator(strokeWidth:2,color:Colors.white)):const Icon(Icons.login),label:Text(busy?'Connexion…':'Se connecter'),style:FilledButton.styleFrom(backgroundColor:primaryStrong,padding:const EdgeInsets.symmetric(vertical:14)))])))))));}
+class _LoginScreenState extends State<LoginScreen>{final u=TextEditingController(),p=TextEditingController();bool obscure=true;bool busy=false;@override void dispose(){u.dispose();p.dispose();super.dispose();}@override Widget build(BuildContext c)=>Scaffold(body:Container(decoration:const BoxDecoration(gradient:LinearGradient(colors:[Color(0xFFEEF2EA),Color(0xFFF3E9DF)],begin:Alignment.topLeft,end:Alignment.bottomRight)),child:Center(child:SingleChildScrollView(padding:const EdgeInsets.all(22),child:Card(shape:RoundedRectangleBorder(borderRadius:BorderRadius.circular(26)),child:Padding(padding:const EdgeInsets.all(24),child:Column(crossAxisAlignment:CrossAxisAlignment.stretch,children:[Container(width:60,height:60,decoration:BoxDecoration(color:primary,borderRadius:BorderRadius.circular(18)),alignment:Alignment.center,child:const Text('MSN',style:TextStyle(color:Colors.white,fontWeight:FontWeight.w900,fontSize:18))),const SizedBox(height:18),const Text('MSN Manager',style:TextStyle(fontSize:24,fontWeight:FontWeight.w800)),const SizedBox(height:6),const Text('Connectez-vous pour accéder à votre espace de gestion client.',style:TextStyle(color:text2)),const SizedBox(height:20),TextField(controller:u,autofocus:true,decoration:const InputDecoration(labelText:"Nom d'utilisateur",border:OutlineInputBorder())),const SizedBox(height:12),TextField(controller:p,obscureText:obscure,decoration:InputDecoration(labelText:'Mot de passe',border:const OutlineInputBorder(),suffixIcon:IconButton(onPressed:()=>setState(()=>obscure=!obscure),icon:Icon(obscure?Icons.visibility:Icons.visibility_off)))),const SizedBox(height:18),FilledButton.icon(onPressed:busy?null:login,icon:busy?const SizedBox(width:18,height:18,child:CircularProgressIndicator(strokeWidth:2,color:Colors.white)):const Icon(Icons.login),label:Text(busy?'Connexion…':'Se connecter'),style:FilledButton.styleFrom(backgroundColor:primaryStrong,padding:const EdgeInsets.symmetric(vertical:14)))]))))));}
 Future<void> login() async {final username=u.text.trim();final pass=p.text;if(username.isEmpty||pass.isEmpty){snack(context,'Nom d’utilisateur et mot de passe requis');return;}setState(()=>busy=true);final found=widget.store.maps('users').where((x)=>x['username']==username&&x['active']!=false).toList();bool ok=false;Map<String,dynamic>? user;if(found.isNotEmpty){user=found.first;final expected='${user['passwordHash']??''}';ok=expected.isNotEmpty&&expected==hashPassword(pass);if(!ok&&user['password']!=null){ok=user['password']==pass; if(ok){user.remove('password');user['passwordHash']=hashPassword(pass);await widget.store.save();}}}if(!ok||user==null){if(mounted){setState(()=>busy=false);snack(context,'Identifiants incorrects');}return;}await widget.onLogin({'id':user['id'],'username':user['username'],'name':user['name'],'role':user['role']});}
+}
 
 class Home extends StatefulWidget {final MsnStore store;final String user;final VoidCallback onLogout;const Home({super.key,required this.store,required this.user,required this.onLogout});@override State<Home> createState()=>_HomeState();}
 class _HomeState extends State<Home>{int tab=0;final nav=[const _Nav(Icons.home_outlined,'Accueil'),const _Nav(Icons.door_front_door_outlined,'Réception'),const _Nav(Icons.list_alt_outlined,'Commandes'),const _Nav(Icons.people_outline,'Clients'),const _Nav(Icons.more_horiz,'Plus')];@override Widget build(BuildContext c){final pages=[Dashboard(store:widget.store),Reception(store:widget.store),Commands(store:widget.store),Clients(store:widget.store),More(store:widget.store,onLogout:widget.onLogout)];return Scaffold(body:SafeArea(child:pages[tab]),bottomNavigationBar:NavigationBar(selectedIndex:tab,onDestinationSelected:(i)=>setState(()=>tab=i),destinations:nav.map((n)=>NavigationDestination(icon:Icon(n.icon),label:n.label)).toList()),floatingActionButton:FloatingActionButton(backgroundColor:accent,foregroundColor:Colors.white,onPressed:()=>quickActions(c),child:const Icon(Icons.add)));}
@@ -194,7 +160,7 @@ class _SelectableCollectionPageState extends State<SelectableCollectionPage>{fin
 class Commands extends StatelessWidget{final MsnStore store;const Commands({super.key,required this.store});@override Widget build(BuildContext c){return SelectableCollectionPage(store:store,collection:'commands',title:'Commandes',icon:Icons.work_outline,itemTitle:(x)=>'${x['id']} · ${x['service']}',itemSubtitle:(x){final cl=store.client('${x['client']}');return '${cl['name']} · ${statusLabel(x['status'])}\n${x['progress']??0}% · ${money((x['amount']??0) as num)} · ${deadlineLabel('${x['deadline']??''}')}';},onAdd:()=>Navigator.push(c,MaterialPageRoute(builder:(_)=>CommandForm(store:store))),onOpen:(ctx,x)=>Navigator.push(ctx,MaterialPageRoute(builder:(_)=>WorkflowPage(store:store,commandId:'${x['id']}'))));}}
 
 class CommandForm extends StatefulWidget{final MsnStore store;const CommandForm({super.key,required this.store});@override State<CommandForm> createState()=>_CommandFormState();}
-class _CommandFormState extends State<CommandForm>{String? client,service;final amount=TextEditingController();final notes=TextEditingController();@override Widget build(BuildContext c)=>Scaffold(appBar:AppBar(title:const Text('Nouvelle commande')),body:ListView(padding:const EdgeInsets.all(18),children:[DropdownButtonFormField<String>(value:client,decoration:const InputDecoration(labelText:'Client *'),items:widget.store.maps('clients').map((x)=>DropdownMenuItem(value:x['id'] as String,child:Text(x['name'] as String))).toList(),onChanged:(v)=>setState(()=>client=v)),DropdownButtonFormField<String>(value:service,decoration:const InputDecoration(labelText:'Service *'),items:storeServices(widget.store).map((x)=>DropdownMenuItem(value:x['name'] as String,child:Text(x['name'] as String))).toList(),onChanged:(v){setState(()=>service=v);final s=servicesByName(widget.store,v??'');amount.text='${s?['base']??0}';}),const SizedBox(height:12),TextField(controller:amount,keyboardType:TextInputType.number,decoration:const InputDecoration(labelText:'Montant (Ar)',border:OutlineInputBorder())),const SizedBox(height:12),TextField(controller:notes,decoration:const InputDecoration(labelText:'Notes',border:OutlineInputBorder()),maxLines:3),const SizedBox(height:18),FilledButton(onPressed:save,child:const Text('Créer et ouvrir le workflow'))]));void save(){if(client==null||service==null){snack(context,'Client et service requis');return;}final cmds=widget.store.maps('commands');final id=widget.store.nextId('CMD','commands');final wf=(widget.store.data['workflows'] as Map)[service]??(widget.store.data['workflows'] as Map)['default']??['Réception','Analyse','Production','Présentation','Validation','Paiement','Livraison'];final steps=List<String>.from(wf);cmds.insert(0,{'id':id,'client':client,'service':service,'status':'en_cours','created':dateStr(DateTime.now()),'deadline':dateStr(DateTime.now().add(const Duration(days:7))),'amount':num.tryParse(amount.text)??0,'progress':0,'priority':'moyenne','paid':0,'step':1,'totalSteps':steps.length,'channel':'App','notes':notes.text,'workflowLog':[]});widget.store.data['commands']=cmds;widget.store.save();Navigator.pushReplacement(context,MaterialPageRoute(builder:(_)=>WorkflowPage(store:widget.store,commandId:id)));}}
+class _CommandFormState extends State<CommandForm>{String? client,service;final amount=TextEditingController();final notes=TextEditingController();@override Widget build(BuildContext c)=>Scaffold(appBar:AppBar(title:const Text('Nouvelle commande')),body:ListView(padding:const EdgeInsets.all(18),children:[DropdownButtonFormField<String>(value:client,decoration:const InputDecoration(labelText:'Client *'),items:widget.store.maps('clients').map((x)=>DropdownMenuItem(value:x['id'] as String,child:Text(x['name'] as String))).toList(),onChanged:(v)=>setState(()=>client=v)),DropdownButtonFormField<String>(value:service,decoration:const InputDecoration(labelText:'Service *'),items:storeServices(widget.store).map((x)=>DropdownMenuItem(value:x['name'] as String,child:Text(x['name'] as String))).toList(),onChanged:(v){setState(()=>service=v);final s=servicesByName(widget.store,v??'');amount.text='${s?['base']??0}';}),const SizedBox(height:12),TextField(controller:amount,keyboardType:TextInputType.number,decoration:const InputDecoration(labelText:'Montant (Ar)',border:OutlineInputBorder())),const SizedBox(height:12),TextField(controller:notes,decoration:const InputDecoration(labelText:'Notes',border:OutlineInputBorder()),maxLines:3),const SizedBox(height:18),FilledButton(onPressed:save,label:const Text('Créer et ouvrir le workflow'))]));void save(){if(client==null||service==null){snack(context,'Client et service requis');return;}final cmds=widget.store.maps('commands');final id=widget.store.nextId('CMD','commands');final wf=(widget.store.data['workflows'] as Map)[service]??(widget.store.data['workflows'] as Map)['default']??['Réception','Analyse','Production','Présentation','Validation','Paiement','Livraison'];final steps=List<String>.from(wf);cmds.insert(0,{'id':id,'client':client,'service':service,'status':'en_cours','created':dateStr(DateTime.now()),'deadline':dateStr(DateTime.now().add(const Duration(days:7))),'amount':num.tryParse(amount.text)??0,'progress':0,'priority':'moyenne','paid':0,'step':1,'totalSteps':steps.length,'channel':'App','notes':notes.text,'workflowLog':[]});widget.store.data['commands']=cmds;widget.store.save();Navigator.pushReplacement(context,MaterialPageRoute(builder:(_)=>WorkflowPage(store:widget.store,commandId:id)));}}
 
 class WorkflowPage extends StatefulWidget{final MsnStore store;final String commandId;const WorkflowPage({super.key,required this.store,required this.commandId});@override State<WorkflowPage> createState()=>_WorkflowPageState();}
 class _WorkflowPageState extends State<WorkflowPage>{@override Widget build(BuildContext c){final cmd=widget.store.command(widget.commandId);if(cmd==null)return Scaffold(appBar:AppBar(title:const Text('Workflow')),body:const Center(child:Text('Commande introuvable')));final wf=(widget.store.data['workflows'] as Map)[cmd['service']]??(widget.store.data['workflows'] as Map)['default'];final steps=List<String>.from(wf);if(!steps.any((s)=>s.toLowerCase().contains('paiement'))){final i=steps.indexWhere((s)=>s.toLowerCase().contains('livraison'));if(i>=0)steps.insert(i,'Paiement');else steps.add('Paiement');}if(!steps.any((s)=>s.toLowerCase().contains('livraison')))steps.add('Livraison');final current=((cmd['step']??1) as num).toInt()-1;return Scaffold(appBar:AppBar(title:Text(cmd['service']),actions:[Padding(padding:const EdgeInsets.all(12),child:Center(child:Text('${cmd['progress']??0}%')))]),body:ListView(padding:const EdgeInsets.all(18),children:[Card(color:primarySoft,child:Padding(padding:const EdgeInsets.all(16),child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Text('Étape actuelle',style:const TextStyle(color:primaryStrong,fontWeight:FontWeight.w800)),Text(steps[current.clamp(0,steps.length-1)],style:const TextStyle(fontSize:20,fontWeight:FontWeight.w900)),const SizedBox(height:10),LinearProgressIndicator(value:((cmd['progress']??0) as num)/100)]))),const SizedBox(height:12),...List.generate(steps.length,(i)=>Card(child:ListTile(leading:CircleAvatar(backgroundColor:i<current?success:i==current?primary:text2,child:Text('${i+1}',style:const TextStyle(color:Colors.white))),title:Text(steps[i]),subtitle:Text(i<current?'Terminé':i==current?'En cours':'À venir'),trailing:i==current?const Icon(Icons.play_circle_fill,color:primary):null))),const SizedBox(height:12),_WorkflowAction(store:widget.store,cmd:cmd,steps:steps,current:current,onChanged:()=>setState((){}))]));}}
@@ -202,41 +168,7 @@ class _WorkflowAction extends StatelessWidget{final MsnStore store;final Map<Str
  void next(){final n=current+1;if(n>=steps.length){cmd['status']='termine';cmd['progress']=100;}else{cmd['step']=n+1;cmd['progress']=((n)/(steps.length-1)*100).round();cmd['status']=stageStatus(steps[n]);}store.save();onChanged();}
  String stageStatus(String s){final x=s.toLowerCase();if(x.contains('validation')||x.contains('présentation'))return'en_validation';if(x.contains('paiement'))return'paiement_attente';if(x.contains('livraison'))return'en_livraison';return'en_cours';}
  void decision(BuildContext c,bool ok){if(ok){cmd['validation']='valide';cmd['status']='paiement_attente';final i=steps.indexWhere((s)=>s.toLowerCase().contains('paiement'));cmd['step']=i>=0?i+1:current+2;cmd['progress']=(((cmd['step']-1)/(steps.length-1))*100).round();}else{cmd['validation']='non_valide';cmd['status']='en_correction';final i=steps.lastIndexWhere((s)=>s.toLowerCase().contains('correction')||s.toLowerCase().contains('conception')||s.toLowerCase().contains('production'));cmd['step']=i>=0?i+1:mathMax(1,current);cmd['progress']=(((cmd['step']-1)/(steps.length-1))*100).round();}store.save();Navigator.pop(c);onChanged();}
- void payment(BuildContext c)async{
-    final balance=(((cmd['amount']??0) as num)-((cmd['paid']??0) as num)).clamp(0,double.infinity);
-    final dft=store.defaultPaymentAccount();
-    final accs=store.activePaymentAccounts();
-    final amount=TextEditingController(text:'${balance>0?balance:(cmd['amount']??0)}'),ref=TextEditingController(),account=TextEditingController(text:dft!=null?'${dft['name']} — ${dft['number']}':'');
-    String mode=(dft?['mode'] as String?)??'MVola';bool accountReady=false;
-    final ok=await showDialog<bool>(context:c,builder:(_)=>StatefulBuilder(builder:(c,set)=>AlertDialog(title:const Text('Paiement — demande et encaissement'),content:SingleChildScrollView(child:Column(mainAxisSize:MainAxisSize.min,crossAxisAlignment:CrossAxisAlignment.start,children:[
-      if(accs.isNotEmpty)Container(margin:const EdgeInsets.only(bottom:12),padding:const EdgeInsets.all(11),decoration:BoxDecoration(color:const Color(0xFFFBF9F5),border:Border.all(color:border),borderRadius:BorderRadius.circular(14)),child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[
-        Row(children:[const Expanded(child:Text('Coordonnées à communiquer au client',style:TextStyle(fontWeight:FontWeight.w700,fontSize:12.5))),if(dft!=null)Text('${dft['mode']}',style:const TextStyle(fontSize:11,color:text2))]),
-        const SizedBox(height:4),
-        if(dft!=null)Text('${dft['name']} · ${dft['number']}',style:const TextStyle(fontWeight:FontWeight.w700)),
-        if(accs.length>1)Padding(padding:const EdgeInsets.only(top:4),child:Text('+ ${accs.length-1} autre(s) compte(s) disponible(s)',style:const TextStyle(fontSize:12,color:text2))),
-        if(dft!=null)Align(alignment:Alignment.centerLeft,child:TextButton.icon(onPressed:()=>copyPaymentAccount(c,dft),icon:const Icon(Icons.copy,size:15),label:const Text('Copier les coordonnées'))),
-      ]))
-      else Container(margin:const EdgeInsets.only(bottom:12),padding:const EdgeInsets.all(11),decoration:BoxDecoration(color:const Color(0xFFF5ECD6),borderRadius:BorderRadius.circular(10)),child:const Text('Aucune coordonnée configurée — ajoutez vos comptes dans Administration → Coordonnées de paiement.',style:TextStyle(fontSize:12.5,color:warning))),
-      TextField(controller:amount,keyboardType:TextInputType.number,decoration:const InputDecoration(labelText:'Montant à encaisser *')),
-      const SizedBox(height:10),
-      DropdownButtonFormField<String>(value:mode,decoration:const InputDecoration(labelText:'Mode de paiement *'),items:['MVola','Orange Money','Airtel Money','Virement bancaire','Espèces'].map((x)=>DropdownMenuItem(value:x,child:Text(x))).toList(),onChanged:(v)=>set(()=>mode=v!)),
-      const SizedBox(height:10),
-      TextField(controller:ref,decoration:const InputDecoration(labelText:'Référence de paiement *')),
-      const SizedBox(height:10),
-      TextField(controller:account,decoration:const InputDecoration(labelText:'Compte / bénéficiaire contrôlé')),
-      CheckboxListTile(contentPadding:EdgeInsets.zero,value:accountReady,onChanged:(v)=>set(()=>accountReady=v??false),title:const Text('Encaissement vérifié et compte prêt',style:TextStyle(fontWeight:FontWeight.w700,fontSize:13.5)),subtitle:const Text('Cocher uniquement après contrôle réel du paiement.',style:TextStyle(fontSize:12)),controlAffinity:ListTileControlAffinity.leading),
-    ])),actions:[TextButton(onPressed:()=>Navigator.pop(c,false),child:const Text('Annuler')),FilledButton(onPressed:()=>Navigator.pop(c,ref.text.trim().isNotEmpty&&accountReady),child:const Text('Enregistrer le paiement'))])));
-    if(ok==true){
-      final a=num.tryParse(amount.text)??0;
-      cmd['paid']=(cmd['paid']??0)+a;
-      cmd['payment']={'amount':a,'mode':mode,'ref':ref.text.trim(),'date':dateStr(DateTime.now()),'account':account.text.trim(),'accountReady':true,'verified':true};
-      final i=steps.indexWhere((s)=>s.toLowerCase().contains('livraison'));
-      cmd['step']=i>=0?i+1:cmd['step'];
-      cmd['status']='en_livraison';
-      cmd['progress']=(((cmd['step']-1)/(steps.length-1))*100).round();
-      store.save();onChanged();
-    }
-  }
+ void payment(BuildContext c)async{final amount=TextEditingController(text:'${cmd['amount']??0}'),ref=TextEditingController();String mode='MVola';final ok=await showDialog<bool>(context:c,builder:(_)=>AlertDialog(title:const Text('Paiement vérifié'),content:StatefulBuilder(builder:(c,set)=>SingleChildScrollView(child:Column(mainAxisSize:MainAxisSize.min,children:[TextField(controller:amount,keyboardType:TextInputType.number,decoration:const InputDecoration(labelText:'Montant')),DropdownButtonFormField<String>(value:mode,items:['MVola','Orange Money','Airtel Money','Virement bancaire','Espèces'].map((x)=>DropdownMenuItem(value:x,child:Text(x))).toList(),onChanged:(v)=>set(()=>mode=v!)),TextField(controller:ref,decoration:const InputDecoration(labelText:'Référence obligatoire')),const SizedBox(height:8),const Text('Le contrôle réel du paiement doit être effectué avant validation.',style:TextStyle(fontSize:12,color:text2))])),actions:[TextButton(onPressed:()=>Navigator.pop(c,false),child:const Text('Annuler')),FilledButton(onPressed:()=>Navigator.pop(c,ref.text.trim().isNotEmpty),child:const Text('Valider'))]));if(ok==true){final a=num.tryParse(amount.text)??0;cmd['paid']=(cmd['paid']??0)+a;cmd['payment']={'amount':a,'mode':mode,'ref':ref.text.trim(),'date':dateStr(DateTime.now()),'verified':true};final i=steps.indexWhere((s)=>s.toLowerCase().contains('livraison'));cmd['step']=i>=0?i+1:cmd['step'];cmd['status']='en_livraison';cmd['progress']=(((cmd['step']-1)/(steps.length-1))*100).round();store.save();onChanged();}}
  void deliver(BuildContext c){if((cmd['payment']?['verified'])!=true){snack(c,'Livraison bloquée : paiement non vérifié');return;}cmd['status']='termine';cmd['progress']=100;cmd['deliveredAt']=dateStr(DateTime.now());store.save();onChanged();snack(c,'Livraison confirmée');}}
 int mathMax(int a,int b)=>a>b?a:b;
 
@@ -283,81 +215,7 @@ class Portfolio extends StatelessWidget{final MsnStore store;const Portfolio({su
 
 class FilesPage extends StatelessWidget{final MsnStore store;const FilesPage({super.key,required this.store});@override Widget build(BuildContext c)=>SelectableCollectionPage(store:store,collection:'files',title:'Fichiers',icon:Icons.insert_drive_file_outlined,itemTitle:(f)=>'${f['name']}',itemSubtitle:(f)=>'${f['size']} · ${f['cat']} · ${f['date']}',onOpen:(ctx,f)=>showFileDialog(ctx,store,f));}
 
-class Admin extends StatelessWidget{final MsnStore store;const Admin({super.key,required this.store});@override Widget build(BuildContext c)=>Scaffold(appBar:AppBar(title:const Text('Administration')),body:ListView(padding:const EdgeInsets.all(14),children:[Card(child:ListTile(leading:const Icon(Icons.miscellaneous_services),title:const Text('Services'),subtitle:Text('${store.list('services').length} services'))),Card(child:ListTile(leading:const Icon(Icons.account_tree),title:const Text('Workflows'),subtitle:Text('${(store.data['workflows'] as Map).length} parcours'))),Card(child:ListTile(leading:const Icon(Icons.people),title:const Text('Utilisateurs'),subtitle:Text('${store.list('users').length} comptes'))),Card(child:ListTile(leading:const Icon(Icons.payments_outlined,color:primary),title:const Text('Coordonnées de paiement'),subtitle:Text('${store.paymentAccounts().length} compte(s) · MVola, Orange, Airtel, banque'),trailing:const Icon(Icons.chevron_right),onTap:()=>Navigator.push(c,MaterialPageRoute(builder:(_)=>PaymentAccountsPage(store:store))))),Card(child:ListTile(leading:const Icon(Icons.history),title:const Text('Journal'),subtitle:Text('${store.list('activity').length} événements')))]));}
-
-// ---------- Coordonnées de paiement : liste + CRUD ----------
-class PaymentAccountsPage extends StatefulWidget{final MsnStore store;const PaymentAccountsPage({super.key,required this.store});@override State<PaymentAccountsPage> createState()=>_PaymentAccountsPageState();}
-class _PaymentAccountsPageState extends State<PaymentAccountsPage>{
-  @override Widget build(BuildContext c){
-    final accs=widget.store.paymentAccounts();
-    return Scaffold(
-      appBar:AppBar(title:const Text('Coordonnées de paiement')),
-      floatingActionButton:FloatingActionButton(onPressed:()=>_openForm(null),child:const Icon(Icons.add)),
-      body:accs.isEmpty
-        ? Center(child:Padding(padding:const EdgeInsets.all(24),child:Column(mainAxisSize:MainAxisSize.min,children:[const Icon(Icons.payments_outlined,size:54,color:text2),const SizedBox(height:12),const Text('Aucun compte de paiement',style:TextStyle(fontWeight:FontWeight.w700)),const SizedBox(height:6),const Text('Ajoutez un compte MVola, Orange Money, Airtel Money ou bancaire pour le communiquer automatiquement aux clients au moment du paiement.',textAlign:TextAlign.center,style:TextStyle(color:text2)),const SizedBox(height:16),FilledButton.icon(onPressed:()=>_openForm(null),icon:const Icon(Icons.add),label:const Text('Ajouter un compte'))])))
-        : ListView(padding:const EdgeInsets.all(14),children:[
-            const Padding(padding:EdgeInsets.only(bottom:8),child:Text('Ces coordonnées sont présentées automatiquement au client à l’étape Paiement du workflow et dans le formulaire d’encaissement.',style:TextStyle(color:text2))),
-            ...accs.map((a)=>Card(child:Padding(padding:const EdgeInsets.all(12),child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[
-              Row(children:[
-                CircleAvatar(backgroundColor:primarySoft,child:const Icon(Icons.payments,color:primary)),
-                const SizedBox(width:10),
-                Expanded(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[
-                  Row(children:[Flexible(child:Text('${a['mode']}',style:const TextStyle(fontWeight:FontWeight.w800))),
-                    if(a['default']==true)Padding(padding:const EdgeInsets.only(left:6),child:_pill('Par défaut',success)),
-                    if(a['active']==false)Padding(padding:const EdgeInsets.only(left:6),child:_pill('Inactif',text2)),
-                  ]),
-                  Text('${a['name']} · ${a['number']}',style:const TextStyle(color:text2)),
-                ])),
-              ]),
-              const SizedBox(height:10),
-              Wrap(spacing:8,runSpacing:8,children:[
-                OutlinedButton.icon(onPressed:()=>copyPaymentAccount(c,a),icon:const Icon(Icons.copy,size:16),label:const Text('Copier')),
-                OutlinedButton.icon(onPressed:()=>_openForm(a),icon:const Icon(Icons.edit,size:16),label:const Text('Modifier')),
-                if(a['default']!=true)OutlinedButton.icon(onPressed:()async{await widget.store.makeDefaultPaymentAccount('${a['id']}');setState((){});},icon:const Icon(Icons.check,size:16),label:const Text('Défaut')),
-                OutlinedButton.icon(onPressed:()async{final ok=await confirm(c,'Supprimer ce compte ?','Les coordonnées « ${a['mode']} — ${a['name']} » seront retirées définitivement des demandes de paiement.');if(ok){await widget.store.deletePaymentAccount('${a['id']}');setState((){});}},icon:const Icon(Icons.delete_outline,size:16,color:danger),label:const Text('Supprimer',style:TextStyle(color:danger))),
-              ]),
-            ]))))
-          ]));
-  }
-  Widget _pill(String t,Color color)=>Container(padding:const EdgeInsets.symmetric(horizontal:8,vertical:2),decoration:BoxDecoration(color:color.withValues(alpha:.15),borderRadius:BorderRadius.circular(999)),child:Text(t,style:TextStyle(color:color,fontSize:11,fontWeight:FontWeight.w700)));
-  Future<void> _openForm(Map<String,dynamic>? a)async{
-    final res=await showDialog<bool>(context:context,builder:(_)=>PaymentAccountForm(store:widget.store,account:a));
-    if(res==true)setState((){});
-  }
-}
-class PaymentAccountForm extends StatefulWidget{final MsnStore store;final Map<String,dynamic>? account;const PaymentAccountForm({super.key,required this.store,this.account});@override State<PaymentAccountForm> createState()=>_PaymentAccountFormState();}
-class _PaymentAccountFormState extends State<PaymentAccountForm>{
-  static const modes=['MVola','Orange Money','Airtel Money','Virement bancaire','Espèces','Autre'];
-  late String mode; late TextEditingController name,number,label; late bool isDefault,active;
-  @override void initState(){super.initState();final a=widget.account;mode=(a?['mode'] as String?)??modes.first;name=TextEditingController(text:'${a?['name']??''}');number=TextEditingController(text:'${a?['number']??''}');label=TextEditingController(text:'${a?['label']??''}');isDefault=a?['default']==true;active=a==null||a['active']!=false;}
-  @override void dispose(){name.dispose();number.dispose();label.dispose();super.dispose();}
-  @override Widget build(BuildContext c){
-    final store=widget.store;
-    return AlertDialog(
-      title:Text(widget.account==null?'Nouveau compte de paiement':'Modifier le compte de paiement'),
-      content:SingleChildScrollView(child:Column(mainAxisSize:MainAxisSize.min,crossAxisAlignment:CrossAxisAlignment.start,children:[
-        DropdownButtonFormField<String>(value:mode,decoration:const InputDecoration(labelText:'Mode de paiement *'),items:modes.map((m)=>DropdownMenuItem(value:m,child:Text(m))).toList(),onChanged:(v)=>setState(()=>mode=v??mode)),
-        const SizedBox(height:10),
-        TextField(controller:name,decoration:const InputDecoration(labelText:'Nom du compte / titulaire *',hintText:'Ex. MSN SERVICES',border:OutlineInputBorder())),
-        const SizedBox(height:10),
-        TextField(controller:number,decoration:const InputDecoration(labelText:'Numéro / numéro de compte *',hintText:'Ex. 034 00 000 00',border:OutlineInputBorder()),keyboardType:TextInputType.phone),
-        const SizedBox(height:10),
-        TextField(controller:label,decoration:const InputDecoration(labelText:'Intitulé interne (optionnel)',hintText:'Ex. MVola boutique',border:OutlineInputBorder())),
-        CheckboxListTile(contentPadding:EdgeInsets.zero,value:isDefault,onChanged:(v)=>setState(()=>isDefault=v??false),title:const Text('Définir comme compte par défaut'),subtitle:const Text('Utilisé automatiquement dans les demandes de paiement.'),controlAffinity:ListTileControlAffinity.leading),
-        CheckboxListTile(contentPadding:EdgeInsets.zero,value:active,onChanged:(v)=>setState(()=>active=v??true),title:const Text('Compte actif'),subtitle:const Text('Les comptes inactifs ne sont plus proposés aux clients.'),controlAffinity:ListTileControlAffinity.leading),
-      ])),
-      actions:[
-        TextButton(onPressed:()=>Navigator.pop(c,false),child:const Text('Annuler')),
-        FilledButton(onPressed:()async{
-          if(name.text.trim().isEmpty){snack(c,'Le nom du compte est obligatoire.');return;}
-          if(number.text.trim().isEmpty){snack(c,'Le numéro / compte est obligatoire.');return;}
-          await store.savePaymentAccount(id:widget.account?['id'] as String?,mode:mode,name:name.text.trim(),number:number.text.trim(),label:label.text.trim(),isDefault:isDefault,active:active);
-          if(c.mounted)Navigator.pop(c,true);
-        },child:const Text('Enregistrer')),
-      ],
-    );
-  }
-}
+class Admin extends StatelessWidget{final MsnStore store;const Admin({super.key,required this.store});@override Widget build(BuildContext c)=>Scaffold(appBar:AppBar(title:const Text('Administration')),body:ListView(padding:const EdgeInsets.all(14),children:[Card(child:ListTile(leading:const Icon(Icons.miscellaneous_services),title:const Text('Services'),subtitle:Text('${store.list('services').length} services'))),Card(child:ListTile(leading:const Icon(Icons.account_tree),title:const Text('Workflows'),subtitle:Text('${(store.data['workflows'] as Map).length} parcours'))),Card(child:ListTile(leading:const Icon(Icons.people),title:const Text('Utilisateurs'),subtitle:Text('${store.list('users').length} comptes'))),Card(child:ListTile(leading:const Icon(Icons.history),title:const Text('Journal'),subtitle:Text('${store.list('activity').length} événements')))]));}
 class SettingsPage extends StatefulWidget{final MsnStore store;final VoidCallback onLogout;const SettingsPage({super.key,required this.store,required this.onLogout});@override State<SettingsPage> createState()=>_SettingsPageState();}
 class _SettingsPageState extends State<SettingsPage>{late TextEditingController endpoint;@override void initState(){super.initState();endpoint=TextEditingController(text:'${widget.store.data['sync']?['onlineEndpoint']??''}');}@override void dispose(){endpoint.dispose();super.dispose();}@override Widget build(BuildContext c){return Scaffold(appBar:AppBar(title:const Text('Paramètres')),body:ListView(padding:const EdgeInsets.all(14),children:[Card(child:ListTile(leading:const Icon(Icons.person),title:const Text('Compte'),subtitle:const Text('Session sécurisée et persistante'),onTap:()=>_account(c))),SwitchListTile(value:(widget.store.data['prefs']['notif']??true)==true,onChanged:(v){setState(()=>widget.store.data['prefs']['notif']=v);widget.store.save();},title:const Text('Notifications')),ListTile(leading:const Icon(Icons.lock_outline),title:const Text('Changer le mot de passe'),onTap:()=>_account(c)),const Divider(),const Text('Synchronisation',style:TextStyle(fontWeight:FontWeight.w800)),TextField(controller:endpoint,decoration:const InputDecoration(labelText:'URL API de synchronisation en ligne',hintText:'https://serveur.exemple/api/msn/sync')),const SizedBox(height:8),FilledButton.icon(onPressed:()async{widget.store.data['sync']['onlineEndpoint']=endpoint.text.trim();await widget.store.save();try{snack(c,await SyncService(widget.store).pushOnline());}catch(e){snack(c,'Synchronisation impossible : $e');}},icon:const Icon(Icons.cloud_upload),label:const Text('Envoyer vers la base en ligne')),OutlinedButton.icon(onPressed:()async{try{snack(c,await SyncService(widget.store).pullOnline());}catch(e){snack(c,'Import en ligne impossible : $e');}},icon:const Icon(Icons.cloud_download),label:const Text('Récupérer depuis la base en ligne')),OutlinedButton.icon(onPressed:()async{try{final devices=await SyncService(widget.store).scan();if(!c.mounted)return;showDialog(context:c,builder:(_)=>AlertDialog(title:const Text('Appareils Bluetooth'),content:SizedBox(width:320,height:300,child:ListView(children:devices.map((d)=>ListTile(title:Text(d.platformName.isEmpty?d.remoteId.str:d.platformName),subtitle:Text(d.remoteId.str),leading:const Icon(Icons.bluetooth),onTap:()async{Navigator.pop(c);try{await SyncService(widget.store).pushCommandsBluetooth(d);if(c.mounted)snack(c,'Commandes synchronisées vers le PC');}catch(e){if(c.mounted)snack(c,'Synchronisation Bluetooth impossible : $e');}}))).toList()))));}catch(e){snack(c,'Bluetooth : $e');}},icon:const Icon(Icons.bluetooth),label:const Text('Rechercher et synchroniser avec le PC')),const Divider(),ListTile(leading:const Icon(Icons.download),title:const Text('Exporter toutes les données'),onTap:()=>exportData(c,widget.store)),ListTile(leading:const Icon(Icons.upload_file),title:const Text('Importer une sauvegarde'),onTap:()=>importAll(c,widget.store)),ListTile(leading:const Icon(Icons.restore),title:const Text('Réinitialiser les données'),onTap:()async{final ok=await confirm(c,'Réinitialiser ?','Les données locales seront remplacées par la base initiale du prototype.');if(ok){await widget.store.reset();setState((){});snack(c,'Données réinitialisées');}}),const SizedBox(height:12),FilledButton.icon(onPressed:widget.onLogout,icon:const Icon(Icons.logout),label:const Text('Se déconnecter'),style:FilledButton.styleFrom(backgroundColor:danger))]);}
 Future<void> _account(BuildContext c)async{final session=await SessionManager.load();if(session==null)return;await changePassword(c,widget.store,'${session['username']}');}

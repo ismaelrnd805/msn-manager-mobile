@@ -1,2419 +1,2418 @@
 {
- "users": [
-  {
-   "id": "USR-001",
-   "username": "admin",
-   "name": "Administrateur MSN",
-   "role": "superadmin",
-   "active": true,
-   "passwordHash": "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9"
-  },
-  {
-   "id": "USR-002",
-   "username": "membre",
-   "name": "Membre MSN",
-   "role": "member",
-   "active": true,
-   "passwordHash": "5a40053f3de93b71fed71aaa7da28475b7330d5ce9cd53f120047de8e2584ace"
-  }
- ],
- "clients": [
-  {
-   "id": "CL-001",
-   "name": "Amina Rakoto",
-   "phone": "+261 34 12 345 67",
-   "email": "amina.rakoto@mail.mg",
-   "city": "Antananarivo",
-   "orders": 5,
-   "total": 2450000,
-   "last": "2026-09-26",
-   "notes": "Cliente fidèle. Préfère WhatsApp. Paiement rapide.",
-   "created": "2025-05-15"
-  },
-  {
-   "id": "CL-002",
-   "name": "Studio Vao",
-   "phone": "+261 32 88 210 44",
-   "email": "contact@studiovao.mg",
-   "city": "Antananarivo",
-   "orders": 3,
-   "total": 1680000,
-   "last": "2026-09-23",
-   "notes": "Agence créative. Facturation entreprise requise.",
-   "created": "2025-09-12"
-  },
-  {
-   "id": "CL-003",
-   "name": "Rado Andrianina",
-   "phone": "+261 33 45 771 02",
-   "email": "rado.a@mail.mg",
-   "city": "Toamasina",
-   "orders": 2,
-   "total": 420000,
-   "last": "2026-09-21",
-   "notes": "Étudiant. Mémoire de fin d'études.",
-   "created": "2026-05-30"
-  },
-  {
-   "id": "CL-004",
-   "name": "Hôtel Sakamanga",
-   "phone": "+261 20 22 358 09",
-   "email": "resa@sakamanga.mg",
-   "city": "Antananarivo",
-   "orders": 4,
-   "total": 3120000,
-   "last": "2026-09-25",
-   "notes": "Client corporate. Devis obligatoire avant commande.",
-   "created": "2024-10-27"
-  },
-  {
-   "id": "CL-005",
-   "name": "Naina Ravelo",
-   "phone": "+261 34 09 112 88",
-   "email": "naina.r@mail.mg",
-   "city": "Fianarantsoa",
-   "orders": 1,
-   "total": 180000,
-   "last": "2026-09-19",
-   "notes": "Nouveau client — logo boutique.",
-   "created": "2026-09-19"
-  }
- ],
- "services": [
-  {
-   "id": "SV-01",
-   "name": "Création de logo",
-   "cat": "Design graphique",
-   "unit": "forfait",
-   "base": 180000,
-   "active": true,
-   "desc": "Logo professionnel + déclinaisons"
-  },
-  {
-   "id": "SV-02",
-   "name": "Saisie / Mémoire",
-   "cat": "Services bureautiques",
-   "unit": "page",
-   "base": 3500,
-   "active": true,
-   "desc": "Saisie et mise en forme de mémoire"
-  },
-  {
-   "id": "SV-03",
-   "name": "Affiche / Poster",
-   "cat": "Design graphique",
-   "unit": "forfait",
-   "base": 95000,
-   "active": true,
-   "desc": "Affiche A3/A2 haute résolution"
-  },
-  {
-   "id": "SV-04",
-   "name": "Carte de visite",
-   "cat": "Design graphique",
-   "unit": "forfait",
-   "base": 60000,
-   "active": true,
-   "desc": "Recto-verso + fichier print"
-  },
-  {
-   "id": "SV-05",
-   "name": "Flyer / Brochure",
-   "cat": "Design graphique",
-   "unit": "forfait",
-   "base": 120000,
-   "active": true,
-   "desc": "Flyer 2 volets ou brochure"
-  },
-  {
-   "id": "SV-06",
-   "name": "Site vitrine",
-   "cat": "Web & numérique",
-   "unit": "forfait",
-   "base": 850000,
-   "active": true,
-   "desc": "Site 5 pages responsive"
-  },
-  {
-   "id": "SV-07",
-   "name": "CV professionnel",
-   "cat": "Services bureautiques",
-   "unit": "forfait",
-   "base": 45000,
-   "active": true,
-   "desc": "CV + lettre de motivation"
-  },
-  {
-   "id": "SV-08",
-   "name": "Rapport / Étude",
-   "cat": "Services bureautiques",
-   "unit": "page",
-   "base": 5000,
-   "active": true,
-   "desc": "Rapport structuré avec tableaux"
-  },
-  {
-   "id": "SVC-001",
-   "name": "Saisie de document",
-   "cat": "Services bureautiques",
-   "unit": "page",
-   "base": 700,
-   "active": true,
-   "desc": "Saisie de documents claire et fidèle."
-  },
-  {
-   "id": "SVC-002",
-   "name": "Mise en forme simple",
-   "cat": "Services bureautiques",
-   "unit": "page",
-   "base": 1000,
-   "active": true,
-   "desc": "Mise en forme structurée et homogène."
-  },
-  {
-   "id": "SVC-003",
-   "name": "Mise en page professionnelle",
-   "cat": "Services bureautiques",
-   "unit": "page",
-   "base": 1500,
-   "active": true,
-   "desc": "Mise en page professionnelle pour documents longs."
-  },
-  {
-   "id": "SVC-004",
-   "name": "Tableau simple",
-   "cat": "Services bureautiques",
-   "unit": "tableau",
-   "base": 1000,
-   "active": true,
-   "desc": "Création ou mise en forme de tableaux."
-  },
-  {
-   "id": "SVC-005",
-   "name": "Graphique / figure",
-   "cat": "Services bureautiques",
-   "unit": "élément",
-   "base": 1500,
-   "active": true,
-   "desc": "Graphiques et figures propres et lisibles."
-  },
-  {
-   "id": "SVC-006",
-   "name": "Organigramme / schéma",
-   "cat": "Services bureautiques",
-   "unit": "élément",
-   "base": 2000,
-   "active": true,
-   "desc": "Schéma ou organigramme professionnel."
-  },
-  {
-   "id": "SVC-008",
-   "name": "Lettre / document professionnel",
-   "cat": "Services bureautiques",
-   "unit": "forfait",
-   "base": 5000,
-   "active": true,
-   "desc": "Document professionnel prêt à utiliser."
-  },
-  {
-   "id": "SVC-009",
-   "name": "Présentation PowerPoint",
-   "cat": "Services bureautiques",
-   "unit": "à partir",
-   "base": 15000,
-   "active": true,
-   "desc": "Présentation structurée et visuelle."
-  },
-  {
-   "id": "SVC-010",
-   "name": "Mémoire / rapport",
-   "cat": "Services bureautiques",
-   "unit": "sur devis",
-   "base": 0,
-   "active": true,
-   "desc": "Étude selon volume et complexité."
-  },
-  {
-   "id": "SVC-011",
-   "name": "Affiche simple",
-   "cat": "Design graphique",
-   "unit": "forfait",
-   "base": 10000,
-   "active": true,
-   "desc": "Création d’affiche simple."
-  },
-  {
-   "id": "SVC-012",
-   "name": "Affiche professionnelle",
-   "cat": "Design graphique",
-   "unit": "forfait",
-   "base": 20000,
-   "active": true,
-   "desc": "Affiche conçue pour impression et diffusion."
-  },
-  {
-   "id": "SVC-013",
-   "name": "Affiche premium",
-   "cat": "Design graphique",
-   "unit": "forfait",
-   "base": 30000,
-   "active": true,
-   "desc": "Direction graphique renforcée et finition premium."
-  },
-  {
-   "id": "SVC-015",
-   "name": "Flyer",
-   "cat": "Design graphique",
-   "unit": "forfait",
-   "base": 15000,
-   "active": true,
-   "desc": "Flyer commercial ou événementiel."
-  },
-  {
-   "id": "SVC-016",
-   "name": "Brochure",
-   "cat": "Design graphique",
-   "unit": "à partir",
-   "base": 30000,
-   "active": true,
-   "desc": "Brochure selon nombre de pages."
-  },
-  {
-   "id": "SVC-017",
-   "name": "Logo",
-   "cat": "Design graphique",
-   "unit": "forfait",
-   "base": 50000,
-   "active": true,
-   "desc": "Création de logo et déclinaisons."
-  },
-  {
-   "id": "SVC-018",
-   "name": "Vectorisation d’un logo",
-   "cat": "Design graphique",
-   "unit": "forfait",
-   "base": 25000,
-   "active": true,
-   "desc": "Reconstruction vectorielle propre."
-  },
-  {
-   "id": "SVC-019",
-   "name": "Invitation",
-   "cat": "Design graphique",
-   "unit": "forfait",
-   "base": 15000,
-   "active": true,
-   "desc": "Invitation numérique ou imprimable."
-  },
-  {
-   "id": "SVC-020",
-   "name": "Visuel réseaux sociaux",
-   "cat": "Design graphique",
-   "unit": "forfait",
-   "base": 10000,
-   "active": true,
-   "desc": "Visuel optimisé pour réseaux sociaux."
-  },
-  {
-   "id": "SVC-021",
-   "name": "Bannière Facebook",
-   "cat": "Design graphique",
-   "unit": "forfait",
-   "base": 15000,
-   "active": true,
-   "desc": "Couverture Facebook adaptée."
-  },
-  {
-   "id": "SVC-022",
-   "name": "Menu / catalogue",
-   "cat": "Design graphique",
-   "unit": "sur devis",
-   "base": 0,
-   "active": true,
-   "desc": "Conception selon volume."
-  },
-  {
-   "id": "SVC-023",
-   "name": "Création d’une publication",
-   "cat": "Communication digitale",
-   "unit": "forfait",
-   "base": 10000,
-   "active": true,
-   "desc": "Publication graphique et message adapté."
-  },
-  {
-   "id": "SVC-024",
-   "name": "Pack 5 publications",
-   "cat": "Communication digitale",
-   "unit": "pack",
-   "base": 45000,
-   "active": true,
-   "desc": "5 publications cohérentes."
-  },
-  {
-   "id": "SVC-025",
-   "name": "Pack 10 publications",
-   "cat": "Communication digitale",
-   "unit": "pack",
-   "base": 80000,
-   "active": true,
-   "desc": "10 publications cohérentes."
-  },
-  {
-   "id": "SVC-026",
-   "name": "Création de couverture Facebook",
-   "cat": "Communication digitale",
-   "unit": "forfait",
-   "base": 20000,
-   "active": true,
-   "desc": "Couverture adaptée à la marque."
-  },
-  {
-   "id": "SVC-027",
-   "name": "Calendrier éditorial",
-   "cat": "Communication digitale",
-   "unit": "sur devis",
-   "base": 0,
-   "active": true,
-   "desc": "Planification des contenus."
-  },
-  {
-   "id": "SVC-028",
-   "name": "Gestion de page",
-   "cat": "Communication digitale",
-   "unit": "sur devis",
-   "base": 0,
-   "active": true,
-   "desc": "Gestion selon fréquence et périmètre."
-  },
-  {
-   "id": "SVC-029",
-   "name": "Community management",
-   "cat": "Communication digitale",
-   "unit": "sur devis",
-   "base": 0,
-   "active": true,
-   "desc": "Animation et suivi de communauté."
-  },
-  {
-   "id": "SVC-030",
-   "name": "Création de contenu",
-   "cat": "Communication digitale",
-   "unit": "sur devis",
-   "base": 0,
-   "active": true,
-   "desc": "Contenu selon stratégie."
-  },
-  {
-   "id": "SVC-031",
-   "name": "Site vitrine simple",
-   "cat": "Web & numérique",
-   "unit": "sur devis",
-   "base": 0,
-   "active": true,
-   "desc": "Site vitrine selon pages et besoins."
-  },
-  {
-   "id": "SVC-032",
-   "name": "Site professionnel",
-   "cat": "Web & numérique",
-   "unit": "sur devis",
-   "base": 0,
-   "active": true,
-   "desc": "Site professionnel avec fonctionnalités adaptées."
-  },
-  {
-   "id": "SVC-033",
-   "name": "Landing page",
-   "cat": "Web & numérique",
-   "unit": "sur devis",
-   "base": 0,
-   "active": true,
-   "desc": "Page d’atterrissage orientée conversion."
-  },
-  {
-   "id": "SVC-034",
-   "name": "Maintenance de site",
-   "cat": "Web & numérique",
-   "unit": "sur devis",
-   "base": 0,
-   "active": true,
-   "desc": "Maintenance et suivi technique."
-  },
-  {
-   "id": "SVC-035",
-   "name": "Modification / mise à jour",
-   "cat": "Web & numérique",
-   "unit": "sur devis",
-   "base": 0,
-   "active": true,
-   "desc": "Modification ciblée d’un site existant."
-  },
-  {
-   "id": "SVC-036",
-   "name": "Formulaire / fonctionnalité web",
-   "cat": "Web & numérique",
-   "unit": "sur devis",
-   "base": 0,
-   "active": true,
-   "desc": "Fonctionnalité selon cahier des charges."
-  },
-  {
-   "id": "SVC-037",
-   "name": "Conception d’application",
-   "cat": "Web & numérique",
-   "unit": "sur devis",
-   "base": 0,
-   "active": true,
-   "desc": "Application selon fonctionnalités et architecture."
-  },
-  {
-   "id": "SVC-038",
-   "name": "Pack Starter",
-   "cat": "Packs entreprises",
-   "unit": "pack",
-   "base": 100000,
-   "active": true,
-   "desc": "Logo/optimisation, carte de visite, 5 visuels et conseils."
-  },
-  {
-   "id": "SVC-039",
-   "name": "Pack Business",
-   "cat": "Packs entreprises",
-   "unit": "pack",
-   "base": 200000,
-   "active": true,
-   "desc": "Identité de base, 10 publications, couverture et supports."
-  },
-  {
-   "id": "SVC-040",
-   "name": "Pack Pro",
-   "cat": "Packs entreprises",
-   "unit": "sur devis",
-   "base": 0,
-   "active": true,
-   "desc": "Design, communication, supports, web et maintenance."
-  }
- ],
- "workflows": {
-  "Création de logo": [
-   "Réception du besoin",
-   "Brief client",
-   "Analyse",
-   "Recherche / inspiration",
-   "Conception",
-   "Présentation",
-   "Retours client",
-   "Corrections",
-   "Validation",
-   "Paiement",
-   "Livraison",
-   "Archivage"
+  "users": [
+    {
+      "id": "USR-001",
+      "username": "admin",
+      "name": "Administrateur MSN",
+      "role": "superadmin",
+      "active": true,
+      "passwordHash": "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9"
+    },
+    {
+      "id": "USR-002",
+      "username": "membre",
+      "name": "Membre MSN",
+      "role": "member",
+      "active": true,
+      "passwordHash": "5a40053f3de93b71fed71aaa7da28475b7330d5ce9cd53f120047de8e2584ace"
+    }
   ],
-  "Saisie / Mémoire": [
-   "Réception",
-   "Analyse du document",
-   "Choix du modèle",
-   "Création du dossier",
-   "Saisie",
-   "Corrections",
-   "Validation",
-   "Paiement",
-   "Livraison"
+  "clients": [
+    {
+      "id": "CL-001",
+      "name": "Amina Rakoto",
+      "phone": "+261 34 12 345 67",
+      "email": "amina.rakoto@mail.mg",
+      "city": "Antananarivo",
+      "orders": 5,
+      "total": 2450000,
+      "last": "2026-09-26",
+      "notes": "Cliente fidèle. Préfère WhatsApp. Paiement rapide.",
+      "created": "2025-05-15"
+    },
+    {
+      "id": "CL-002",
+      "name": "Studio Vao",
+      "phone": "+261 32 88 210 44",
+      "email": "contact@studiovao.mg",
+      "city": "Antananarivo",
+      "orders": 3,
+      "total": 1680000,
+      "last": "2026-09-23",
+      "notes": "Agence créative. Facturation entreprise requise.",
+      "created": "2025-09-12"
+    },
+    {
+      "id": "CL-003",
+      "name": "Rado Andrianina",
+      "phone": "+261 33 45 771 02",
+      "email": "rado.a@mail.mg",
+      "city": "Toamasina",
+      "orders": 2,
+      "total": 420000,
+      "last": "2026-09-21",
+      "notes": "Étudiant. Mémoire de fin d'études.",
+      "created": "2026-05-30"
+    },
+    {
+      "id": "CL-004",
+      "name": "Hôtel Sakamanga",
+      "phone": "+261 20 22 358 09",
+      "email": "resa@sakamanga.mg",
+      "city": "Antananarivo",
+      "orders": 4,
+      "total": 3120000,
+      "last": "2026-09-25",
+      "notes": "Client corporate. Devis obligatoire avant commande.",
+      "created": "2024-10-27"
+    },
+    {
+      "id": "CL-005",
+      "name": "Naina Ravelo",
+      "phone": "+261 34 09 112 88",
+      "email": "naina.r@mail.mg",
+      "city": "Fianarantsoa",
+      "orders": 1,
+      "total": 180000,
+      "last": "2026-09-19",
+      "notes": "Nouveau client — logo boutique.",
+      "created": "2026-09-19"
+    }
   ],
-  "Affiche / Poster": [
-   "Brief",
-   "Format",
-   "Contenu",
-   "Conception",
-   "Présentation",
-   "Validation",
-   "Paiement",
-   "Livraison"
+  "services": [
+    {
+      "id": "SV-01",
+      "name": "Création de logo",
+      "cat": "Design graphique",
+      "unit": "forfait",
+      "base": 180000,
+      "active": true,
+      "desc": "Logo professionnel + déclinaisons"
+    },
+    {
+      "id": "SV-02",
+      "name": "Saisie / Mémoire",
+      "cat": "Services bureautiques",
+      "unit": "page",
+      "base": 3500,
+      "active": true,
+      "desc": "Saisie et mise en forme de mémoire"
+    },
+    {
+      "id": "SV-03",
+      "name": "Affiche / Poster",
+      "cat": "Design graphique",
+      "unit": "forfait",
+      "base": 95000,
+      "active": true,
+      "desc": "Affiche A3/A2 haute résolution"
+    },
+    {
+      "id": "SV-04",
+      "name": "Carte de visite",
+      "cat": "Design graphique",
+      "unit": "forfait",
+      "base": 60000,
+      "active": true,
+      "desc": "Recto-verso + fichier print"
+    },
+    {
+      "id": "SV-05",
+      "name": "Flyer / Brochure",
+      "cat": "Design graphique",
+      "unit": "forfait",
+      "base": 120000,
+      "active": true,
+      "desc": "Flyer 2 volets ou brochure"
+    },
+    {
+      "id": "SV-06",
+      "name": "Site vitrine",
+      "cat": "Web & numérique",
+      "unit": "forfait",
+      "base": 850000,
+      "active": true,
+      "desc": "Site 5 pages responsive"
+    },
+    {
+      "id": "SV-07",
+      "name": "CV professionnel",
+      "cat": "Services bureautiques",
+      "unit": "forfait",
+      "base": 45000,
+      "active": true,
+      "desc": "CV + lettre de motivation"
+    },
+    {
+      "id": "SV-08",
+      "name": "Rapport / Étude",
+      "cat": "Services bureautiques",
+      "unit": "page",
+      "base": 5000,
+      "active": true,
+      "desc": "Rapport structuré avec tableaux"
+    },
+    {
+      "id": "SVC-001",
+      "name": "Saisie de document",
+      "cat": "Services bureautiques",
+      "unit": "page",
+      "base": 700,
+      "active": true,
+      "desc": "Saisie de documents claire et fidèle."
+    },
+    {
+      "id": "SVC-002",
+      "name": "Mise en forme simple",
+      "cat": "Services bureautiques",
+      "unit": "page",
+      "base": 1000,
+      "active": true,
+      "desc": "Mise en forme structurée et homogène."
+    },
+    {
+      "id": "SVC-003",
+      "name": "Mise en page professionnelle",
+      "cat": "Services bureautiques",
+      "unit": "page",
+      "base": 1500,
+      "active": true,
+      "desc": "Mise en page professionnelle pour documents longs."
+    },
+    {
+      "id": "SVC-004",
+      "name": "Tableau simple",
+      "cat": "Services bureautiques",
+      "unit": "tableau",
+      "base": 1000,
+      "active": true,
+      "desc": "Création ou mise en forme de tableaux."
+    },
+    {
+      "id": "SVC-005",
+      "name": "Graphique / figure",
+      "cat": "Services bureautiques",
+      "unit": "élément",
+      "base": 1500,
+      "active": true,
+      "desc": "Graphiques et figures propres et lisibles."
+    },
+    {
+      "id": "SVC-006",
+      "name": "Organigramme / schéma",
+      "cat": "Services bureautiques",
+      "unit": "élément",
+      "base": 2000,
+      "active": true,
+      "desc": "Schéma ou organigramme professionnel."
+    },
+    {
+      "id": "SVC-008",
+      "name": "Lettre / document professionnel",
+      "cat": "Services bureautiques",
+      "unit": "forfait",
+      "base": 5000,
+      "active": true,
+      "desc": "Document professionnel prêt à utiliser."
+    },
+    {
+      "id": "SVC-009",
+      "name": "Présentation PowerPoint",
+      "cat": "Services bureautiques",
+      "unit": "à partir",
+      "base": 15000,
+      "active": true,
+      "desc": "Présentation structurée et visuelle."
+    },
+    {
+      "id": "SVC-010",
+      "name": "Mémoire / rapport",
+      "cat": "Services bureautiques",
+      "unit": "sur devis",
+      "base": 0,
+      "active": true,
+      "desc": "Étude selon volume et complexité."
+    },
+    {
+      "id": "SVC-011",
+      "name": "Affiche simple",
+      "cat": "Design graphique",
+      "unit": "forfait",
+      "base": 10000,
+      "active": true,
+      "desc": "Création d’affiche simple."
+    },
+    {
+      "id": "SVC-012",
+      "name": "Affiche professionnelle",
+      "cat": "Design graphique",
+      "unit": "forfait",
+      "base": 20000,
+      "active": true,
+      "desc": "Affiche conçue pour impression et diffusion."
+    },
+    {
+      "id": "SVC-013",
+      "name": "Affiche premium",
+      "cat": "Design graphique",
+      "unit": "forfait",
+      "base": 30000,
+      "active": true,
+      "desc": "Direction graphique renforcée et finition premium."
+    },
+    {
+      "id": "SVC-015",
+      "name": "Flyer",
+      "cat": "Design graphique",
+      "unit": "forfait",
+      "base": 15000,
+      "active": true,
+      "desc": "Flyer commercial ou événementiel."
+    },
+    {
+      "id": "SVC-016",
+      "name": "Brochure",
+      "cat": "Design graphique",
+      "unit": "à partir",
+      "base": 30000,
+      "active": true,
+      "desc": "Brochure selon nombre de pages."
+    },
+    {
+      "id": "SVC-017",
+      "name": "Logo",
+      "cat": "Design graphique",
+      "unit": "forfait",
+      "base": 50000,
+      "active": true,
+      "desc": "Création de logo et déclinaisons."
+    },
+    {
+      "id": "SVC-018",
+      "name": "Vectorisation d’un logo",
+      "cat": "Design graphique",
+      "unit": "forfait",
+      "base": 25000,
+      "active": true,
+      "desc": "Reconstruction vectorielle propre."
+    },
+    {
+      "id": "SVC-019",
+      "name": "Invitation",
+      "cat": "Design graphique",
+      "unit": "forfait",
+      "base": 15000,
+      "active": true,
+      "desc": "Invitation numérique ou imprimable."
+    },
+    {
+      "id": "SVC-020",
+      "name": "Visuel réseaux sociaux",
+      "cat": "Design graphique",
+      "unit": "forfait",
+      "base": 10000,
+      "active": true,
+      "desc": "Visuel optimisé pour réseaux sociaux."
+    },
+    {
+      "id": "SVC-021",
+      "name": "Bannière Facebook",
+      "cat": "Design graphique",
+      "unit": "forfait",
+      "base": 15000,
+      "active": true,
+      "desc": "Couverture Facebook adaptée."
+    },
+    {
+      "id": "SVC-022",
+      "name": "Menu / catalogue",
+      "cat": "Design graphique",
+      "unit": "sur devis",
+      "base": 0,
+      "active": true,
+      "desc": "Conception selon volume."
+    },
+    {
+      "id": "SVC-023",
+      "name": "Création d’une publication",
+      "cat": "Communication digitale",
+      "unit": "forfait",
+      "base": 10000,
+      "active": true,
+      "desc": "Publication graphique et message adapté."
+    },
+    {
+      "id": "SVC-024",
+      "name": "Pack 5 publications",
+      "cat": "Communication digitale",
+      "unit": "pack",
+      "base": 45000,
+      "active": true,
+      "desc": "5 publications cohérentes."
+    },
+    {
+      "id": "SVC-025",
+      "name": "Pack 10 publications",
+      "cat": "Communication digitale",
+      "unit": "pack",
+      "base": 80000,
+      "active": true,
+      "desc": "10 publications cohérentes."
+    },
+    {
+      "id": "SVC-026",
+      "name": "Création de couverture Facebook",
+      "cat": "Communication digitale",
+      "unit": "forfait",
+      "base": 20000,
+      "active": true,
+      "desc": "Couverture adaptée à la marque."
+    },
+    {
+      "id": "SVC-027",
+      "name": "Calendrier éditorial",
+      "cat": "Communication digitale",
+      "unit": "sur devis",
+      "base": 0,
+      "active": true,
+      "desc": "Planification des contenus."
+    },
+    {
+      "id": "SVC-028",
+      "name": "Gestion de page",
+      "cat": "Communication digitale",
+      "unit": "sur devis",
+      "base": 0,
+      "active": true,
+      "desc": "Gestion selon fréquence et périmètre."
+    },
+    {
+      "id": "SVC-029",
+      "name": "Community management",
+      "cat": "Communication digitale",
+      "unit": "sur devis",
+      "base": 0,
+      "active": true,
+      "desc": "Animation et suivi de communauté."
+    },
+    {
+      "id": "SVC-030",
+      "name": "Création de contenu",
+      "cat": "Communication digitale",
+      "unit": "sur devis",
+      "base": 0,
+      "active": true,
+      "desc": "Contenu selon stratégie."
+    },
+    {
+      "id": "SVC-031",
+      "name": "Site vitrine simple",
+      "cat": "Web & numérique",
+      "unit": "sur devis",
+      "base": 0,
+      "active": true,
+      "desc": "Site vitrine selon pages et besoins."
+    },
+    {
+      "id": "SVC-032",
+      "name": "Site professionnel",
+      "cat": "Web & numérique",
+      "unit": "sur devis",
+      "base": 0,
+      "active": true,
+      "desc": "Site professionnel avec fonctionnalités adaptées."
+    },
+    {
+      "id": "SVC-033",
+      "name": "Landing page",
+      "cat": "Web & numérique",
+      "unit": "sur devis",
+      "base": 0,
+      "active": true,
+      "desc": "Page d’atterrissage orientée conversion."
+    },
+    {
+      "id": "SVC-034",
+      "name": "Maintenance de site",
+      "cat": "Web & numérique",
+      "unit": "sur devis",
+      "base": 0,
+      "active": true,
+      "desc": "Maintenance et suivi technique."
+    },
+    {
+      "id": "SVC-035",
+      "name": "Modification / mise à jour",
+      "cat": "Web & numérique",
+      "unit": "sur devis",
+      "base": 0,
+      "active": true,
+      "desc": "Modification ciblée d’un site existant."
+    },
+    {
+      "id": "SVC-036",
+      "name": "Formulaire / fonctionnalité web",
+      "cat": "Web & numérique",
+      "unit": "sur devis",
+      "base": 0,
+      "active": true,
+      "desc": "Fonctionnalité selon cahier des charges."
+    },
+    {
+      "id": "SVC-037",
+      "name": "Conception d’application",
+      "cat": "Web & numérique",
+      "unit": "sur devis",
+      "base": 0,
+      "active": true,
+      "desc": "Application selon fonctionnalités et architecture."
+    },
+    {
+      "id": "SVC-038",
+      "name": "Pack Starter",
+      "cat": "Packs entreprises",
+      "unit": "pack",
+      "base": 100000,
+      "active": true,
+      "desc": "Logo/optimisation, carte de visite, 5 visuels et conseils."
+    },
+    {
+      "id": "SVC-039",
+      "name": "Pack Business",
+      "cat": "Packs entreprises",
+      "unit": "pack",
+      "base": 200000,
+      "active": true,
+      "desc": "Identité de base, 10 publications, couverture et supports."
+    },
+    {
+      "id": "SVC-040",
+      "name": "Pack Pro",
+      "cat": "Packs entreprises",
+      "unit": "sur devis",
+      "base": 0,
+      "active": true,
+      "desc": "Design, communication, supports, web et maintenance."
+    }
   ],
-  "Site vitrine": [
-   "Cadrage",
-   "Arborescence",
-   "Maquettes",
-   "Développement",
-   "Présentation",
-   "Validation",
-   "Paiement",
-   "Mise en ligne",
-   "Livraison"
-  ],
-  "default": [
-   "Réception",
-   "Analyse",
-   "Production",
-   "Présentation",
-   "Validation",
-   "Paiement",
-   "Livraison"
-  ]
- },
- "commands": [
-  {
-   "id": "CMD-2401",
-   "client": "CL-004",
-   "service": "Création de logo",
-   "status": "en_validation",
-   "created": "2026-09-17",
-   "deadline": "2026-09-30",
-   "amount": 280000,
-   "progress": 60,
-   "priority": "haute",
-   "notes": "Refonte identité visuelle + déclinaisons",
-   "paid": 0,
-   "step": 6,
-   "totalSteps": 12,
-   "channel": "WhatsApp",
-   "brief": {
-    "domains": [
-     "Entreprise / marque"
+  "workflows": {
+    "Création de logo": [
+      "Réception du besoin",
+      "Brief client",
+      "Analyse",
+      "Recherche / inspiration",
+      "Conception",
+      "Présentation",
+      "Retours client",
+      "Corrections",
+      "Validation",
+      "Paiement",
+      "Livraison",
+      "Archivage"
     ],
-    "objective": "Nouvelle identité pour la haute saison",
-    "types": [
-     "Visuel"
+    "Saisie / Mémoire": [
+      "Réception",
+      "Analyse du document",
+      "Choix du modèle",
+      "Création du dossier",
+      "Saisie",
+      "Corrections",
+      "Validation",
+      "Paiement",
+      "Livraison"
     ],
-    "constraints": [
-     "Charte graphique"
+    "Affiche / Poster": [
+      "Brief",
+      "Format",
+      "Contenu",
+      "Conception",
+      "Présentation",
+      "Validation",
+      "Paiement",
+      "Livraison"
+    ],
+    "Site vitrine": [
+      "Cadrage",
+      "Arborescence",
+      "Maquettes",
+      "Développement",
+      "Présentation",
+      "Validation",
+      "Paiement",
+      "Mise en ligne",
+      "Livraison"
+    ],
+    "default": [
+      "Réception",
+      "Analyse",
+      "Production",
+      "Présentation",
+      "Validation",
+      "Paiement",
+      "Livraison"
     ]
-   },
-   "presentation": {
-    "sentAt": "2026-09-26T05:06:42.438Z",
-    "message": "Bonjour, voici la présentation du logo…"
-   },
-   "receptionId": "REC-S1",
-   "workflowLog": [
+  },
+  "commands": [
     {
-     "step": 1,
-     "label": "Réception du besoin",
-     "at": "2026-09-17T01:06:42.438Z",
-     "status": "completed",
-     "source": "reception"
-    }
-   ]
-  },
-  {
-   "id": "CMD-2402",
-   "client": "CL-003",
-   "service": "Saisie / Mémoire",
-   "status": "en_cours",
-   "created": "2026-09-18",
-   "deadline": "2026-10-03",
-   "amount": 385000,
-   "progress": 45,
-   "priority": "haute",
-   "notes": "Mémoire 110 pages + annexes",
-   "paid": 150000,
-   "step": 4,
-   "totalSteps": 9,
-   "channel": "Appel",
-   "receptionId": "REC-S2",
-   "workflowLog": [
-    {
-     "step": 1,
-     "label": "Réception",
-     "at": "2026-09-14T13:06:42.438Z",
-     "status": "completed",
-     "source": "reception"
-    }
-   ]
-  },
-  {
-   "id": "CMD-2403",
-   "client": "CL-001",
-   "service": "Affiche / Poster",
-   "status": "en_cours",
-   "created": "2026-09-22",
-   "deadline": "2026-09-29",
-   "amount": 95000,
-   "progress": 62,
-   "priority": "moyenne",
-   "notes": "Affiche événement musical",
-   "paid": 0,
-   "step": 4,
-   "totalSteps": 8,
-   "channel": "Messenger",
-   "workflowLog": []
-  },
-  {
-   "id": "CMD-2404",
-   "client": "CL-002",
-   "service": "Carte de visite",
-   "status": "nouveau",
-   "created": "2026-09-26",
-   "deadline": "2026-10-05",
-   "amount": 60000,
-   "progress": 0,
-   "priority": "basse",
-   "notes": "Cartes pour 3 collaborateurs",
-   "paid": 0,
-   "step": 1,
-   "totalSteps": 8,
-   "channel": "WhatsApp",
-   "workflowLog": []
-  },
-  {
-   "id": "CMD-2405",
-   "client": "CL-005",
-   "service": "Création de logo",
-   "status": "en_attente",
-   "created": "2026-09-20",
-   "deadline": "2026-10-07",
-   "amount": 180000,
-   "progress": 18,
-   "priority": "moyenne",
-   "notes": "Attente acompte 50%",
-   "paid": 0,
-   "step": 2,
-   "totalSteps": 12,
-   "channel": "Visite",
-   "receptionId": "REC-S3",
-   "workflowLog": [
-    {
-     "step": 1,
-     "label": "Réception du besoin",
-     "at": "2026-09-19T23:06:42.438Z",
-     "status": "completed",
-     "source": "reception"
-    }
-   ]
-  },
-  {
-   "id": "CMD-2406",
-   "client": "CL-001",
-   "service": "CV professionnel",
-   "status": "termine",
-   "created": "2026-09-02",
-   "deadline": "2026-09-15",
-   "amount": 45000,
-   "progress": 100,
-   "priority": "basse",
-   "notes": "Livré et validé",
-   "paid": 45000,
-   "step": 9,
-   "totalSteps": 9,
-   "channel": "Messenger",
-   "deliveredAt": "2026-09-15",
-   "followupAt": "2026-09-16",
-   "workflowLog": []
-  },
-  {
-   "id": "CMD-2407",
-   "client": "CL-004",
-   "service": "Flyer / Brochure",
-   "status": "en_cours",
-   "created": "2026-09-23",
-   "deadline": "2026-10-02",
-   "amount": 150000,
-   "progress": 35,
-   "priority": "moyenne",
-   "notes": "Flyer promotion séjour",
-   "paid": 75000,
-   "step": 4,
-   "totalSteps": 8,
-   "channel": "Appel",
-   "workflowLog": []
-  },
-  {
-   "id": "CMD-2408",
-   "client": "CL-002",
-   "service": "Site vitrine",
-   "status": "en_attente",
-   "created": "2026-09-24",
-   "deadline": "2026-10-18",
-   "amount": 850000,
-   "progress": 8,
-   "priority": "haute",
-   "notes": "En attente validation devis",
-   "paid": 0,
-   "step": 1,
-   "totalSteps": 9,
-   "channel": "WhatsApp",
-   "workflowLog": []
-  }
- ],
- "quotes": [
-  {
-   "id": "DEV-2401",
-   "client": "CL-004",
-   "service": "Flyer / Brochure",
-   "status": "envoye",
-   "date": "2026-09-23",
-   "valid": "2026-10-07",
-   "amount": 150000,
-   "lines": [
-    {
-     "d": "Conception flyer A5 recto-verso",
-     "q": 1,
-     "pu": 120000
+      "id": "CMD-2401",
+      "client": "CL-004",
+      "service": "Création de logo",
+      "status": "en_validation",
+      "created": "2026-09-17",
+      "deadline": "2026-09-30",
+      "amount": 280000,
+      "progress": 60,
+      "priority": "haute",
+      "notes": "Refonte identité visuelle + déclinaisons",
+      "paid": 0,
+      "step": 6,
+      "totalSteps": 12,
+      "channel": "WhatsApp",
+      "brief": {
+        "domains": [
+          "Entreprise / marque"
+        ],
+        "objective": "Nouvelle identité pour la haute saison",
+        "types": [
+          "Visuel"
+        ],
+        "constraints": [
+          "Charte graphique"
+        ]
+      },
+      "presentation": {
+        "sentAt": "2026-09-26T05:06:42.438Z",
+        "message": "Bonjour, voici la présentation du logo…"
+      },
+      "receptionId": "REC-S1",
+      "workflowLog": [
+        {
+          "step": 1,
+          "label": "Réception du besoin",
+          "at": "2026-09-17T01:06:42.438Z",
+          "status": "completed",
+          "source": "reception"
+        }
+      ]
     },
     {
-     "d": "Déclinaison réseaux sociaux",
-     "q": 3,
-     "pu": 10000
-    }
-   ]
-  },
-  {
-   "id": "DEV-2402",
-   "client": "CL-002",
-   "service": "Site vitrine",
-   "status": "envoye",
-   "date": "2026-09-24",
-   "valid": "2026-10-08",
-   "amount": 850000,
-   "lines": [
-    {
-     "d": "Site vitrine 5 pages",
-     "q": 1,
-     "pu": 750000
+      "id": "CMD-2402",
+      "client": "CL-003",
+      "service": "Saisie / Mémoire",
+      "status": "en_cours",
+      "created": "2026-09-18",
+      "deadline": "2026-10-03",
+      "amount": 385000,
+      "progress": 45,
+      "priority": "haute",
+      "notes": "Mémoire 110 pages + annexes",
+      "paid": 150000,
+      "step": 4,
+      "totalSteps": 9,
+      "channel": "Appel",
+      "receptionId": "REC-S2",
+      "workflowLog": [
+        {
+          "step": 1,
+          "label": "Réception",
+          "at": "2026-09-14T13:06:42.438Z",
+          "status": "completed",
+          "source": "reception"
+        }
+      ]
     },
     {
-     "d": "Nom de domaine + hébergement 1 an",
-     "q": 1,
-     "pu": 100000
-    }
-   ]
-  },
-  {
-   "id": "DEV-2403",
-   "client": "CL-003",
-   "service": "Saisie / Mémoire",
-   "status": "accepte",
-   "date": "2026-09-18",
-   "valid": "2026-10-02",
-   "amount": 385000,
-   "lines": [
+      "id": "CMD-2403",
+      "client": "CL-001",
+      "service": "Affiche / Poster",
+      "status": "en_cours",
+      "created": "2026-09-22",
+      "deadline": "2026-09-29",
+      "amount": 95000,
+      "progress": 62,
+      "priority": "moyenne",
+      "notes": "Affiche événement musical",
+      "paid": 0,
+      "step": 4,
+      "totalSteps": 8,
+      "channel": "Messenger",
+      "workflowLog": []
+    },
     {
-     "d": "Saisie et mise en forme",
-     "q": 110,
-     "pu": 3500
-    }
-   ]
-  },
-  {
-   "id": "DEV-2404",
-   "client": "CL-005",
-   "service": "Création de logo",
-   "status": "brouillon",
-   "date": "2026-09-20",
-   "valid": "2026-10-04",
-   "amount": 180000,
-   "lines": [
+      "id": "CMD-2404",
+      "client": "CL-002",
+      "service": "Carte de visite",
+      "status": "nouveau",
+      "created": "2026-09-26",
+      "deadline": "2026-10-05",
+      "amount": 60000,
+      "progress": 0,
+      "priority": "basse",
+      "notes": "Cartes pour 3 collaborateurs",
+      "paid": 0,
+      "step": 1,
+      "totalSteps": 8,
+      "channel": "WhatsApp",
+      "workflowLog": []
+    },
     {
-     "d": "Logo + 3 déclinaisons",
-     "q": 1,
-     "pu": 180000
-    }
-   ]
-  },
-  {
-   "id": "DEV-2405",
-   "client": "CL-001",
-   "service": "Affiche / Poster",
-   "status": "accepte",
-   "date": "2026-09-22",
-   "valid": "2026-10-06",
-   "amount": 95000,
-   "lines": [
+      "id": "CMD-2405",
+      "client": "CL-005",
+      "service": "Création de logo",
+      "status": "en_attente",
+      "created": "2026-09-20",
+      "deadline": "2026-10-07",
+      "amount": 180000,
+      "progress": 18,
+      "priority": "moyenne",
+      "notes": "Attente acompte 50%",
+      "paid": 0,
+      "step": 2,
+      "totalSteps": 12,
+      "channel": "Visite",
+      "receptionId": "REC-S3",
+      "workflowLog": [
+        {
+          "step": 1,
+          "label": "Réception du besoin",
+          "at": "2026-09-19T23:06:42.438Z",
+          "status": "completed",
+          "source": "reception"
+        }
+      ]
+    },
     {
-     "d": "Affiche A3",
-     "q": 1,
-     "pu": 95000
+      "id": "CMD-2406",
+      "client": "CL-001",
+      "service": "CV professionnel",
+      "status": "termine",
+      "created": "2026-09-02",
+      "deadline": "2026-09-15",
+      "amount": 45000,
+      "progress": 100,
+      "priority": "basse",
+      "notes": "Livré et validé",
+      "paid": 45000,
+      "step": 9,
+      "totalSteps": 9,
+      "channel": "Messenger",
+      "deliveredAt": "2026-09-15",
+      "followupAt": "2026-09-16",
+      "workflowLog": []
+    },
+    {
+      "id": "CMD-2407",
+      "client": "CL-004",
+      "service": "Flyer / Brochure",
+      "status": "en_cours",
+      "created": "2026-09-23",
+      "deadline": "2026-10-02",
+      "amount": 150000,
+      "progress": 35,
+      "priority": "moyenne",
+      "notes": "Flyer promotion séjour",
+      "paid": 75000,
+      "step": 4,
+      "totalSteps": 8,
+      "channel": "Appel",
+      "workflowLog": []
+    },
+    {
+      "id": "CMD-2408",
+      "client": "CL-002",
+      "service": "Site vitrine",
+      "status": "en_attente",
+      "created": "2026-09-24",
+      "deadline": "2026-10-18",
+      "amount": 850000,
+      "progress": 8,
+      "priority": "haute",
+      "notes": "En attente validation devis",
+      "paid": 0,
+      "step": 1,
+      "totalSteps": 9,
+      "channel": "WhatsApp",
+      "workflowLog": []
     }
-   ]
+  ],
+  "quotes": [
+    {
+      "id": "DEV-2401",
+      "client": "CL-004",
+      "service": "Flyer / Brochure",
+      "status": "envoye",
+      "date": "2026-09-23",
+      "valid": "2026-10-07",
+      "amount": 150000,
+      "lines": [
+        {
+          "d": "Conception flyer A5 recto-verso",
+          "q": 1,
+          "pu": 120000
+        },
+        {
+          "d": "Déclinaison réseaux sociaux",
+          "q": 3,
+          "pu": 10000
+        }
+      ]
+    },
+    {
+      "id": "DEV-2402",
+      "client": "CL-002",
+      "service": "Site vitrine",
+      "status": "envoye",
+      "date": "2026-09-24",
+      "valid": "2026-10-08",
+      "amount": 850000,
+      "lines": [
+        {
+          "d": "Site vitrine 5 pages",
+          "q": 1,
+          "pu": 750000
+        },
+        {
+          "d": "Nom de domaine + hébergement 1 an",
+          "q": 1,
+          "pu": 100000
+        }
+      ]
+    },
+    {
+      "id": "DEV-2403",
+      "client": "CL-003",
+      "service": "Saisie / Mémoire",
+      "status": "accepte",
+      "date": "2026-09-18",
+      "valid": "2026-10-02",
+      "amount": 385000,
+      "lines": [
+        {
+          "d": "Saisie et mise en forme",
+          "q": 110,
+          "pu": 3500
+        }
+      ]
+    },
+    {
+      "id": "DEV-2404",
+      "client": "CL-005",
+      "service": "Création de logo",
+      "status": "brouillon",
+      "date": "2026-09-20",
+      "valid": "2026-10-04",
+      "amount": 180000,
+      "lines": [
+        {
+          "d": "Logo + 3 déclinaisons",
+          "q": 1,
+          "pu": 180000
+        }
+      ]
+    },
+    {
+      "id": "DEV-2405",
+      "client": "CL-001",
+      "service": "Affiche / Poster",
+      "status": "accepte",
+      "date": "2026-09-22",
+      "valid": "2026-10-06",
+      "amount": 95000,
+      "lines": [
+        {
+          "d": "Affiche A3",
+          "q": 1,
+          "pu": 95000
+        }
+      ]
+    }
+  ],
+  "invoices": [
+    {
+      "id": "FAC-2401",
+      "client": "CL-004",
+      "service": "Création de logo",
+      "status": "impayee",
+      "date": "2026-09-17",
+      "due": "2026-10-01",
+      "amount": 280000,
+      "paid": 0
+    },
+    {
+      "id": "FAC-2402",
+      "client": "CL-003",
+      "service": "Saisie / Mémoire",
+      "status": "partielle",
+      "date": "2026-09-18",
+      "due": "2026-10-03",
+      "amount": 385000,
+      "paid": 150000
+    },
+    {
+      "id": "FAC-2403",
+      "client": "CL-001",
+      "service": "CV professionnel",
+      "status": "payee",
+      "date": "2026-09-02",
+      "due": "2026-09-15",
+      "amount": 45000,
+      "paid": 45000
+    },
+    {
+      "id": "FAC-2404",
+      "client": "CL-004",
+      "service": "Flyer / Brochure",
+      "status": "partielle",
+      "date": "2026-09-23",
+      "due": "2026-10-07",
+      "amount": 150000,
+      "paid": 75000
+    }
+  ],
+  "tasks": [
+    {
+      "id": "T-01",
+      "title": "Envoyer le brief logo à l'imprimeur",
+      "cmd": "CMD-2401",
+      "priority": "haute",
+      "due": "2026-09-28",
+      "status": "todo"
+    },
+    {
+      "id": "T-02",
+      "title": "Relire les 30 dernières pages du mémoire",
+      "cmd": "CMD-2402",
+      "priority": "haute",
+      "due": "2026-09-28",
+      "status": "todo"
+    },
+    {
+      "id": "T-03",
+      "title": "Préparer la v2 de l'affiche",
+      "cmd": "CMD-2403",
+      "priority": "moyenne",
+      "due": "2026-09-29",
+      "status": "inprogress"
+    },
+    {
+      "id": "T-04",
+      "title": "Relancer client Studio Vao (devis site)",
+      "cmd": "CMD-2408",
+      "priority": "haute",
+      "due": "2026-09-26",
+      "status": "todo"
+    },
+    {
+      "id": "T-05",
+      "title": "Créer la maquette flyer hôtel",
+      "cmd": "CMD-2407",
+      "priority": "moyenne",
+      "due": "2026-09-30",
+      "status": "inprogress"
+    },
+    {
+      "id": "T-06",
+      "title": "Appeler Naina pour acompte logo",
+      "cmd": "CMD-2405",
+      "priority": "haute",
+      "due": "2026-09-26",
+      "status": "todo"
+    },
+    {
+      "id": "T-07",
+      "title": "Exporter carte de visite en PDF print",
+      "cmd": "CMD-2404",
+      "priority": "basse",
+      "due": "2026-10-05",
+      "status": "todo"
+    },
+    {
+      "id": "T-08",
+      "title": "Facturer le solde mémoire",
+      "cmd": "CMD-2402",
+      "priority": "moyenne",
+      "due": "2026-10-04",
+      "status": "todo"
+    },
+    {
+      "id": "T-09",
+      "title": "Archiver les fichiers du CV livré",
+      "cmd": "CMD-2406",
+      "priority": "basse",
+      "due": "2026-09-16",
+      "status": "done"
+    },
+    {
+      "id": "T-10",
+      "title": "Mettre à jour le catalogue tarifs",
+      "cmd": "",
+      "priority": "moyenne",
+      "due": "2026-10-02",
+      "status": "todo"
+    }
+  ],
+  "templates": [
+    {
+      "id": "TPL-01",
+      "name": "Mémoire universitaire standard",
+      "cat": "Mémoire",
+      "version": "v3.2",
+      "date": "2026-09-19",
+      "status": "actif"
+    },
+    {
+      "id": "TPL-02",
+      "name": "Rapport de stage",
+      "cat": "Rapport",
+      "version": "v2.1",
+      "date": "2026-09-07",
+      "status": "actif"
+    },
+    {
+      "id": "TPL-03",
+      "name": "Lettre de motivation moderne",
+      "cat": "Lettre",
+      "version": "v1.4",
+      "date": "2026-08-28",
+      "status": "actif"
+    },
+    {
+      "id": "TPL-04",
+      "name": "CV créatif 2 colonnes",
+      "cat": "CV",
+      "version": "v2.0",
+      "date": "2026-09-03",
+      "status": "actif"
+    },
+    {
+      "id": "TPL-05",
+      "name": "Facture MSN standard",
+      "cat": "Facture",
+      "version": "v1.1",
+      "date": "2026-07-19",
+      "status": "actif"
+    },
+    {
+      "id": "TPL-06",
+      "name": "Devis MSN standard",
+      "cat": "Devis",
+      "version": "v1.3",
+      "date": "2026-07-19",
+      "status": "actif"
+    },
+    {
+      "id": "TPL-07",
+      "name": "Catalogue services",
+      "cat": "Catalogue",
+      "version": "v1.0",
+      "date": "2026-08-28",
+      "status": "brouillon"
+    },
+    {
+      "id": "TPL-08",
+      "name": "Brochure 3 volets",
+      "cat": "Brochure",
+      "version": "v2.2",
+      "date": "2026-06-29",
+      "status": "actif"
+    }
+  ],
+  "messages": [
+    {
+      "id": "MSG-01",
+      "cat": "Accueil",
+      "title": "Message d'accueil",
+      "body": "Bonjour {client} 👋\nMerci de contacter MSN — Multi-Services Numériques.\nComment pouvons-nous vous aider aujourd'hui ?"
+    },
+    {
+      "id": "MSG-02",
+      "cat": "Demande d'informations",
+      "title": "Demander des précisions",
+      "body": "Bonjour {client},\nPour bien préparer votre {service}, pourriez-vous nous préciser :\n• Le format souhaité\n• Le contenu à intégrer\n• Votre deadline\nMerci !"
+    },
+    {
+      "id": "MSG-03",
+      "cat": "Présentation tarif",
+      "title": "Envoi tarif",
+      "body": "Bonjour {client},\nVoici notre tarif pour {service} :\n👉 {montant}\nDélai estimé : {deadline}\nSouhaitez-vous que nous lancions la commande ?"
+    },
+    {
+      "id": "MSG-04",
+      "cat": "Devis",
+      "title": "Envoi du devis",
+      "body": "Bonjour {client},\nVeuillez trouver notre devis n° {numero} pour {service}.\nMontant : {montant}\nValidité : 14 jours\nNous restons disponibles pour toute question."
+    },
+    {
+      "id": "MSG-05",
+      "cat": "Confirmation commande",
+      "title": "Commande confirmée",
+      "body": "Bonjour {client},\nVotre commande {numero} est bien enregistrée ✅\nService : {service}\nDeadline : {deadline}\nNous démarrons le travail dès maintenant."
+    },
+    {
+      "id": "MSG-06",
+      "cat": "Relance",
+      "title": "Relance paiement",
+      "body": "Bonjour {client},\nPetit rappel concernant la facture {numero} ({montant}).\nPouvez-vous nous indiquer une date de règlement ?\nMerci d'avance 🙏"
+    },
+    {
+      "id": "MSG-07",
+      "cat": "Livraison",
+      "title": "Livraison du travail",
+      "body": "Bonjour {client},\nVotre {service} est prêt 🎉\nVous trouverez les fichiers en pièce jointe.\nN'hésitez pas à nous faire un retour."
+    },
+    {
+      "id": "MSG-08",
+      "cat": "Demande de validation",
+      "title": "Demander validation",
+      "body": "Bonjour {client},\nVoici la version à valider pour {service}.\nMerci de nous confirmer :\n✅ Validé\nou ✏️ Modifications souhaitées"
+    },
+    {
+      "id": "MSG-09",
+      "cat": "Remerciement",
+      "title": "Remerciement",
+      "body": "Merci beaucoup {client} pour votre confiance 🙏\nAu plaisir de collaborer à nouveau sur vos prochains projets !\n— Équipe MSN"
+    }
+  ],
+  "notifications": [
+    {
+      "id": "N1",
+      "type": "new_order",
+      "title": "Nouvelle demande client",
+      "text": "Naina Ravelo — Création de logo via Visite",
+      "time": "il y a 12 min",
+      "unread": true
+    },
+    {
+      "id": "N2",
+      "type": "deadline",
+      "title": "Deadline proche",
+      "text": "CMD-2403 — Affiche / Poster dans 2 jours",
+      "time": "il y a 1 h",
+      "unread": true
+    },
+    {
+      "id": "N3",
+      "type": "payment",
+      "title": "Paiement reçu",
+      "text": "Hôtel Sakamanga a réglé 75 000 Ar",
+      "time": "il y a 3 h",
+      "unread": true
+    },
+    {
+      "id": "N4",
+      "type": "validation",
+      "title": "Validation client requise",
+      "text": "Studio Vao attend votre devis site vitrine",
+      "time": "hier",
+      "unread": false
+    },
+    {
+      "id": "N5",
+      "type": "late",
+      "title": "Tâche en retard",
+      "text": "Relancer client Studio Vao (devis site)",
+      "time": "hier",
+      "unread": false
+    },
+    {
+      "id": "N6",
+      "type": "deadline",
+      "title": "Facture impayée",
+      "text": "FAC-2401 — 280 000 Ar à encaisser",
+      "time": "il y a 2 j",
+      "unread": false
+    }
+  ],
+  "files": [
+    {
+      "id": "F-01",
+      "name": "logo_brief_client.pdf",
+      "type": "pdf",
+      "size": "245 Ko",
+      "date": "2026-09-17",
+      "cat": "reçus",
+      "cmd": "CMD-2401"
+    },
+    {
+      "id": "F-02",
+      "name": "logo_v2_final.ai",
+      "type": "img",
+      "size": "1,8 Mo",
+      "date": "2026-09-25",
+      "cat": "travail",
+      "cmd": "CMD-2401"
+    },
+    {
+      "id": "F-03",
+      "name": "memoire_rado_v1.docx",
+      "type": "doc",
+      "size": "3,2 Mo",
+      "date": "2026-09-22",
+      "cat": "travail",
+      "cmd": "CMD-2402"
+    },
+    {
+      "id": "F-04",
+      "name": "affiche_concert_A3.pdf",
+      "type": "pdf",
+      "size": "4,1 Mo",
+      "date": "2026-09-26",
+      "cat": "livrés",
+      "cmd": "CMD-2403"
+    },
+    {
+      "id": "F-05",
+      "name": "cv_amina_final.pdf",
+      "type": "pdf",
+      "size": "180 Ko",
+      "date": "2026-09-15",
+      "cat": "livrés",
+      "cmd": "CMD-2406"
+    },
+    {
+      "id": "F-06",
+      "name": "modele_memoire_2025.docx",
+      "type": "doc",
+      "size": "620 Ko",
+      "date": "2026-09-19",
+      "cat": "modèles",
+      "cmd": ""
+    },
+    {
+      "id": "F-07",
+      "name": "flyer_hotel_maquette.psd",
+      "type": "img",
+      "size": "22 Mo",
+      "date": "2026-09-26",
+      "cat": "travail",
+      "cmd": "CMD-2407"
+    },
+    {
+      "id": "F-08",
+      "name": "facture_FAC-2401.pdf",
+      "type": "pdf",
+      "size": "95 Ko",
+      "date": "2026-09-17",
+      "cat": "livrés",
+      "cmd": "CMD-2401"
+    }
+  ],
+  "portfolio": [
+    {
+      "id": "PF-01",
+      "service": "Création de logo",
+      "title": "Identité Sakamanga",
+      "type": "Logo + déclinaisons",
+      "color": "#4a7c6f"
+    },
+    {
+      "id": "PF-02",
+      "service": "Affiche / Poster",
+      "title": "Affiche concert live",
+      "type": "A3 imprimé",
+      "color": "#b5673a"
+    },
+    {
+      "id": "PF-03",
+      "service": "Site vitrine",
+      "title": "Vitrine Studio Vao",
+      "type": "Site 5 pages",
+      "color": "#4a7d9d"
+    },
+    {
+      "id": "PF-04",
+      "service": "Flyer / Brochure",
+      "title": "Flyer séjour hôtel",
+      "type": "A5 recto-verso",
+      "color": "#a97d24"
+    }
+  ],
+  "receptions": [
+    {
+      "id": "REC-S1",
+      "client": "CL-004",
+      "name": "Hôtel Sakamanga",
+      "phone": "+261 20 22 358 09",
+      "channel": "WhatsApp",
+      "service": "Création de logo",
+      "status": "convertis",
+      "at": "2026-09-17T01:06:42.438Z"
+    },
+    {
+      "id": "REC-S2",
+      "client": "CL-003",
+      "name": "Rado Andrianina",
+      "phone": "+261 33 45 771 02",
+      "channel": "Appel",
+      "service": "Saisie / Mémoire",
+      "status": "convertis",
+      "at": "2026-09-14T13:06:42.438Z"
+    },
+    {
+      "id": "REC-S3",
+      "client": "CL-005",
+      "name": "Naina Ravelo",
+      "phone": "+261 34 09 112 88",
+      "channel": "Visite",
+      "service": "Création de logo",
+      "status": "qualifiee",
+      "at": "2026-09-19T23:06:42.438Z"
+    }
+  ],
+  "activity": [
+    {
+      "id": "A1",
+      "type": "order",
+      "text": "Nouvelle commande CMD-2404 — Studio Vao",
+      "time": "il y a 35 min"
+    },
+    {
+      "id": "A2",
+      "type": "quote",
+      "text": "Devis DEV-2402 envoyé à Studio Vao",
+      "time": "il y a 2 h"
+    },
+    {
+      "id": "A3",
+      "type": "invoice",
+      "text": "Facture FAC-2404 envoyée à Hôtel Sakamanga",
+      "time": "hier"
+    },
+    {
+      "id": "A4",
+      "type": "client",
+      "text": "Client Naina Ravelo ajouté",
+      "time": "hier"
+    },
+    {
+      "id": "A5",
+      "type": "doc",
+      "text": "Document affiche_concert_A3.pdf livré",
+      "time": "il y a 2 j"
+    }
+  ],
+  "presentations": [
+    {
+      "id": "PRS-001",
+      "service": "Création de logo",
+      "target": "client",
+      "fr": "Création de logo — une solution pensée selon votre objectif. Logo professionnel + déclinaisons MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Création de logo — vahaolana mifanaraka amin’ny tanjonao. Logo professionnel + déclinaisons MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Création de logo — a solution built around your objective. Logo professionnel + déclinaisons MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Logo professionnel + déclinaisons",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-002",
+      "service": "Saisie / Mémoire",
+      "target": "client",
+      "fr": "Saisie / Mémoire — une solution pensée selon votre objectif. Saisie et mise en forme de mémoire MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Saisie / Mémoire — vahaolana mifanaraka amin’ny tanjonao. Saisie et mise en forme de mémoire MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Saisie / Mémoire — a solution built around your objective. Saisie et mise en forme de mémoire MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Saisie et mise en forme de mémoire",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-003",
+      "service": "Affiche / Poster",
+      "target": "client",
+      "fr": "Affiche / Poster — une solution pensée selon votre objectif. Affiche A3/A2 haute résolution MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Affiche / Poster — vahaolana mifanaraka amin’ny tanjonao. Affiche A3/A2 haute résolution MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Affiche / Poster — a solution built around your objective. Affiche A3/A2 haute résolution MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Affiche A3/A2 haute résolution",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-004",
+      "service": "Carte de visite",
+      "target": "client",
+      "fr": "Carte de visite — une solution pensée selon votre objectif. Recto-verso + fichier print MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Carte de visite — vahaolana mifanaraka amin’ny tanjonao. Recto-verso + fichier print MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Carte de visite — a solution built around your objective. Recto-verso + fichier print MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Recto-verso + fichier print",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-005",
+      "service": "Flyer / Brochure",
+      "target": "client",
+      "fr": "Flyer / Brochure — une solution pensée selon votre objectif. Flyer 2 volets ou brochure MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Flyer / Brochure — vahaolana mifanaraka amin’ny tanjonao. Flyer 2 volets ou brochure MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Flyer / Brochure — a solution built around your objective. Flyer 2 volets ou brochure MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Flyer 2 volets ou brochure",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-006",
+      "service": "Site vitrine",
+      "target": "client",
+      "fr": "Site vitrine — une solution pensée selon votre objectif. Site 5 pages responsive MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Site vitrine — vahaolana mifanaraka amin’ny tanjonao. Site 5 pages responsive MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Site vitrine — a solution built around your objective. Site 5 pages responsive MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Site 5 pages responsive",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-007",
+      "service": "CV professionnel",
+      "target": "client",
+      "fr": "CV professionnel — une solution pensée selon votre objectif. CV + lettre de motivation MSN vous accompagne du cadrage à la livraison.",
+      "mg": "CV professionnel — vahaolana mifanaraka amin’ny tanjonao. CV + lettre de motivation MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "CV professionnel — a solution built around your objective. CV + lettre de motivation MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "CV + lettre de motivation",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-008",
+      "service": "Rapport / Étude",
+      "target": "client",
+      "fr": "Rapport / Étude — une solution pensée selon votre objectif. Rapport structuré avec tableaux MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Rapport / Étude — vahaolana mifanaraka amin’ny tanjonao. Rapport structuré avec tableaux MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Rapport / Étude — a solution built around your objective. Rapport structuré avec tableaux MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Rapport structuré avec tableaux",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-009",
+      "service": "Saisie de document",
+      "target": "client",
+      "fr": "Saisie de document — une solution pensée selon votre objectif. Saisie de documents claire et fidèle. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Saisie de document — vahaolana mifanaraka amin’ny tanjonao. Saisie de documents claire et fidèle. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Saisie de document — a solution built around your objective. Saisie de documents claire et fidèle. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Saisie de documents claire et fidèle.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-010",
+      "service": "Mise en forme simple",
+      "target": "client",
+      "fr": "Mise en forme simple — une solution pensée selon votre objectif. Mise en forme structurée et homogène. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Mise en forme simple — vahaolana mifanaraka amin’ny tanjonao. Mise en forme structurée et homogène. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Mise en forme simple — a solution built around your objective. Mise en forme structurée et homogène. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Mise en forme structurée et homogène.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-011",
+      "service": "Mise en page professionnelle",
+      "target": "client",
+      "fr": "Mise en page professionnelle — une solution pensée selon votre objectif. Mise en page professionnelle pour documents longs. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Mise en page professionnelle — vahaolana mifanaraka amin’ny tanjonao. Mise en page professionnelle pour documents longs. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Mise en page professionnelle — a solution built around your objective. Mise en page professionnelle pour documents longs. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Mise en page professionnelle pour documents longs.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-012",
+      "service": "Tableau simple",
+      "target": "client",
+      "fr": "Tableau simple — une solution pensée selon votre objectif. Création ou mise en forme de tableaux. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Tableau simple — vahaolana mifanaraka amin’ny tanjonao. Création ou mise en forme de tableaux. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Tableau simple — a solution built around your objective. Création ou mise en forme de tableaux. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Création ou mise en forme de tableaux.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-013",
+      "service": "Graphique / figure",
+      "target": "client",
+      "fr": "Graphique / figure — une solution pensée selon votre objectif. Graphiques et figures propres et lisibles. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Graphique / figure — vahaolana mifanaraka amin’ny tanjonao. Graphiques et figures propres et lisibles. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Graphique / figure — a solution built around your objective. Graphiques et figures propres et lisibles. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Graphiques et figures propres et lisibles.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-014",
+      "service": "Organigramme / schéma",
+      "target": "client",
+      "fr": "Organigramme / schéma — une solution pensée selon votre objectif. Schéma ou organigramme professionnel. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Organigramme / schéma — vahaolana mifanaraka amin’ny tanjonao. Schéma ou organigramme professionnel. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Organigramme / schéma — a solution built around your objective. Schéma ou organigramme professionnel. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Schéma ou organigramme professionnel.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-015",
+      "service": "Lettre / document professionnel",
+      "target": "client",
+      "fr": "Lettre / document professionnel — une solution pensée selon votre objectif. Document professionnel prêt à utiliser. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Lettre / document professionnel — vahaolana mifanaraka amin’ny tanjonao. Document professionnel prêt à utiliser. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Lettre / document professionnel — a solution built around your objective. Document professionnel prêt à utiliser. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Document professionnel prêt à utiliser.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-016",
+      "service": "Présentation PowerPoint",
+      "target": "client",
+      "fr": "Présentation PowerPoint — une solution pensée selon votre objectif. Présentation structurée et visuelle. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Présentation PowerPoint — vahaolana mifanaraka amin’ny tanjonao. Présentation structurée et visuelle. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Présentation PowerPoint — a solution built around your objective. Présentation structurée et visuelle. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Présentation structurée et visuelle.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-017",
+      "service": "Mémoire / rapport",
+      "target": "client",
+      "fr": "Mémoire / rapport — une solution pensée selon votre objectif. Étude selon volume et complexité. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Mémoire / rapport — vahaolana mifanaraka amin’ny tanjonao. Étude selon volume et complexité. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Mémoire / rapport — a solution built around your objective. Étude selon volume et complexité. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Étude selon volume et complexité.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-018",
+      "service": "Affiche simple",
+      "target": "client",
+      "fr": "Affiche simple — une solution pensée selon votre objectif. Création d’affiche simple. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Affiche simple — vahaolana mifanaraka amin’ny tanjonao. Création d’affiche simple. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Affiche simple — a solution built around your objective. Création d’affiche simple. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Création d’affiche simple.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-019",
+      "service": "Affiche professionnelle",
+      "target": "client",
+      "fr": "Affiche professionnelle — une solution pensée selon votre objectif. Affiche conçue pour impression et diffusion. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Affiche professionnelle — vahaolana mifanaraka amin’ny tanjonao. Affiche conçue pour impression et diffusion. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Affiche professionnelle — a solution built around your objective. Affiche conçue pour impression et diffusion. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Affiche conçue pour impression et diffusion.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-020",
+      "service": "Affiche premium",
+      "target": "client",
+      "fr": "Affiche premium — une solution pensée selon votre objectif. Direction graphique renforcée et finition premium. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Affiche premium — vahaolana mifanaraka amin’ny tanjonao. Direction graphique renforcée et finition premium. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Affiche premium — a solution built around your objective. Direction graphique renforcée et finition premium. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Direction graphique renforcée et finition premium.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-021",
+      "service": "Flyer",
+      "target": "client",
+      "fr": "Flyer — une solution pensée selon votre objectif. Flyer commercial ou événementiel. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Flyer — vahaolana mifanaraka amin’ny tanjonao. Flyer commercial ou événementiel. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Flyer — a solution built around your objective. Flyer commercial ou événementiel. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Flyer commercial ou événementiel.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-022",
+      "service": "Brochure",
+      "target": "client",
+      "fr": "Brochure — une solution pensée selon votre objectif. Brochure selon nombre de pages. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Brochure — vahaolana mifanaraka amin’ny tanjonao. Brochure selon nombre de pages. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Brochure — a solution built around your objective. Brochure selon nombre de pages. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Brochure selon nombre de pages.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-023",
+      "service": "Logo",
+      "target": "client",
+      "fr": "Logo — une solution pensée selon votre objectif. Création de logo et déclinaisons. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Logo — vahaolana mifanaraka amin’ny tanjonao. Création de logo et déclinaisons. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Logo — a solution built around your objective. Création de logo et déclinaisons. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Création de logo et déclinaisons.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-024",
+      "service": "Vectorisation d’un logo",
+      "target": "client",
+      "fr": "Vectorisation d’un logo — une solution pensée selon votre objectif. Reconstruction vectorielle propre. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Vectorisation d’un logo — vahaolana mifanaraka amin’ny tanjonao. Reconstruction vectorielle propre. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Vectorisation d’un logo — a solution built around your objective. Reconstruction vectorielle propre. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Reconstruction vectorielle propre.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-025",
+      "service": "Invitation",
+      "target": "client",
+      "fr": "Invitation — une solution pensée selon votre objectif. Invitation numérique ou imprimable. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Invitation — vahaolana mifanaraka amin’ny tanjonao. Invitation numérique ou imprimable. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Invitation — a solution built around your objective. Invitation numérique ou imprimable. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Invitation numérique ou imprimable.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-026",
+      "service": "Visuel réseaux sociaux",
+      "target": "client",
+      "fr": "Visuel réseaux sociaux — une solution pensée selon votre objectif. Visuel optimisé pour réseaux sociaux. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Visuel réseaux sociaux — vahaolana mifanaraka amin’ny tanjonao. Visuel optimisé pour réseaux sociaux. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Visuel réseaux sociaux — a solution built around your objective. Visuel optimisé pour réseaux sociaux. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Visuel optimisé pour réseaux sociaux.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-027",
+      "service": "Bannière Facebook",
+      "target": "client",
+      "fr": "Bannière Facebook — une solution pensée selon votre objectif. Couverture Facebook adaptée. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Bannière Facebook — vahaolana mifanaraka amin’ny tanjonao. Couverture Facebook adaptée. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Bannière Facebook — a solution built around your objective. Couverture Facebook adaptée. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Couverture Facebook adaptée.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-028",
+      "service": "Menu / catalogue",
+      "target": "client",
+      "fr": "Menu / catalogue — une solution pensée selon votre objectif. Conception selon volume. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Menu / catalogue — vahaolana mifanaraka amin’ny tanjonao. Conception selon volume. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Menu / catalogue — a solution built around your objective. Conception selon volume. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Conception selon volume.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-029",
+      "service": "Création d’une publication",
+      "target": "client",
+      "fr": "Création d’une publication — une solution pensée selon votre objectif. Publication graphique et message adapté. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Création d’une publication — vahaolana mifanaraka amin’ny tanjonao. Publication graphique et message adapté. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Création d’une publication — a solution built around your objective. Publication graphique et message adapté. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Publication graphique et message adapté.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-030",
+      "service": "Pack 5 publications",
+      "target": "client",
+      "fr": "Pack 5 publications — une solution pensée selon votre objectif. 5 publications cohérentes. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Pack 5 publications — vahaolana mifanaraka amin’ny tanjonao. 5 publications cohérentes. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Pack 5 publications — a solution built around your objective. 5 publications cohérentes. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "5 publications cohérentes.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-031",
+      "service": "Pack 10 publications",
+      "target": "client",
+      "fr": "Pack 10 publications — une solution pensée selon votre objectif. 10 publications cohérentes. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Pack 10 publications — vahaolana mifanaraka amin’ny tanjonao. 10 publications cohérentes. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Pack 10 publications — a solution built around your objective. 10 publications cohérentes. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "10 publications cohérentes.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-032",
+      "service": "Création de couverture Facebook",
+      "target": "client",
+      "fr": "Création de couverture Facebook — une solution pensée selon votre objectif. Couverture adaptée à la marque. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Création de couverture Facebook — vahaolana mifanaraka amin’ny tanjonao. Couverture adaptée à la marque. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Création de couverture Facebook — a solution built around your objective. Couverture adaptée à la marque. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Couverture adaptée à la marque.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-033",
+      "service": "Calendrier éditorial",
+      "target": "client",
+      "fr": "Calendrier éditorial — une solution pensée selon votre objectif. Planification des contenus. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Calendrier éditorial — vahaolana mifanaraka amin’ny tanjonao. Planification des contenus. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Calendrier éditorial — a solution built around your objective. Planification des contenus. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Planification des contenus.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-034",
+      "service": "Gestion de page",
+      "target": "client",
+      "fr": "Gestion de page — une solution pensée selon votre objectif. Gestion selon fréquence et périmètre. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Gestion de page — vahaolana mifanaraka amin’ny tanjonao. Gestion selon fréquence et périmètre. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Gestion de page — a solution built around your objective. Gestion selon fréquence et périmètre. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Gestion selon fréquence et périmètre.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-035",
+      "service": "Community management",
+      "target": "client",
+      "fr": "Community management — une solution pensée selon votre objectif. Animation et suivi de communauté. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Community management — vahaolana mifanaraka amin’ny tanjonao. Animation et suivi de communauté. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Community management — a solution built around your objective. Animation et suivi de communauté. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Animation et suivi de communauté.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-036",
+      "service": "Création de contenu",
+      "target": "client",
+      "fr": "Création de contenu — une solution pensée selon votre objectif. Contenu selon stratégie. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Création de contenu — vahaolana mifanaraka amin’ny tanjonao. Contenu selon stratégie. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Création de contenu — a solution built around your objective. Contenu selon stratégie. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Contenu selon stratégie.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-037",
+      "service": "Site vitrine simple",
+      "target": "client",
+      "fr": "Site vitrine simple — une solution pensée selon votre objectif. Site vitrine selon pages et besoins. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Site vitrine simple — vahaolana mifanaraka amin’ny tanjonao. Site vitrine selon pages et besoins. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Site vitrine simple — a solution built around your objective. Site vitrine selon pages et besoins. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Site vitrine selon pages et besoins.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-038",
+      "service": "Site professionnel",
+      "target": "client",
+      "fr": "Site professionnel — une solution pensée selon votre objectif. Site professionnel avec fonctionnalités adaptées. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Site professionnel — vahaolana mifanaraka amin’ny tanjonao. Site professionnel avec fonctionnalités adaptées. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Site professionnel — a solution built around your objective. Site professionnel avec fonctionnalités adaptées. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Site professionnel avec fonctionnalités adaptées.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-039",
+      "service": "Landing page",
+      "target": "client",
+      "fr": "Landing page — une solution pensée selon votre objectif. Page d’atterrissage orientée conversion. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Landing page — vahaolana mifanaraka amin’ny tanjonao. Page d’atterrissage orientée conversion. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Landing page — a solution built around your objective. Page d’atterrissage orientée conversion. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Page d’atterrissage orientée conversion.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-040",
+      "service": "Maintenance de site",
+      "target": "client",
+      "fr": "Maintenance de site — une solution pensée selon votre objectif. Maintenance et suivi technique. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Maintenance de site — vahaolana mifanaraka amin’ny tanjonao. Maintenance et suivi technique. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Maintenance de site — a solution built around your objective. Maintenance et suivi technique. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Maintenance et suivi technique.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-041",
+      "service": "Modification / mise à jour",
+      "target": "client",
+      "fr": "Modification / mise à jour — une solution pensée selon votre objectif. Modification ciblée d’un site existant. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Modification / mise à jour — vahaolana mifanaraka amin’ny tanjonao. Modification ciblée d’un site existant. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Modification / mise à jour — a solution built around your objective. Modification ciblée d’un site existant. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Modification ciblée d’un site existant.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-042",
+      "service": "Formulaire / fonctionnalité web",
+      "target": "client",
+      "fr": "Formulaire / fonctionnalité web — une solution pensée selon votre objectif. Fonctionnalité selon cahier des charges. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Formulaire / fonctionnalité web — vahaolana mifanaraka amin’ny tanjonao. Fonctionnalité selon cahier des charges. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Formulaire / fonctionnalité web — a solution built around your objective. Fonctionnalité selon cahier des charges. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Fonctionnalité selon cahier des charges.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-043",
+      "service": "Conception d’application",
+      "target": "client",
+      "fr": "Conception d’application — une solution pensée selon votre objectif. Application selon fonctionnalités et architecture. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Conception d’application — vahaolana mifanaraka amin’ny tanjonao. Application selon fonctionnalités et architecture. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Conception d’application — a solution built around your objective. Application selon fonctionnalités et architecture. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Application selon fonctionnalités et architecture.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-044",
+      "service": "Pack Starter",
+      "target": "client",
+      "fr": "Pack Starter — une solution pensée selon votre objectif. Logo/optimisation, carte de visite, 5 visuels et conseils. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Pack Starter — vahaolana mifanaraka amin’ny tanjonao. Logo/optimisation, carte de visite, 5 visuels et conseils. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Pack Starter — a solution built around your objective. Logo/optimisation, carte de visite, 5 visuels et conseils. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Logo/optimisation, carte de visite, 5 visuels et conseils.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-045",
+      "service": "Pack Business",
+      "target": "client",
+      "fr": "Pack Business — une solution pensée selon votre objectif. Identité de base, 10 publications, couverture et supports. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Pack Business — vahaolana mifanaraka amin’ny tanjonao. Identité de base, 10 publications, couverture et supports. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Pack Business — a solution built around your objective. Identité de base, 10 publications, couverture et supports. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Identité de base, 10 publications, couverture et supports.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    },
+    {
+      "id": "PRS-046",
+      "service": "Pack Pro",
+      "target": "client",
+      "fr": "Pack Pro — une solution pensée selon votre objectif. Design, communication, supports, web et maintenance. MSN vous accompagne du cadrage à la livraison.",
+      "mg": "Pack Pro — vahaolana mifanaraka amin’ny tanjonao. Design, communication, supports, web et maintenance. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
+      "en": "Pack Pro — a solution built around your objective. Design, communication, supports, web et maintenance. MSN supports the project from scoping to delivery.",
+      "benefits": [
+        "Design, communication, supports, web et maintenance.",
+        "Processus cadré",
+        "Résultat exploitable",
+        "Suivi et validation"
+      ],
+      "process": [
+        "Cadrage du besoin",
+        "Préparation des éléments",
+        "Réalisation",
+        "Présentation",
+        "Corrections prévues",
+        "Validation / livraison"
+      ],
+      "cta": "Demander un devis",
+      "active": true
+    }
+  ],
+  "docSettings": {
+    "company": "MULTI-SERVICES NUMÉRIQUES — MSN",
+    "slogan": "Services numériques tout en un",
+    "contact": "+261 343967744",
+    "email": "ismaelrnd805@gmail.com",
+    "location": "Antananarivo — Madagascar"
+  },
+  "prefs": {
+    "notif": true,
+    "sound": false,
+    "language": "fr"
+  },
+  "sync": {
+    "onlineEndpoint": "",
+    "onlineEnabled": false,
+    "bluetoothEnabled": false,
+    "lastSync": null
   }
- ],
- "invoices": [
-  {
-   "id": "FAC-2401",
-   "client": "CL-004",
-   "service": "Création de logo",
-   "status": "impayee",
-   "date": "2026-09-17",
-   "due": "2026-10-01",
-   "amount": 280000,
-   "paid": 0
-  },
-  {
-   "id": "FAC-2402",
-   "client": "CL-003",
-   "service": "Saisie / Mémoire",
-   "status": "partielle",
-   "date": "2026-09-18",
-   "due": "2026-10-03",
-   "amount": 385000,
-   "paid": 150000
-  },
-  {
-   "id": "FAC-2403",
-   "client": "CL-001",
-   "service": "CV professionnel",
-   "status": "payee",
-   "date": "2026-09-02",
-   "due": "2026-09-15",
-   "amount": 45000,
-   "paid": 45000
-  },
-  {
-   "id": "FAC-2404",
-   "client": "CL-004",
-   "service": "Flyer / Brochure",
-   "status": "partielle",
-   "date": "2026-09-23",
-   "due": "2026-10-07",
-   "amount": 150000,
-   "paid": 75000
-  }
- ],
- "tasks": [
-  {
-   "id": "T-01",
-   "title": "Envoyer le brief logo à l'imprimeur",
-   "cmd": "CMD-2401",
-   "priority": "haute",
-   "due": "2026-09-28",
-   "status": "todo"
-  },
-  {
-   "id": "T-02",
-   "title": "Relire les 30 dernières pages du mémoire",
-   "cmd": "CMD-2402",
-   "priority": "haute",
-   "due": "2026-09-28",
-   "status": "todo"
-  },
-  {
-   "id": "T-03",
-   "title": "Préparer la v2 de l'affiche",
-   "cmd": "CMD-2403",
-   "priority": "moyenne",
-   "due": "2026-09-29",
-   "status": "inprogress"
-  },
-  {
-   "id": "T-04",
-   "title": "Relancer client Studio Vao (devis site)",
-   "cmd": "CMD-2408",
-   "priority": "haute",
-   "due": "2026-09-26",
-   "status": "todo"
-  },
-  {
-   "id": "T-05",
-   "title": "Créer la maquette flyer hôtel",
-   "cmd": "CMD-2407",
-   "priority": "moyenne",
-   "due": "2026-09-30",
-   "status": "inprogress"
-  },
-  {
-   "id": "T-06",
-   "title": "Appeler Naina pour acompte logo",
-   "cmd": "CMD-2405",
-   "priority": "haute",
-   "due": "2026-09-26",
-   "status": "todo"
-  },
-  {
-   "id": "T-07",
-   "title": "Exporter carte de visite en PDF print",
-   "cmd": "CMD-2404",
-   "priority": "basse",
-   "due": "2026-10-05",
-   "status": "todo"
-  },
-  {
-   "id": "T-08",
-   "title": "Facturer le solde mémoire",
-   "cmd": "CMD-2402",
-   "priority": "moyenne",
-   "due": "2026-10-04",
-   "status": "todo"
-  },
-  {
-   "id": "T-09",
-   "title": "Archiver les fichiers du CV livré",
-   "cmd": "CMD-2406",
-   "priority": "basse",
-   "due": "2026-09-16",
-   "status": "done"
-  },
-  {
-   "id": "T-10",
-   "title": "Mettre à jour le catalogue tarifs",
-   "cmd": "",
-   "priority": "moyenne",
-   "due": "2026-10-02",
-   "status": "todo"
-  }
- ],
- "templates": [
-  {
-   "id": "TPL-01",
-   "name": "Mémoire universitaire standard",
-   "cat": "Mémoire",
-   "version": "v3.2",
-   "date": "2026-09-19",
-   "status": "actif"
-  },
-  {
-   "id": "TPL-02",
-   "name": "Rapport de stage",
-   "cat": "Rapport",
-   "version": "v2.1",
-   "date": "2026-09-07",
-   "status": "actif"
-  },
-  {
-   "id": "TPL-03",
-   "name": "Lettre de motivation moderne",
-   "cat": "Lettre",
-   "version": "v1.4",
-   "date": "2026-08-28",
-   "status": "actif"
-  },
-  {
-   "id": "TPL-04",
-   "name": "CV créatif 2 colonnes",
-   "cat": "CV",
-   "version": "v2.0",
-   "date": "2026-09-03",
-   "status": "actif"
-  },
-  {
-   "id": "TPL-05",
-   "name": "Facture MSN standard",
-   "cat": "Facture",
-   "version": "v1.1",
-   "date": "2026-07-19",
-   "status": "actif"
-  },
-  {
-   "id": "TPL-06",
-   "name": "Devis MSN standard",
-   "cat": "Devis",
-   "version": "v1.3",
-   "date": "2026-07-19",
-   "status": "actif"
-  },
-  {
-   "id": "TPL-07",
-   "name": "Catalogue services",
-   "cat": "Catalogue",
-   "version": "v1.0",
-   "date": "2026-08-28",
-   "status": "brouillon"
-  },
-  {
-   "id": "TPL-08",
-   "name": "Brochure 3 volets",
-   "cat": "Brochure",
-   "version": "v2.2",
-   "date": "2026-06-29",
-   "status": "actif"
-  }
- ],
- "messages": [
-  {
-   "id": "MSG-01",
-   "cat": "Accueil",
-   "title": "Message d'accueil",
-   "body": "Bonjour {client} 👋\nMerci de contacter MSN — Multi-Services Numériques.\nComment pouvons-nous vous aider aujourd'hui ?"
-  },
-  {
-   "id": "MSG-02",
-   "cat": "Demande d'informations",
-   "title": "Demander des précisions",
-   "body": "Bonjour {client},\nPour bien préparer votre {service}, pourriez-vous nous préciser :\n• Le format souhaité\n• Le contenu à intégrer\n• Votre deadline\nMerci !"
-  },
-  {
-   "id": "MSG-03",
-   "cat": "Présentation tarif",
-   "title": "Envoi tarif",
-   "body": "Bonjour {client},\nVoici notre tarif pour {service} :\n👉 {montant}\nDélai estimé : {deadline}\nSouhaitez-vous que nous lancions la commande ?"
-  },
-  {
-   "id": "MSG-04",
-   "cat": "Devis",
-   "title": "Envoi du devis",
-   "body": "Bonjour {client},\nVeuillez trouver notre devis n° {numero} pour {service}.\nMontant : {montant}\nValidité : 14 jours\nNous restons disponibles pour toute question."
-  },
-  {
-   "id": "MSG-05",
-   "cat": "Confirmation commande",
-   "title": "Commande confirmée",
-   "body": "Bonjour {client},\nVotre commande {numero} est bien enregistrée ✅\nService : {service}\nDeadline : {deadline}\nNous démarrons le travail dès maintenant."
-  },
-  {
-   "id": "MSG-06",
-   "cat": "Relance",
-   "title": "Relance paiement",
-   "body": "Bonjour {client},\nPetit rappel concernant la facture {numero} ({montant}).\nPouvez-vous nous indiquer une date de règlement ?\nMerci d'avance 🙏"
-  },
-  {
-   "id": "MSG-07",
-   "cat": "Livraison",
-   "title": "Livraison du travail",
-   "body": "Bonjour {client},\nVotre {service} est prêt 🎉\nVous trouverez les fichiers en pièce jointe.\nN'hésitez pas à nous faire un retour."
-  },
-  {
-   "id": "MSG-08",
-   "cat": "Demande de validation",
-   "title": "Demander validation",
-   "body": "Bonjour {client},\nVoici la version à valider pour {service}.\nMerci de nous confirmer :\n✅ Validé\nou ✏️ Modifications souhaitées"
-  },
-  {
-   "id": "MSG-09",
-   "cat": "Remerciement",
-   "title": "Remerciement",
-   "body": "Merci beaucoup {client} pour votre confiance 🙏\nAu plaisir de collaborer à nouveau sur vos prochains projets !\n— Équipe MSN"
-  }
- ],
- "notifications": [
-  {
-   "id": "N1",
-   "type": "new_order",
-   "title": "Nouvelle demande client",
-   "text": "Naina Ravelo — Création de logo via Visite",
-   "time": "il y a 12 min",
-   "unread": true
-  },
-  {
-   "id": "N2",
-   "type": "deadline",
-   "title": "Deadline proche",
-   "text": "CMD-2403 — Affiche / Poster dans 2 jours",
-   "time": "il y a 1 h",
-   "unread": true
-  },
-  {
-   "id": "N3",
-   "type": "payment",
-   "title": "Paiement reçu",
-   "text": "Hôtel Sakamanga a réglé 75 000 Ar",
-   "time": "il y a 3 h",
-   "unread": true
-  },
-  {
-   "id": "N4",
-   "type": "validation",
-   "title": "Validation client requise",
-   "text": "Studio Vao attend votre devis site vitrine",
-   "time": "hier",
-   "unread": false
-  },
-  {
-   "id": "N5",
-   "type": "late",
-   "title": "Tâche en retard",
-   "text": "Relancer client Studio Vao (devis site)",
-   "time": "hier",
-   "unread": false
-  },
-  {
-   "id": "N6",
-   "type": "deadline",
-   "title": "Facture impayée",
-   "text": "FAC-2401 — 280 000 Ar à encaisser",
-   "time": "il y a 2 j",
-   "unread": false
-  }
- ],
- "files": [
-  {
-   "id": "F-01",
-   "name": "logo_brief_client.pdf",
-   "type": "pdf",
-   "size": "245 Ko",
-   "date": "2026-09-17",
-   "cat": "reçus",
-   "cmd": "CMD-2401"
-  },
-  {
-   "id": "F-02",
-   "name": "logo_v2_final.ai",
-   "type": "img",
-   "size": "1,8 Mo",
-   "date": "2026-09-25",
-   "cat": "travail",
-   "cmd": "CMD-2401"
-  },
-  {
-   "id": "F-03",
-   "name": "memoire_rado_v1.docx",
-   "type": "doc",
-   "size": "3,2 Mo",
-   "date": "2026-09-22",
-   "cat": "travail",
-   "cmd": "CMD-2402"
-  },
-  {
-   "id": "F-04",
-   "name": "affiche_concert_A3.pdf",
-   "type": "pdf",
-   "size": "4,1 Mo",
-   "date": "2026-09-26",
-   "cat": "livrés",
-   "cmd": "CMD-2403"
-  },
-  {
-   "id": "F-05",
-   "name": "cv_amina_final.pdf",
-   "type": "pdf",
-   "size": "180 Ko",
-   "date": "2026-09-15",
-   "cat": "livrés",
-   "cmd": "CMD-2406"
-  },
-  {
-   "id": "F-06",
-   "name": "modele_memoire_2025.docx",
-   "type": "doc",
-   "size": "620 Ko",
-   "date": "2026-09-19",
-   "cat": "modèles",
-   "cmd": ""
-  },
-  {
-   "id": "F-07",
-   "name": "flyer_hotel_maquette.psd",
-   "type": "img",
-   "size": "22 Mo",
-   "date": "2026-09-26",
-   "cat": "travail",
-   "cmd": "CMD-2407"
-  },
-  {
-   "id": "F-08",
-   "name": "facture_FAC-2401.pdf",
-   "type": "pdf",
-   "size": "95 Ko",
-   "date": "2026-09-17",
-   "cat": "livrés",
-   "cmd": "CMD-2401"
-  }
- ],
- "portfolio": [
-  {
-   "id": "PF-01",
-   "service": "Création de logo",
-   "title": "Identité Sakamanga",
-   "type": "Logo + déclinaisons",
-   "color": "#4a7c6f"
-  },
-  {
-   "id": "PF-02",
-   "service": "Affiche / Poster",
-   "title": "Affiche concert live",
-   "type": "A3 imprimé",
-   "color": "#b5673a"
-  },
-  {
-   "id": "PF-03",
-   "service": "Site vitrine",
-   "title": "Vitrine Studio Vao",
-   "type": "Site 5 pages",
-   "color": "#4a7d9d"
-  },
-  {
-   "id": "PF-04",
-   "service": "Flyer / Brochure",
-   "title": "Flyer séjour hôtel",
-   "type": "A5 recto-verso",
-   "color": "#a97d24"
-  }
- ],
- "receptions": [
-  {
-   "id": "REC-S1",
-   "client": "CL-004",
-   "name": "Hôtel Sakamanga",
-   "phone": "+261 20 22 358 09",
-   "channel": "WhatsApp",
-   "service": "Création de logo",
-   "status": "convertis",
-   "at": "2026-09-17T01:06:42.438Z"
-  },
-  {
-   "id": "REC-S2",
-   "client": "CL-003",
-   "name": "Rado Andrianina",
-   "phone": "+261 33 45 771 02",
-   "channel": "Appel",
-   "service": "Saisie / Mémoire",
-   "status": "convertis",
-   "at": "2026-09-14T13:06:42.438Z"
-  },
-  {
-   "id": "REC-S3",
-   "client": "CL-005",
-   "name": "Naina Ravelo",
-   "phone": "+261 34 09 112 88",
-   "channel": "Visite",
-   "service": "Création de logo",
-   "status": "qualifiee",
-   "at": "2026-09-19T23:06:42.438Z"
-  }
- ],
- "activity": [
-  {
-   "id": "A1",
-   "type": "order",
-   "text": "Nouvelle commande CMD-2404 — Studio Vao",
-   "time": "il y a 35 min"
-  },
-  {
-   "id": "A2",
-   "type": "quote",
-   "text": "Devis DEV-2402 envoyé à Studio Vao",
-   "time": "il y a 2 h"
-  },
-  {
-   "id": "A3",
-   "type": "invoice",
-   "text": "Facture FAC-2404 envoyée à Hôtel Sakamanga",
-   "time": "hier"
-  },
-  {
-   "id": "A4",
-   "type": "client",
-   "text": "Client Naina Ravelo ajouté",
-   "time": "hier"
-  },
-  {
-   "id": "A5",
-   "type": "doc",
-   "text": "Document affiche_concert_A3.pdf livré",
-   "time": "il y a 2 j"
-  }
- ],
- "presentations": [
-  {
-   "id": "PRS-001",
-   "service": "Création de logo",
-   "target": "client",
-   "fr": "Création de logo — une solution pensée selon votre objectif. Logo professionnel + déclinaisons MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Création de logo — vahaolana mifanaraka amin’ny tanjonao. Logo professionnel + déclinaisons MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Création de logo — a solution built around your objective. Logo professionnel + déclinaisons MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Logo professionnel + déclinaisons",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-002",
-   "service": "Saisie / Mémoire",
-   "target": "client",
-   "fr": "Saisie / Mémoire — une solution pensée selon votre objectif. Saisie et mise en forme de mémoire MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Saisie / Mémoire — vahaolana mifanaraka amin’ny tanjonao. Saisie et mise en forme de mémoire MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Saisie / Mémoire — a solution built around your objective. Saisie et mise en forme de mémoire MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Saisie et mise en forme de mémoire",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-003",
-   "service": "Affiche / Poster",
-   "target": "client",
-   "fr": "Affiche / Poster — une solution pensée selon votre objectif. Affiche A3/A2 haute résolution MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Affiche / Poster — vahaolana mifanaraka amin’ny tanjonao. Affiche A3/A2 haute résolution MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Affiche / Poster — a solution built around your objective. Affiche A3/A2 haute résolution MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Affiche A3/A2 haute résolution",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-004",
-   "service": "Carte de visite",
-   "target": "client",
-   "fr": "Carte de visite — une solution pensée selon votre objectif. Recto-verso + fichier print MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Carte de visite — vahaolana mifanaraka amin’ny tanjonao. Recto-verso + fichier print MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Carte de visite — a solution built around your objective. Recto-verso + fichier print MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Recto-verso + fichier print",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-005",
-   "service": "Flyer / Brochure",
-   "target": "client",
-   "fr": "Flyer / Brochure — une solution pensée selon votre objectif. Flyer 2 volets ou brochure MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Flyer / Brochure — vahaolana mifanaraka amin’ny tanjonao. Flyer 2 volets ou brochure MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Flyer / Brochure — a solution built around your objective. Flyer 2 volets ou brochure MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Flyer 2 volets ou brochure",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-006",
-   "service": "Site vitrine",
-   "target": "client",
-   "fr": "Site vitrine — une solution pensée selon votre objectif. Site 5 pages responsive MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Site vitrine — vahaolana mifanaraka amin’ny tanjonao. Site 5 pages responsive MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Site vitrine — a solution built around your objective. Site 5 pages responsive MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Site 5 pages responsive",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-007",
-   "service": "CV professionnel",
-   "target": "client",
-   "fr": "CV professionnel — une solution pensée selon votre objectif. CV + lettre de motivation MSN vous accompagne du cadrage à la livraison.",
-   "mg": "CV professionnel — vahaolana mifanaraka amin’ny tanjonao. CV + lettre de motivation MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "CV professionnel — a solution built around your objective. CV + lettre de motivation MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "CV + lettre de motivation",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-008",
-   "service": "Rapport / Étude",
-   "target": "client",
-   "fr": "Rapport / Étude — une solution pensée selon votre objectif. Rapport structuré avec tableaux MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Rapport / Étude — vahaolana mifanaraka amin’ny tanjonao. Rapport structuré avec tableaux MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Rapport / Étude — a solution built around your objective. Rapport structuré avec tableaux MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Rapport structuré avec tableaux",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-009",
-   "service": "Saisie de document",
-   "target": "client",
-   "fr": "Saisie de document — une solution pensée selon votre objectif. Saisie de documents claire et fidèle. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Saisie de document — vahaolana mifanaraka amin’ny tanjonao. Saisie de documents claire et fidèle. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Saisie de document — a solution built around your objective. Saisie de documents claire et fidèle. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Saisie de documents claire et fidèle.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-010",
-   "service": "Mise en forme simple",
-   "target": "client",
-   "fr": "Mise en forme simple — une solution pensée selon votre objectif. Mise en forme structurée et homogène. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Mise en forme simple — vahaolana mifanaraka amin’ny tanjonao. Mise en forme structurée et homogène. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Mise en forme simple — a solution built around your objective. Mise en forme structurée et homogène. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Mise en forme structurée et homogène.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-011",
-   "service": "Mise en page professionnelle",
-   "target": "client",
-   "fr": "Mise en page professionnelle — une solution pensée selon votre objectif. Mise en page professionnelle pour documents longs. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Mise en page professionnelle — vahaolana mifanaraka amin’ny tanjonao. Mise en page professionnelle pour documents longs. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Mise en page professionnelle — a solution built around your objective. Mise en page professionnelle pour documents longs. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Mise en page professionnelle pour documents longs.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-012",
-   "service": "Tableau simple",
-   "target": "client",
-   "fr": "Tableau simple — une solution pensée selon votre objectif. Création ou mise en forme de tableaux. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Tableau simple — vahaolana mifanaraka amin’ny tanjonao. Création ou mise en forme de tableaux. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Tableau simple — a solution built around your objective. Création ou mise en forme de tableaux. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Création ou mise en forme de tableaux.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-013",
-   "service": "Graphique / figure",
-   "target": "client",
-   "fr": "Graphique / figure — une solution pensée selon votre objectif. Graphiques et figures propres et lisibles. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Graphique / figure — vahaolana mifanaraka amin’ny tanjonao. Graphiques et figures propres et lisibles. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Graphique / figure — a solution built around your objective. Graphiques et figures propres et lisibles. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Graphiques et figures propres et lisibles.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-014",
-   "service": "Organigramme / schéma",
-   "target": "client",
-   "fr": "Organigramme / schéma — une solution pensée selon votre objectif. Schéma ou organigramme professionnel. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Organigramme / schéma — vahaolana mifanaraka amin’ny tanjonao. Schéma ou organigramme professionnel. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Organigramme / schéma — a solution built around your objective. Schéma ou organigramme professionnel. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Schéma ou organigramme professionnel.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-015",
-   "service": "Lettre / document professionnel",
-   "target": "client",
-   "fr": "Lettre / document professionnel — une solution pensée selon votre objectif. Document professionnel prêt à utiliser. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Lettre / document professionnel — vahaolana mifanaraka amin’ny tanjonao. Document professionnel prêt à utiliser. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Lettre / document professionnel — a solution built around your objective. Document professionnel prêt à utiliser. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Document professionnel prêt à utiliser.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-016",
-   "service": "Présentation PowerPoint",
-   "target": "client",
-   "fr": "Présentation PowerPoint — une solution pensée selon votre objectif. Présentation structurée et visuelle. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Présentation PowerPoint — vahaolana mifanaraka amin’ny tanjonao. Présentation structurée et visuelle. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Présentation PowerPoint — a solution built around your objective. Présentation structurée et visuelle. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Présentation structurée et visuelle.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-017",
-   "service": "Mémoire / rapport",
-   "target": "client",
-   "fr": "Mémoire / rapport — une solution pensée selon votre objectif. Étude selon volume et complexité. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Mémoire / rapport — vahaolana mifanaraka amin’ny tanjonao. Étude selon volume et complexité. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Mémoire / rapport — a solution built around your objective. Étude selon volume et complexité. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Étude selon volume et complexité.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-018",
-   "service": "Affiche simple",
-   "target": "client",
-   "fr": "Affiche simple — une solution pensée selon votre objectif. Création d’affiche simple. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Affiche simple — vahaolana mifanaraka amin’ny tanjonao. Création d’affiche simple. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Affiche simple — a solution built around your objective. Création d’affiche simple. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Création d’affiche simple.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-019",
-   "service": "Affiche professionnelle",
-   "target": "client",
-   "fr": "Affiche professionnelle — une solution pensée selon votre objectif. Affiche conçue pour impression et diffusion. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Affiche professionnelle — vahaolana mifanaraka amin’ny tanjonao. Affiche conçue pour impression et diffusion. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Affiche professionnelle — a solution built around your objective. Affiche conçue pour impression et diffusion. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Affiche conçue pour impression et diffusion.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-020",
-   "service": "Affiche premium",
-   "target": "client",
-   "fr": "Affiche premium — une solution pensée selon votre objectif. Direction graphique renforcée et finition premium. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Affiche premium — vahaolana mifanaraka amin’ny tanjonao. Direction graphique renforcée et finition premium. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Affiche premium — a solution built around your objective. Direction graphique renforcée et finition premium. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Direction graphique renforcée et finition premium.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-021",
-   "service": "Flyer",
-   "target": "client",
-   "fr": "Flyer — une solution pensée selon votre objectif. Flyer commercial ou événementiel. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Flyer — vahaolana mifanaraka amin’ny tanjonao. Flyer commercial ou événementiel. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Flyer — a solution built around your objective. Flyer commercial ou événementiel. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Flyer commercial ou événementiel.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-022",
-   "service": "Brochure",
-   "target": "client",
-   "fr": "Brochure — une solution pensée selon votre objectif. Brochure selon nombre de pages. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Brochure — vahaolana mifanaraka amin’ny tanjonao. Brochure selon nombre de pages. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Brochure — a solution built around your objective. Brochure selon nombre de pages. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Brochure selon nombre de pages.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-023",
-   "service": "Logo",
-   "target": "client",
-   "fr": "Logo — une solution pensée selon votre objectif. Création de logo et déclinaisons. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Logo — vahaolana mifanaraka amin’ny tanjonao. Création de logo et déclinaisons. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Logo — a solution built around your objective. Création de logo et déclinaisons. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Création de logo et déclinaisons.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-024",
-   "service": "Vectorisation d’un logo",
-   "target": "client",
-   "fr": "Vectorisation d’un logo — une solution pensée selon votre objectif. Reconstruction vectorielle propre. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Vectorisation d’un logo — vahaolana mifanaraka amin’ny tanjonao. Reconstruction vectorielle propre. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Vectorisation d’un logo — a solution built around your objective. Reconstruction vectorielle propre. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Reconstruction vectorielle propre.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-025",
-   "service": "Invitation",
-   "target": "client",
-   "fr": "Invitation — une solution pensée selon votre objectif. Invitation numérique ou imprimable. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Invitation — vahaolana mifanaraka amin’ny tanjonao. Invitation numérique ou imprimable. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Invitation — a solution built around your objective. Invitation numérique ou imprimable. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Invitation numérique ou imprimable.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-026",
-   "service": "Visuel réseaux sociaux",
-   "target": "client",
-   "fr": "Visuel réseaux sociaux — une solution pensée selon votre objectif. Visuel optimisé pour réseaux sociaux. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Visuel réseaux sociaux — vahaolana mifanaraka amin’ny tanjonao. Visuel optimisé pour réseaux sociaux. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Visuel réseaux sociaux — a solution built around your objective. Visuel optimisé pour réseaux sociaux. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Visuel optimisé pour réseaux sociaux.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-027",
-   "service": "Bannière Facebook",
-   "target": "client",
-   "fr": "Bannière Facebook — une solution pensée selon votre objectif. Couverture Facebook adaptée. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Bannière Facebook — vahaolana mifanaraka amin’ny tanjonao. Couverture Facebook adaptée. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Bannière Facebook — a solution built around your objective. Couverture Facebook adaptée. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Couverture Facebook adaptée.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-028",
-   "service": "Menu / catalogue",
-   "target": "client",
-   "fr": "Menu / catalogue — une solution pensée selon votre objectif. Conception selon volume. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Menu / catalogue — vahaolana mifanaraka amin’ny tanjonao. Conception selon volume. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Menu / catalogue — a solution built around your objective. Conception selon volume. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Conception selon volume.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-029",
-   "service": "Création d’une publication",
-   "target": "client",
-   "fr": "Création d’une publication — une solution pensée selon votre objectif. Publication graphique et message adapté. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Création d’une publication — vahaolana mifanaraka amin’ny tanjonao. Publication graphique et message adapté. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Création d’une publication — a solution built around your objective. Publication graphique et message adapté. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Publication graphique et message adapté.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-030",
-   "service": "Pack 5 publications",
-   "target": "client",
-   "fr": "Pack 5 publications — une solution pensée selon votre objectif. 5 publications cohérentes. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Pack 5 publications — vahaolana mifanaraka amin’ny tanjonao. 5 publications cohérentes. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Pack 5 publications — a solution built around your objective. 5 publications cohérentes. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "5 publications cohérentes.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-031",
-   "service": "Pack 10 publications",
-   "target": "client",
-   "fr": "Pack 10 publications — une solution pensée selon votre objectif. 10 publications cohérentes. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Pack 10 publications — vahaolana mifanaraka amin’ny tanjonao. 10 publications cohérentes. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Pack 10 publications — a solution built around your objective. 10 publications cohérentes. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "10 publications cohérentes.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-032",
-   "service": "Création de couverture Facebook",
-   "target": "client",
-   "fr": "Création de couverture Facebook — une solution pensée selon votre objectif. Couverture adaptée à la marque. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Création de couverture Facebook — vahaolana mifanaraka amin’ny tanjonao. Couverture adaptée à la marque. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Création de couverture Facebook — a solution built around your objective. Couverture adaptée à la marque. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Couverture adaptée à la marque.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-033",
-   "service": "Calendrier éditorial",
-   "target": "client",
-   "fr": "Calendrier éditorial — une solution pensée selon votre objectif. Planification des contenus. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Calendrier éditorial — vahaolana mifanaraka amin’ny tanjonao. Planification des contenus. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Calendrier éditorial — a solution built around your objective. Planification des contenus. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Planification des contenus.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-034",
-   "service": "Gestion de page",
-   "target": "client",
-   "fr": "Gestion de page — une solution pensée selon votre objectif. Gestion selon fréquence et périmètre. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Gestion de page — vahaolana mifanaraka amin’ny tanjonao. Gestion selon fréquence et périmètre. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Gestion de page — a solution built around your objective. Gestion selon fréquence et périmètre. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Gestion selon fréquence et périmètre.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-035",
-   "service": "Community management",
-   "target": "client",
-   "fr": "Community management — une solution pensée selon votre objectif. Animation et suivi de communauté. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Community management — vahaolana mifanaraka amin’ny tanjonao. Animation et suivi de communauté. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Community management — a solution built around your objective. Animation et suivi de communauté. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Animation et suivi de communauté.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-036",
-   "service": "Création de contenu",
-   "target": "client",
-   "fr": "Création de contenu — une solution pensée selon votre objectif. Contenu selon stratégie. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Création de contenu — vahaolana mifanaraka amin’ny tanjonao. Contenu selon stratégie. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Création de contenu — a solution built around your objective. Contenu selon stratégie. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Contenu selon stratégie.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-037",
-   "service": "Site vitrine simple",
-   "target": "client",
-   "fr": "Site vitrine simple — une solution pensée selon votre objectif. Site vitrine selon pages et besoins. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Site vitrine simple — vahaolana mifanaraka amin’ny tanjonao. Site vitrine selon pages et besoins. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Site vitrine simple — a solution built around your objective. Site vitrine selon pages et besoins. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Site vitrine selon pages et besoins.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-038",
-   "service": "Site professionnel",
-   "target": "client",
-   "fr": "Site professionnel — une solution pensée selon votre objectif. Site professionnel avec fonctionnalités adaptées. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Site professionnel — vahaolana mifanaraka amin’ny tanjonao. Site professionnel avec fonctionnalités adaptées. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Site professionnel — a solution built around your objective. Site professionnel avec fonctionnalités adaptées. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Site professionnel avec fonctionnalités adaptées.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-039",
-   "service": "Landing page",
-   "target": "client",
-   "fr": "Landing page — une solution pensée selon votre objectif. Page d’atterrissage orientée conversion. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Landing page — vahaolana mifanaraka amin’ny tanjonao. Page d’atterrissage orientée conversion. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Landing page — a solution built around your objective. Page d’atterrissage orientée conversion. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Page d’atterrissage orientée conversion.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-040",
-   "service": "Maintenance de site",
-   "target": "client",
-   "fr": "Maintenance de site — une solution pensée selon votre objectif. Maintenance et suivi technique. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Maintenance de site — vahaolana mifanaraka amin’ny tanjonao. Maintenance et suivi technique. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Maintenance de site — a solution built around your objective. Maintenance et suivi technique. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Maintenance et suivi technique.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-041",
-   "service": "Modification / mise à jour",
-   "target": "client",
-   "fr": "Modification / mise à jour — une solution pensée selon votre objectif. Modification ciblée d’un site existant. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Modification / mise à jour — vahaolana mifanaraka amin’ny tanjonao. Modification ciblée d’un site existant. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Modification / mise à jour — a solution built around your objective. Modification ciblée d’un site existant. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Modification ciblée d’un site existant.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-042",
-   "service": "Formulaire / fonctionnalité web",
-   "target": "client",
-   "fr": "Formulaire / fonctionnalité web — une solution pensée selon votre objectif. Fonctionnalité selon cahier des charges. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Formulaire / fonctionnalité web — vahaolana mifanaraka amin’ny tanjonao. Fonctionnalité selon cahier des charges. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Formulaire / fonctionnalité web — a solution built around your objective. Fonctionnalité selon cahier des charges. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Fonctionnalité selon cahier des charges.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-043",
-   "service": "Conception d’application",
-   "target": "client",
-   "fr": "Conception d’application — une solution pensée selon votre objectif. Application selon fonctionnalités et architecture. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Conception d’application — vahaolana mifanaraka amin’ny tanjonao. Application selon fonctionnalités et architecture. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Conception d’application — a solution built around your objective. Application selon fonctionnalités et architecture. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Application selon fonctionnalités et architecture.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-044",
-   "service": "Pack Starter",
-   "target": "client",
-   "fr": "Pack Starter — une solution pensée selon votre objectif. Logo/optimisation, carte de visite, 5 visuels et conseils. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Pack Starter — vahaolana mifanaraka amin’ny tanjonao. Logo/optimisation, carte de visite, 5 visuels et conseils. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Pack Starter — a solution built around your objective. Logo/optimisation, carte de visite, 5 visuels et conseils. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Logo/optimisation, carte de visite, 5 visuels et conseils.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-045",
-   "service": "Pack Business",
-   "target": "client",
-   "fr": "Pack Business — une solution pensée selon votre objectif. Identité de base, 10 publications, couverture et supports. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Pack Business — vahaolana mifanaraka amin’ny tanjonao. Identité de base, 10 publications, couverture et supports. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Pack Business — a solution built around your objective. Identité de base, 10 publications, couverture et supports. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Identité de base, 10 publications, couverture et supports.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  },
-  {
-   "id": "PRS-046",
-   "service": "Pack Pro",
-   "target": "client",
-   "fr": "Pack Pro — une solution pensée selon votre objectif. Design, communication, supports, web et maintenance. MSN vous accompagne du cadrage à la livraison.",
-   "mg": "Pack Pro — vahaolana mifanaraka amin’ny tanjonao. Design, communication, supports, web et maintenance. MSN manampy hatramin’ny famaritana ny filàna ka hatramin’ny fanaterana.",
-   "en": "Pack Pro — a solution built around your objective. Design, communication, supports, web et maintenance. MSN supports the project from scoping to delivery.",
-   "benefits": [
-    "Design, communication, supports, web et maintenance.",
-    "Processus cadré",
-    "Résultat exploitable",
-    "Suivi et validation"
-   ],
-   "process": [
-    "Cadrage du besoin",
-    "Préparation des éléments",
-    "Réalisation",
-    "Présentation",
-    "Corrections prévues",
-    "Validation / livraison"
-   ],
-   "cta": "Demander un devis",
-   "active": true
-  }
- ],
- "docSettings": {
-  "company": "MULTI-SERVICES NUMÉRIQUES — MSN",
-  "slogan": "Services numériques tout en un",
-  "contact": "+261 343967744",
-  "email": "ismaelrnd805@gmail.com",
-  "location": "Antananarivo — Madagascar"
- },
- "prefs": {
-  "notif": true,
-  "sound": false,
-  "language": "fr"
- },
- "sync": {
-  "onlineEndpoint": "",
-  "onlineEnabled": false,
-  "bluetoothEnabled": false,
-  "lastSync": null
- },
- "payment_accounts": []
 }
