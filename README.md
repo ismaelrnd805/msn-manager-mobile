@@ -1,6 +1,6 @@
 # MSN Manager
 
-Application Flutter mobile de gestion de Multi-Services Numériques (MSN), migrée du prototype V19.
+Application Flutter mobile de gestion de Multi-Services Numériques (MSN), migrée du prototype HTML (V19, puis V21).
 
 ## Fonctionnalités
 - Authentification locale et session persistante
@@ -10,7 +10,8 @@ Application Flutter mobile de gestion de Multi-Services Numériques (MSN), migr�
 - Commandes et filtres
 - Workflow métier par service
 - Boucle présentation → validation/corrections
-- Paiement vérifié avant livraison
+- **Coordonnées de paiement (V21)** : comptes MVola, Orange Money, Airtel Money, virement bancaire… gérés dans Administration → Coordonnées de paiement (ajout, modification, compte par défaut, copie rapide)
+- Paiement vérifié avant livraison, avec coordonnées du compte à communiquer affichées directement dans le formulaire d'encaissement
 - Livraison et suivi
 - Devis et factures
 - Tâches
@@ -46,4 +47,4 @@ flutter run
 Le fichier `codemagic.yaml` configure analyse, tests, APK et AAB. Pour une signature Play Store, renseigner les variables/secrets de signature dans Codemagic.
 
 ## Source fonctionnelle
-Le prototype HTML V19 fourni dans la conversation reste inclus à titre de référence dans `reference/`.
+Le prototype HTML V19 fourni dans la conversation reste inclus à titre de référence dans `reference/`. La version V21 a ajouté la gestion des coordonnées de paiement, portée dans cette app Flutter.
