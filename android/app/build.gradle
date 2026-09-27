@@ -1,0 +1,9 @@
+plugins { id 'com.android.application'; id 'org.jetbrains.kotlin.android' }
+
+def flutterRoot = System.getenv('FLUTTER_ROOT')
+apply from: "${flutterRoot}/packages/flutter_tools/gradle/flutter.gradle"
+
+android { namespace 'mg.msn.manager'; compileSdkVersion flutter.compileSdkVersion
+    defaultConfig { applicationId 'mg.msn.manager'; minSdkVersion 23; targetSdkVersion flutter.targetSdkVersion; versionCode 1; versionName '1.0.0' }
+}
+flutter { source '../..' }

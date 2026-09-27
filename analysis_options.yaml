@@ -1,14 +1,6 @@
 include: package:flutter_lints/flutter.yaml
-
-analyzer:
-  errors:
-    invalid_annotation_target: ignore
-  exclude:
-    - build/**
-    - android/**
-
 linter:
   rules:
-    prefer_single_quotes: true
-    avoid_print: true
-    unawaited_futures: true
+    avoid_print: false
+    prefer_const_constructors: true
+    prefer_final_locals: true
