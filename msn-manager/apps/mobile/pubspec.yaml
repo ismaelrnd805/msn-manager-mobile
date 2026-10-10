@@ -1,0 +1,26 @@
+name: msn_mobile
+description: "MSN Manager V1 — application Android (un compte appareil Android, spéc. §3)."
+publish_to: none
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  msn_core:
+    path: ../../packages/core
+  msn_ui:
+    path: ../../packages/msn_ui
+  # Bundler SQLite natif — INDISPENSABLE pour NativeDatabase (msn_core)
+  # sur Android comme sur Windows. Sans lui, la base ne s'ouvre pas.
+  sqlite3_flutter_libs: ^0.5.42
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true

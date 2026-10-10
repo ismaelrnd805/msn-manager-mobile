@@ -1,0 +1,32 @@
+# Secrets / environnements
+.env
+.env.*.local
+server/api/.env
+server/api/storage/*.key
+*.pem
+*.p12
+*.jks
+!**/.env.example
+
+# Dépendances / artefacts
+vendor/
+node_modules/
+.dart_tool/
+.packages
+.pub-cache/
+build/
+*.lock.bak
+# Code généré Drift inclus au dépôt (pas d'exclusion) — build_runner requis seulement en dev
+coverage/
+
+# IDE / OS
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Logs et locaux
+*.log
+coverage/
+.tool-versions

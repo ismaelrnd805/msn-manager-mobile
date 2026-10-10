@@ -1,0 +1,441 @@
+-- Fichier Drift (.drift) : déclaration déclarative des tables, miroir fidèle
+-- de la spécification MSN Manager V1 §5 (SQLite local).
+-- Les contraintes CHECK sont déclarées inline (SQLite les applique à la création).
+
+CREATE TABLE app_meta (
+  "key" TEXT PRIMARY KEY,
+  "value" TEXT NOT NULL
+);
+
+CREATE TABLE clients (
+  id TEXT PRIMARY KEY,
+  type_client TEXT NOT NULL CHECK (type_client IN ('particulier','entreprise')),
+  nom_affiche TEXT NOT NULL,
+  nom_legal TEXT,
+  telephone_principal TEXT,
+  email_principal TEXT,
+  adresse TEXT,
+  notes TEXT,
+  actif INTEGER NOT NULL DEFAULT 1 CHECK (actif IN (0,1)),
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  version INTEGER NOT NULL DEFAULT 1 CHECK (version >= 1),
+  deleted_at TEXT
+);
+CREATE INDEX idx_clients_nom ON clients(nom_affiche);
+
+CREATE TABLE contacts (
+  id TEXT PRIMARY KEY,
+  client_id TEXT NOT NULL REFERENCES clients(id) ON DELETE RESTRICT,
+  nom TEXT NOT NULL,
+  "role" TEXT,
+  telephone TEXT,
+  email TEXT,
+  canal_prefere TEXT CHECK (canal_prefere IS NULL OR canal_prefere IN ('messenger','whatsapp','email','telephone','autre')),
+  principal INTEGER NOT NULL DEFAULT 0 CHECK (principal IN (0,1)),
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  version INTEGER NOT NULL DEFAULT 1,
+  deleted_at TEXT
+);
+CREATE INDEX idx_contacts_client ON contacts(client_id);
+
+CREATE TABLE services (
+  id TEXT PRIMARY KEY,
+  code TEXT NOT NULL UNIQUE,
+  nom TEXT NOT NULL,
+  description TEXT,
+  categorie TEXT NOT NULL,
+  unite_tarifaire TEXT NOT NULL,
+  actif INTEGER NOT NULL DEFAULT 1 CHECK (actif IN (0,1)),
+  necessite_cahier_charges INTEGER NOT NULL DEFAULT 0 CHECK (necessite_cahier_charges IN (0,1)),
+  questions_qualification_json TEXT NOT NULL DEFAULT '[]',
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  version INTEGER NOT NULL DEFAULT 1,
+  deleted_at TEXT
+);
+
+CREATE TABLE tarifs (
+  id TEXT PRIMARY KEY,
+  service_id TEXT NOT NULL REFERENCES services(id) ON DELETE RESTRICT,
+  prix_unitaire INTEGER NOT NULL CHECK (prix_unitaire >= 0),
+  devise TEXT NOT NULL DEFAULT 'MGA' CHECK (devise = 'MGA'),
+  date_debut_validite TEXT NOT NULL,
+  date_fin_validite TEXT,
+  actif INTEGER NOT NULL DEFAULT 1 CHECK (actif IN (0,1)),
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  version INTEGER NOT NULL DEFAULT 1,
+  deleted_at TEXT,
+  CHECK (date_fin_validite IS NULL OR date_fin_validite >= date_debut_validite)
+);
+CREATE INDEX idx_tarifs_service_dates ON tarifs(service_id, date_debut_validite, date_fin_validite);
+
+CREATE TABLE demandes (
+  id TEXT PRIMARY KEY,
+  client_id TEXT NOT NULL REFERENCES clients(id) ON DELETE RESTRICT,
+  contact_id TEXT REFERENCES contacts(id) ON DELETE RESTRICT,
+  canal_origine TEXT NOT NULL CHECK (canal_origine IN ('messenger','facebook','whatsapp','email','telephone','presentiel','autre')),
+  message_initial TEXT NOT NULL,
+  besoin_resume TEXT,
+  statut TEXT NOT NULL DEFAULT 'a_qualifier'
+    CHECK (statut IN ('a_qualifier','offre_presentee','en_attente_client','devis_a_preparer','gagnee','perdue')),
+  date_limite_souhaitee TEXT,
+  budget_indicatif INTEGER CHECK (budget_indicatif IS NULL OR budget_indicatif >= 0),
+  devise_budget TEXT NOT NULL DEFAULT 'MGA' CHECK (devise_budget = 'MGA'),
+  motif_perte TEXT,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  version INTEGER NOT NULL DEFAULT 1,
+  deleted_at TEXT
+);
+CREATE INDEX idx_demandes_client_date ON demandes(client_id, created_at);
+CREATE INDEX idx_demandes_statut ON demandes(statut);
+
+CREATE TABLE demande_prestations (
+  id TEXT PRIMARY KEY,
+  demande_id TEXT NOT NULL REFERENCES demandes(id) ON DELETE RESTRICT,
+  service_id TEXT NOT NULL REFERENCES services(id) ON DELETE RESTRICT,
+  quantite TEXT NOT NULL DEFAULT '1' CHECK (quantite > 0),
+  unite_snapshot TEXT NOT NULL,
+  prix_indicatif_unitaire INTEGER CHECK (prix_indicatif_unitaire IS NULL OR prix_indicatif_unitaire >= 0),
+  devise TEXT NOT NULL DEFAULT 'MGA' CHECK (devise = 'MGA'),
+  details_json TEXT NOT NULL DEFAULT '{}',
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  version INTEGER NOT NULL DEFAULT 1,
+  deleted_at TEXT,
+  UNIQUE(demande_id, service_id)
+);
+
+CREATE TABLE commandes (
+  id TEXT PRIMARY KEY,
+  numero TEXT NOT NULL UNIQUE,
+  demande_id TEXT NOT NULL UNIQUE REFERENCES demandes(id) ON DELETE RESTRICT,
+  statut TEXT NOT NULL DEFAULT 'en_preparation'
+    CHECK (statut IN ('en_preparation','en_attente_validation','validee','en_production','en_correction','livree','annulee')),
+  date_confirmation TEXT,
+  date_debut_prevue TEXT,
+  date_limite_confirmee TEXT,
+  instructions TEXT,
+  motif_annulation TEXT,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  version INTEGER NOT NULL DEFAULT 1,
+  deleted_at TEXT
+);
+
+CREATE TABLE lignes_commande (
+  id TEXT PRIMARY KEY,
+  commande_id TEXT NOT NULL REFERENCES commandes(id) ON DELETE RESTRICT,
+  service_id TEXT REFERENCES services(id) ON DELETE RESTRICT,
+  description TEXT NOT NULL,
+  quantite TEXT NOT NULL CHECK (quantite > 0),
+  unite_snapshot TEXT NOT NULL,
+  prix_unitaire INTEGER NOT NULL CHECK (prix_unitaire >= 0),
+  devise TEXT NOT NULL DEFAULT 'MGA' CHECK (devise = 'MGA'),
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  version INTEGER NOT NULL DEFAULT 1,
+  deleted_at TEXT
+);
+
+CREATE TABLE projets (
+  id TEXT PRIMARY KEY,
+  commande_id TEXT NOT NULL REFERENCES commandes(id) ON DELETE RESTRICT,
+  nom TEXT NOT NULL,
+  description TEXT,
+  statut TEXT NOT NULL DEFAULT 'en_preparation'
+    CHECK (statut IN ('en_preparation','en_cours','en_correction','termine','annule')),
+  date_limite TEXT,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  version INTEGER NOT NULL DEFAULT 1,
+  deleted_at TEXT
+);
+
+CREATE TABLE cahiers_charges (
+  id TEXT PRIMARY KEY,
+  projet_id TEXT NOT NULL REFERENCES projets(id) ON DELETE RESTRICT,
+  version_document INTEGER NOT NULL DEFAULT 1 CHECK (version_document >= 1),
+  contenu_json TEXT NOT NULL,
+  statut TEXT NOT NULL DEFAULT 'brouillon'
+    CHECK (statut IN ('brouillon','a_valider','valide','remplace')),
+  date_validation TEXT,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  version INTEGER NOT NULL DEFAULT 1,
+  deleted_at TEXT,
+  UNIQUE(projet_id, version_document)
+);
+
+CREATE TABLE taches (
+  id TEXT PRIMARY KEY,
+  commande_id TEXT NOT NULL REFERENCES commandes(id) ON DELETE RESTRICT,
+  projet_id TEXT REFERENCES projets(id) ON DELETE RESTRICT,
+  titre TEXT NOT NULL,
+  description TEXT,
+  statut TEXT NOT NULL DEFAULT 'a_faire'
+    CHECK (statut IN ('a_faire','en_cours','bloquee','terminee','annulee')),
+  priorite TEXT NOT NULL DEFAULT 'normale'
+    CHECK (priorite IN ('basse','normale','haute','urgente')),
+  echeance TEXT,
+  terminee_at TEXT,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  version INTEGER NOT NULL DEFAULT 1,
+  deleted_at TEXT
+);
+
+CREATE TABLE modeles_messages (
+  id TEXT PRIMARY KEY,
+  code TEXT NOT NULL UNIQUE,
+  nom TEXT NOT NULL,
+  objectif TEXT NOT NULL,
+  canal TEXT NOT NULL CHECK (canal IN ('messenger','whatsapp','email','telephone','autre')),
+  corps_template TEXT NOT NULL,
+  variables_json TEXT NOT NULL DEFAULT '[]',
+  actif INTEGER NOT NULL DEFAULT 1 CHECK (actif IN (0,1)),
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  version INTEGER NOT NULL DEFAULT 1,
+  deleted_at TEXT
+);
+
+CREATE TABLE echanges (
+  id TEXT PRIMARY KEY,
+  client_id TEXT NOT NULL REFERENCES clients(id) ON DELETE RESTRICT,
+  demande_id TEXT REFERENCES demandes(id) ON DELETE RESTRICT,
+  commande_id TEXT REFERENCES commandes(id) ON DELETE RESTRICT,
+  modele_id TEXT REFERENCES modeles_messages(id) ON DELETE RESTRICT,
+  canal TEXT NOT NULL CHECK (canal IN ('messenger','facebook','whatsapp','email','telephone','presentiel','autre')),
+  direction TEXT NOT NULL CHECK (direction IN ('entrant','sortant','interne')),
+  contenu TEXT NOT NULL,
+  statut_envoi TEXT NOT NULL DEFAULT 'brouillon'
+    CHECK (statut_envoi IN ('brouillon','prete','copiee','envoi_manuel_confirme','envoi_integration_confirme','echec')),
+  date_preparation TEXT,
+  date_copie TEXT,
+  date_envoi_confirme TEXT,
+  external_reference TEXT,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  version INTEGER NOT NULL DEFAULT 1,
+  deleted_at TEXT
+);
+CREATE INDEX idx_echanges_client_date ON echanges(client_id, created_at);
+
+CREATE TABLE devis (
+  id TEXT PRIMARY KEY,
+  numero TEXT NOT NULL UNIQUE,
+  demande_id TEXT NOT NULL REFERENCES demandes(id) ON DELETE RESTRICT,
+  commande_id TEXT REFERENCES commandes(id) ON DELETE RESTRICT,
+  revision INTEGER NOT NULL DEFAULT 1 CHECK (revision >= 1),
+  statut TEXT NOT NULL DEFAULT 'brouillon'
+    CHECK (statut IN ('brouillon','presente','modification_demandee','accepte','refuse','expire','remplace')),
+  date_emission TEXT,
+  date_validite TEXT,
+  conditions TEXT,
+  total_ht INTEGER NOT NULL DEFAULT 0 CHECK (total_ht >= 0),
+  devise TEXT NOT NULL DEFAULT 'MGA' CHECK (devise = 'MGA'),
+  accepte_at TEXT,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  version INTEGER NOT NULL DEFAULT 1,
+  deleted_at TEXT,
+  UNIQUE(demande_id, revision)
+);
+-- Correction C1 : commande_id sans UNIQUE — la règle « une seule version courante
+-- proposée à la fois » est vérifiée par le domaine, pas par une contrainte SQL.
+CREATE INDEX idx_devis_commande ON devis(commande_id);
+CREATE INDEX idx_devis_statut ON devis(statut);
+
+CREATE TABLE lignes_devis (
+  id TEXT PRIMARY KEY,
+  devis_id TEXT NOT NULL REFERENCES devis(id) ON DELETE RESTRICT,
+  service_id TEXT REFERENCES services(id) ON DELETE RESTRICT,
+  description TEXT NOT NULL,
+  quantite TEXT NOT NULL CHECK (quantite > 0),
+  unite_snapshot TEXT NOT NULL,
+  prix_unitaire INTEGER NOT NULL CHECK (prix_unitaire >= 0),
+  montant_ligne INTEGER NOT NULL CHECK (montant_ligne >= 0),
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  version INTEGER NOT NULL DEFAULT 1,
+  deleted_at TEXT
+);
+
+CREATE TABLE factures (
+  id TEXT PRIMARY KEY,
+  numero TEXT NOT NULL UNIQUE,
+  commande_id TEXT NOT NULL UNIQUE REFERENCES commandes(id) ON DELETE RESTRICT,
+  statut TEXT NOT NULL DEFAULT 'brouillon'
+    CHECK (statut IN ('brouillon','emise','partiellement_payee','payee','annulee')),
+  date_emission TEXT,
+  date_echeance TEXT,
+  total INTEGER NOT NULL DEFAULT 0 CHECK (total >= 0),
+  devise TEXT NOT NULL DEFAULT 'MGA' CHECK (devise = 'MGA'),
+  conditions TEXT,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  version INTEGER NOT NULL DEFAULT 1,
+  deleted_at TEXT
+);
+
+CREATE TABLE lignes_facture (
+  id TEXT PRIMARY KEY,
+  facture_id TEXT NOT NULL REFERENCES factures(id) ON DELETE RESTRICT,
+  description TEXT NOT NULL,
+  quantite TEXT NOT NULL CHECK (quantite > 0),
+  unite_snapshot TEXT NOT NULL,
+  prix_unitaire INTEGER NOT NULL CHECK (prix_unitaire >= 0),
+  montant_ligne INTEGER NOT NULL CHECK (montant_ligne >= 0),
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  version INTEGER NOT NULL DEFAULT 1,
+  deleted_at TEXT
+);
+
+CREATE TABLE paiements (
+  id TEXT PRIMARY KEY,
+  facture_id TEXT NOT NULL REFERENCES factures(id) ON DELETE RESTRICT,
+  montant INTEGER NOT NULL CHECK (montant > 0),
+  devise TEXT NOT NULL DEFAULT 'MGA' CHECK (devise = 'MGA'),
+  date_paiement TEXT NOT NULL,
+  moyen TEXT NOT NULL CHECK (moyen IN ('especes','mobile_money','virement','autre')),
+  reference TEXT,
+  statut TEXT NOT NULL DEFAULT 'confirme'
+    CHECK (statut IN ('en_attente','confirme','annule')),
+  notes TEXT,
+  idempotency_key TEXT UNIQUE,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  version INTEGER NOT NULL DEFAULT 1,
+  deleted_at TEXT
+);
+CREATE INDEX idx_paiements_facture ON paiements(facture_id, statut);
+
+CREATE TABLE depenses (
+  id TEXT PRIMARY KEY,
+  date_depense TEXT NOT NULL,
+  categorie TEXT NOT NULL,
+  description TEXT NOT NULL,
+  montant INTEGER NOT NULL CHECK (montant > 0),
+  devise TEXT NOT NULL DEFAULT 'MGA' CHECK (devise = 'MGA'),
+  moyen TEXT NOT NULL CHECK (moyen IN ('especes','mobile_money','virement','autre')),
+  reference TEXT,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  version INTEGER NOT NULL DEFAULT 1,
+  deleted_at TEXT
+);
+
+CREATE TABLE pieces_jointes (
+  id TEXT PRIMARY KEY,
+  client_id TEXT REFERENCES clients(id) ON DELETE RESTRICT,
+  demande_id TEXT REFERENCES demandes(id) ON DELETE RESTRICT,
+  commande_id TEXT REFERENCES commandes(id) ON DELETE RESTRICT,
+  projet_id TEXT REFERENCES projets(id) ON DELETE RESTRICT,
+  nom_fichier TEXT NOT NULL,
+  mime_type TEXT NOT NULL,
+  taille_octets INTEGER NOT NULL CHECK (taille_octets >= 0),
+  sha256 TEXT NOT NULL,
+  chemin_local TEXT,
+  cle_stockage_distant TEXT,
+  statut_transfert TEXT NOT NULL DEFAULT 'local'
+    CHECK (statut_transfert IN ('local','a_transferer','transfert_en_cours','synchronise','echec')),
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  version INTEGER NOT NULL DEFAULT 1,
+  deleted_at TEXT,
+  CHECK (client_id IS NOT NULL OR demande_id IS NOT NULL OR commande_id IS NOT NULL OR projet_id IS NOT NULL)
+);
+
+CREATE TABLE journal_actions (
+  id TEXT PRIMARY KEY,
+  entite_type TEXT NOT NULL,
+  entite_id TEXT NOT NULL,
+  action TEXT NOT NULL,
+  avant_json TEXT,
+  apres_json TEXT,
+  motif TEXT,
+  appareil_id TEXT NOT NULL,
+  acteur_id TEXT,
+  date_action TEXT NOT NULL,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  version INTEGER NOT NULL DEFAULT 1,
+  deleted_at TEXT
+);
+CREATE INDEX idx_journal_entite ON journal_actions(entite_type, entite_id, date_action);
+
+CREATE TABLE appareils (
+  id TEXT PRIMARY KEY,
+  nom TEXT NOT NULL,
+  plateforme TEXT NOT NULL CHECK (plateforme IN ('android','windows')),
+  dernier_sync_at TEXT,
+  actif INTEGER NOT NULL DEFAULT 1 CHECK (actif IN (0,1)),
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL
+);
+
+CREATE TABLE publications_facebook (
+  id TEXT PRIMARY KEY,
+  client_id TEXT REFERENCES clients(id) ON DELETE RESTRICT,
+  titre TEXT NOT NULL,
+  contenu TEXT NOT NULL,
+  date_planifiee TEXT NOT NULL,
+  statut TEXT NOT NULL DEFAULT 'planifie'
+    CHECK (statut IN ('planifie','prete','publie_manuellement','annule')),
+  canal TEXT NOT NULL DEFAULT 'facebook',
+  publie_at TEXT,
+  notes TEXT,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  version INTEGER NOT NULL DEFAULT 1,
+  deleted_at TEXT
+);
+CREATE INDEX idx_pfb_date ON publications_facebook(date_planifiee);
+
+CREATE TABLE sync_outbox (
+  id TEXT PRIMARY KEY,
+  appareil_id TEXT NOT NULL REFERENCES appareils(id) ON DELETE RESTRICT,
+  entite_type TEXT NOT NULL,
+  entite_id TEXT NOT NULL,
+  operation TEXT NOT NULL CHECK (operation IN ('upsert','delete')),
+  payload_json TEXT NOT NULL,
+  base_version INTEGER,
+  idempotency_key TEXT NOT NULL UNIQUE,
+  statut TEXT NOT NULL DEFAULT 'pending'
+    CHECK (statut IN ('pending','in_flight','synced','conflict','failed')),
+  tentatives INTEGER NOT NULL DEFAULT 0 CHECK (tentatives >= 0),
+  prochaine_tentative_at TEXT,
+  derniere_erreur TEXT,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL
+);
+CREATE INDEX idx_outbox_pending ON sync_outbox(statut, created_at);
+
+CREATE TABLE sync_state (
+  appareil_id TEXT PRIMARY KEY REFERENCES appareils(id) ON DELETE RESTRICT,
+  dernier_curseur TEXT NOT NULL DEFAULT '0',
+  dernier_sync_reussi_at TEXT,
+  derniere_erreur TEXT,
+  updated_at TEXT NOT NULL
+);
+
+CREATE TABLE sync_conflicts (
+  id TEXT PRIMARY KEY,
+  appareil_id TEXT NOT NULL REFERENCES appareils(id) ON DELETE RESTRICT,
+  entite_type TEXT NOT NULL,
+  entite_id TEXT NOT NULL,
+  version_locale INTEGER NOT NULL,
+  version_serveur INTEGER NOT NULL,
+  local_json TEXT NOT NULL,
+  serveur_json TEXT NOT NULL,
+  statut TEXT NOT NULL DEFAULT 'a_resoudre'
+    CHECK (statut IN ('a_resoudre','resolu_local','resolu_serveur','fusionne')),
+  resolution_json TEXT,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL
+);
