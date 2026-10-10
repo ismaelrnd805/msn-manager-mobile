@@ -1,0 +1,111 @@
+# Codemagic CI/CD — MSN Manager V1 — APPLICATION WINDOWS (EXE + ZIP)
+#
+# Fichier de configuration DÉDIÉ à l'application de bureau, pour la créer dans
+# Codemagic comme application SÉPARÉE de la version mobile :
+#
+#   Codemagic → Add application → sélectionner le dépôt →
+#   « Specify .yaml file name » → apps/desktop/codemagic.yaml
+#
+# Le workflow apparaît sous le nom « MSN Manager Windows — EXE release ».
+# Sur les machines Windows de Codemagic, les scripts s'exécutent en PowerShell.
+#
+# ⚠️ Le dépôt COMPLET doit être poussé sur Git : apps/desktop dépend des
+#    paquets partagés ../../packages/core et ../../packages/msn_ui.
+#    Un garde-fou en début de build vérifie leur présence.
+#
+# Le dossier windows/ n'est PAS dans le dépôt : il est généré par
+# `flutter create --platforms windows` sur la machine Windows de la CI
+# (Flutter ne compile le desktop Windows QUE sous Windows).
+workflows:
+  windows-desktop-app:
+    name: MSN Manager Windows — EXE release
+    instance_type: windows_x2
+    max_build_duration: 60
+    environment:
+      flutter: 3.35.4
+    scripts:
+      - name: Garde-fou — structure du dépôt
+        script: |
+          $ErrorActionPreference = "Stop"
+          $repo = git rev-parse --show-toplevel
+          Write-Output "→ Racine du dépôt : $repo"
+          if (-not (Test-Path "$repo/packages/core") -or -not (Test-Path "$repo/packages/msn_ui")) {
+            Write-Error ("packages/core ou packages/msn_ui introuvable. " +
+              "apps/desktop dépend des paquets partagés du dépôt complet. " +
+              "Poussez le dépôt ENTIER (dossier msn-manager/) puis créez " +
+              "l'application Codemagic avec le yaml apps/desktop/codemagic.yaml.")
+          }
+      - name: Tests du cœur métier (msn_core)
+        script: |
+          $ErrorActionPreference = "Stop"
+          $repo = git rev-parse --show-toplevel
+          # sqlite3.dll n'est pas préinstallée sur l'image Windows : on la
+          # télécharge depuis sqlite.org (version officielle figée 3.45.1 x64).
+          $tmp = "$repo/.ci_sqlite"
+          New-Item -ItemType Directory -Force -Path $tmp | Out-Null
+          $dll = "$tmp/sqlite3.dll"
+          if (-not (Test-Path $dll)) {
+            try {
+              Invoke-WebRequest -UseBasicParsing `
+                -Uri "https://www.sqlite.org/2024/sqlite-dll-win-x64-3450100.zip" `
+                -OutFile "$tmp/sqlite3.zip"
+              Expand-Archive -Path "$tmp/sqlite3.zip" -DestinationPath $tmp -Force
+            } catch {
+              Write-Warning ("sqlite3.dll non téléchargeable : " + $_.Exception.Message)
+            }
+          }
+          if (Test-Path $dll) {
+            $env:MSN_SQLITE_LIB = $dll
+            Write-Output "→ sqlite3.dll provisionnée : $dll"
+          } else {
+            Write-Warning "ATTENTION : tests du cœur IGNORÉS (sqlite3.dll indisponible sur cette machine). Le cœur est déjà couvert par le pipeline Android (macOS) ; le build continue."
+            exit 0
+          }
+          Set-Location "$repo/packages/core"
+          dart test
+      - name: Génération de la plateforme Windows
+        script: |
+          $ErrorActionPreference = "Stop"
+          $repo = git rev-parse --show-toplevel
+          Set-Location "$repo/apps/desktop"
+          if (-not (Test-Path windows)) {
+            flutter create . --platforms windows --project-name msn_desktop
+          }
+          flutter pub get
+      - name: Build Windows release
+        script: |
+          $ErrorActionPreference = "Stop"
+          $repo = git rev-parse --show-toplevel
+          Set-Location "$repo/apps/desktop"
+          flutter build windows --release
+      - name: Empaquetage ZIP (exe + DLL) + collecte
+        script: |
+          $ErrorActionPreference = "Stop"
+          $repo = git rev-parse --show-toplevel
+          Set-Location "$repo/apps/desktop"
+          New-Item -ItemType Directory -Force -Path dist | Out-Null
+          Compress-Archive -Path build/windows/x64/runner/Release/* `
+            -DestinationPath dist/MSN_Manager_Windows.zip -Force
+          New-Item -ItemType Directory -Force -Path "$repo/artifacts_windows" | Out-Null
+          Copy-Item dist/MSN_Manager_Windows.zip `
+            "$repo/artifacts_windows/MSN_Manager_Windows.zip" -Force
+          Write-Output "OK ZIP collecté : artifacts_windows/MSN_Manager_Windows.zip"
+    artifacts:
+      - artifacts_windows/*.zip
+      - apps/desktop/dist/*.zip
+    publishing:
+      email:
+        recipients:
+          - vous@votre-domaine.mg
+        notify:
+          success: true
+          failure: true
+    # Déclenchement automatique OPTIONNEL — décommenter pour builder à chaque
+    # push sur main :
+    # triggering:
+    #   events:
+    #     - push
+    #   branch_patterns:
+    #     - pattern: main
+    #       include: true
+    #       source: true
