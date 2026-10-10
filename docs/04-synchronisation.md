@@ -1,104 +1,64 @@
-# 04 — Synchronisation
+# Synchronisation hors ligne (Android ↔ Windows via le serveur)
 
-Le moteur (`lib/core/sync/sync_engine.dart`) applique la stratégie offline-first : file locale, puis PUSH/PULL quand un serveur est configuré, conflits jamais résolus en silence.
+## Principe
 
-## 1. La file d'attente `sync_queue`
+Deux bases SQLite ne se synchronisent **jamais** entre elles. Le serveur central
+PostgreSQL est l'arbitre : chaque appareil pousse ses opérations locales et tire
+les changements des autres. L'application reste **entièrement utilisable hors ligne**.
 
-| Colonne | Rôle |
+## Cycle
+
+1. **Écriture locale** : toute modification métier (client, demande, devis,
+   paiement…) est écrite avec une opération d'outbox **dans la même transaction
+   Drift** — une fermeture forcée ne perd rien.
+2. **Push** (lot ≤ 100, spec §8.6) :
+   - opérations passées en `in_flight` ;
+   - le serveur vérifie jeton + appareil, rejoue les clés d'idempotence
+     (`sync_push_log`), compare `base_version`, applique les règles métier,
+     répond opération par opération (`synced` / `conflict` / `failed`) ;
+   - `synced` uniquement après confirmation serveur ; `conflict` → conservé dans
+     `sync_conflicts` (les DEUX versions) ; `failed` → retenté avec message.
+3. **Pull** (curseur monotone) :
+   - `GET /sync/pull?cursor=N` sert le journal global `sync_journal` ;
+   - le lot est appliqué **dans une seule transaction locale** ;
+   - le curseur n'avance qu'après application complète réussie ;
+   - les suppressions sont des tombstones (`deleted_at`), jamais physiques.
+
+## Déclencheurs (spec §8.6)
+
+lancement de l'app · retour au premier plan · après chaque modification (si
+réseau disponible) · action manuelle (bouton sync).
+
+## Défaillances réseau
+
+- API injoignable → `ApiInatteignable` → opérations `in_flight` repassées en
+  `pending` (rien n'est perdu) ;
+- temporisation progressive du planificateur : délai = min(2^tentatives, 300 s) ;
+- reprise sans doublon grâce à la clé d'idempotence (test F37).
+
+## Conflits (spec §8.5)
+
+| Donnée | Politique |
 |---|---|
-| `entite`, `entityId` | Cible, ex. `'clients'` / `cli_173…` (nom de table côté serveur). |
-| `operation` | `SyncOperation.create / update / delete` (persisté par `.name`). |
-| `payload` | JSON sérialisé des champs métier. |
-| `statut` | `enAttente` (défaut), `enCours`, `synchronise`, `erreur`, `conflit`. |
-| `tentatives`, `derniereErreur` | Compteur d'échecs + dernier message (seuil `syncMaxAttempts = 5`). |
-| `createdAt`, `updatedAt` | Ordre de traitement et horodatage poussé au serveur. |
+| Champs indépendants non sensibles | fusion possible (règle documentée par champ) |
+| Client/contact : mêmes champs modifiés | les deux versions sont présentées à l'utilisateur |
+| Devis accepté, facture émise, paiement confirmé, commande livrée | **jamais** « dernier arrivé gagne » — rectification auditable |
 
-Enfilement (appelé par toutes les écritures métier) :
+Le serveur protège les champs sensibles (`statut`, `numero`, `total`…) contre
+l'écrasement par sync générique : `CHAMP_PROTEGE` — les transitions passent par
+des actions métier explicites (`/transition`, `/delivery`, `/payments`).
 
-```dart
-await ref.read(syncEngineProvider).enqueue(
-      entite: 'clients', entityId: id,
-      operation: SyncOperation.create,
-      payload: {'nom': client.nom, 'telephone': client.telephone},
-    );
-```
+## Fichiers (pièces jointes)
 
-## 2. Cycle PUSH — `POST /api/v1/sync/batch`
+- métadonnées en base (`pieces_jointes`), transfert **séparé** du push/pull ;
+- `POST /attachments` (déclare taille + SHA-256) → `PUT /attachments/{id}/content`
+  → `POST /attachments/{id}/complete` (vérifie taille + empreinte) ;
+- états locaux : `local` / `a_transferer` / `transfert_en_cours` / `synchronise` / `echec` ;
+- limite 25 Mo par fichier (V1) ;
+- `GET /attachments/{id}/download` pour l'autre appareil.
 
-1. `SystemDao.pending(limit: syncBatchSize)` : statuts `enAttente` + `erreur`, ordre `createdAt ASC`.
-2. Chaque ligne devient un `SyncPayload` (`api_contracts.dart`) : `entite, entityId, operation, payload, updatedAt, deviceId`.
-3. Corps HTTP : `{'deviceId': deviceId, 'changes': [ … ]}` vers `$serverUrl/api/v1/sync/batch`.
-4. Réponse `PushBatchResult` : `acceptedIds` -> statut `synchronise` ; `conflictIds` -> statut `conflit` + ligne dans `sync_conflicts` (`_createConflict`, message « Le serveur a une version plus récente. »).
-5. `NetworkException` -> `incrementTentative` sur chaque ligne ; **rien n'est perdu**, le cycle suivant rejoue.
+## État visible dans l'interface
 
-## 3. Cycle PULL — `GET /api/v1/sync/changes?since=…`
-
-1. `since` = clé `last_sync_at` (epoch si première sync).
-2. Réponse : liste de `RemoteChange { entite, entityId, payload, serverUpdatedAt, version }`.
-3. Chaque changement passe par `_applyRemote` :
-   - **pas d'applier** pour l'entité -> le changement est ré-enfilé dans `sync_queue` (statut `enAttente`) : jamais perdu, traité dès qu'un applier existera ;
-   - **écriture locale en attente pour la même entité** (`sync_queue` contient `enAttente`/`erreur` pour `entite+entityId`) -> conflit créé dans `sync_conflicts`, application refusée ;
-   - sinon l'applier applique le payload localement (upsert).
-4. `last_sync_at` est mis à jour même si le pull échoue après un push réussi (le push est déjà comptabilisé côté serveur).
-
-## 4. Conflits : jamais d'écrasement silencieux
-
-Deux détections complémentaires :
-- **Côté push** : le serveur répond `conflicts` quand il détient une version plus récente (comparaison `updatedAt` + `version`, voir 05-backend-nestjs.md).
-- **Côté pull** : le mobile refuse d'appliquer un changement distant si une écriture locale de la même entité dort encore dans la file.
-
-Table `sync_conflicts` : `entite, entityId, localPayload, remotePayload, statut ('ouvert'/'resolu-…'), detecteLe, resoluLe`. Résolution humaine depuis l'écran `/sync` (réservée admin : `AppPermissions.canResolveConflicts`) :
-
-```dart
-await ref.read(systemDaoProvider).resolveConflict(id, 'garde-local'); // ou 'garde-distant'
-```
-
-Tant qu'un conflit est ouvert, le rapport de cycle renvoie `SyncStatus.erreur` avec « N conflit(s) à résoudre. » — l'état ne repasse jamais « SYNCHRONISÉ » silencieusement.
-
-## 5. Ajouter un applier d'entité (exemple `clients`)
-
-Un applier est un `RemoteEntityApplier` : `Future<bool> Function(String entityId, Map<String, dynamic> payload)` enregistré dans `SyncEngine.remoteAppliers`. Il traduit un payload serveur en upsert local. Exemple complet :
-
-```dart
-// core/sync/appliers.dart (nouveau fichier) ou wiring dans services_providers.dart
-void registerAppliers(Ref ref) {
-  final db = ref.read(appDatabaseProvider);
-  final engine = ref.read(syncEngineProvider);
-
-  engine.remoteAppliers['clients'] = (entityId, payload) async {
-    final existing = await (db.select(db.clients)
-          ..where((c) => c.id.equals(entityId)))
-        .getSingleOrNull();
-    final row = ClientsCompanion.insert(
-      id: entityId,
-      nom: payload['nom'] as String? ?? existing?.nom ?? '',
-      telephone: Value(payload['telephone'] as String? ?? existing?.telephone),
-      email: Value(payload['email'] as String? ?? existing?.email),
-      updatedAt: Value(DateTime.now()),
-      lastSyncedAt: Value(DateTime.now()),     // marqueur de sync
-    );
-    await db.into(db.clients).insertOnConflictUpdate(
-          existing == null ? row : row.copyWith(id: Value(entityId)),
-        );
-    return true; // true = appliqué (comptabilisé dans SyncRunReport.pulled)
-  };
-}
-```
-
-Règles d'écriture d'un applier : jamais jeter de données (fusionner avec `existing`), poser `lastSyncedAt`, retourner `false` seulement si l'application doit être retentée, et n'appeler **aucun** `enqueue` (on applique du distant, on ne ré-enfile pas).
-
-## 6. Configuration de l'URL serveur
-
-- Clé `settings.server_url` (`AppConstants.keyServerUrl`), saisie par l'administrateur dans l'écran `/settings` (ex. `http://192.168.1.20:3000`, sans `/` final).
-- `SyncEngine.run` : si la clé est absente/vide -> `SyncStatus.nonConfigure`, aucun appel HTTP, aucune donnée envoyée.
-- `deviceId` : `mobile-<timestamp>` par défaut (ou injecté via le constructeur) ; il identifie l'appareil dans chaque lot poussé.
-- Le client REST (`ApiClient`) préfixe toutes les routes par `/api/v1` et envoie `Authorization: Bearer <token>` dès qu'un `authToken` est fourni ; les erreurs réseau lèvent `NetworkException` (timeout 15 s).
-
-## 7. Déclenchements
-
-| Déclencheur | Code |
-|---|---|
-| Retour du réseau | `SyncController` écoute `connectivityProvider` -> `runNow()`. |
-| Périodique | `Timer.periodic` 5 minutes. |
-| Manuel | Bouton de l'écran `/sync` -> `syncControllerProvider.runNow()`. |
-| Statut instantané (sans cycle) | `SyncEngine.currentStatus()` : OFFLINE / NON CONFIGURÉ / ONLINE. |
+Le rail de navigation affiche : nombre d'opérations en attente, conflits non
+résolus, curseur, dernière synchronisation réussie. Aucune action ne laisse
+l'utilisateur croire à une synchronisation qui n'a pas eu lieu.
