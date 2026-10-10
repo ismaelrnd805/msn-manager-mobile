@@ -1,32 +1,45 @@
-# Secrets / environnements
-.env
-.env.*.local
-server/api/.env
-server/api/storage/*.key
-*.pem
-*.p12
-*.jks
-!**/.env.example
-
-# Dépendances / artefacts
-vendor/
-node_modules/
-.dart_tool/
-.packages
-.pub-cache/
-build/
-*.lock.bak
-# Code généré Drift inclus au dépôt (pas d'exclusion) — build_runner requis seulement en dev
-coverage/
-
-# IDE / OS
-.idea/
-.vscode/
-*.iml
-.DS_Store
-Thumbs.db
-
-# Logs et locaux
+# Miscellaneous
+*.class
 *.log
-coverage/
-.tool-versions
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+/coverage/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release

@@ -1,37 +1,79 @@
-# Codemagic CI/CD — MSN Manager V1
-# Deux workflows séparés, deux machines distinctes :
-#   * android-mobile  → APK release (machine macOS)
-#   * windows-desktop → EXE Windows + ZIP (machine Windows)
-# Les dossiers de plateforme (android/, windows/) sont générés par `flutter create`
-# au moment du build : le dépôt reste léger et toujours aligné sur le SDK Flutter
-# utilisé par la CI. Guide complet : docs/08-codemagic.md
+# Codemagic CI/CD — MSN Manager V1 — APPLICATION MOBILE (APK Android)
+#
+# Fichier de configuration DÉDIÉ à l'application mobile, pour la créer dans
+# Codemagic comme application SÉPARÉE de la version Windows :
+#
+#   Codemagic → Add application → sélectionner le dépôt →
+#   « Specify .yaml file name » → apps/mobile/codemagic.yaml
+#
+# Le workflow apparaît sous le nom « MSN Manager Mobile — APK release ».
+#
+# ⚠️ Le dépôt COMPLET doit être poussé sur Git : apps/mobile dépend des
+#    paquets partagés ../../packages/core et ../../packages/msn_ui.
+#    Un garde-fou en début de build vérifie leur présence et affiche un
+#    message clair en cas d'absence.
+#
+# Signature production OPTIONNELLE : groupe de variables `msn_android_signing`
+# (CM_KEYSTORE_PATH, CM_KEYSTORE_PASSWORD, CM_KEY_ALIAS, CM_KEY_ALIAS_PASSWORD)
+# — guide : docs/08-codemagic.md §8.3. Sans keystore : APK signé debug,
+# installable pour les tests internes.
 workflows:
-  android-mobile:
-    name: MSN Manager — Android (APK release)
+  android-mobile-app:
+    name: MSN Manager Mobile — APK release
     instance_type: mac_mini_m2
     max_build_duration: 60
     environment:
       flutter: 3.35.4
-      # Groupe de variables OPTIONNEL pour la signature de production :
-      # msn_android_signing = CM_KEYSTORE_PATH, CM_KEYSTORE_PASSWORD,
-      #                       CM_KEY_ALIAS, CM_KEY_ALIAS_PASSWORD
-      # Sans keystore, l'APK est signé debug (installable pour tests).
       groups:
         - msn_android_signing
     scripts:
+      - name: Garde-fou — structure du dépôt
+        script: |
+          set -euo pipefail
+          REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+          echo "→ Racine du dépôt : $REPO_ROOT"
+          if [ ! -d "$REPO_ROOT/packages/core" ] || [ ! -d "$REPO_ROOT/packages/msn_ui" ]; then
+            echo "!! packages/core ou packages/msn_ui introuvable." >&2
+            echo "   apps/mobile dépend des paquets partagés du dépôt complet." >&2
+            echo "   Poussez le dépôt ENTIER (dossier msn-manager/) puis créez" >&2
+            echo "   l'application Codemagic avec le yaml apps/mobile/codemagic.yaml." >&2
+            exit 1
+          fi
       - name: Tests du cœur métier (msn_core)
         script: |
-          cd packages/core
+          set -euo pipefail
+          cd "$(git rev-parse --show-toplevel)/packages/core"
           dart test
       - name: Génération + configuration de la plateforme Android
-        script: bash scripts/ci/android_prepare.sh
+        script: |
+          set -euo pipefail
+          REPO_ROOT="$(git rev-parse --show-toplevel)"
+          bash "$REPO_ROOT/scripts/ci/android_prepare.sh"
       - name: Build APK release
         script: |
-          cd apps/mobile
+          set -euo pipefail
+          cd "$(git rev-parse --show-toplevel)/apps/mobile"
           flutter build apk --release
       - name: Signature production (si keystore fourni)
-        script: bash scripts/ci/android_sign.sh
+        script: |
+          set -euo pipefail
+          REPO_ROOT="$(git rev-parse --show-toplevel)"
+          bash "$REPO_ROOT/scripts/ci/android_sign.sh"
+      - name: Collecte des artefacts
+        script: |
+          set -euo pipefail
+          REPO_ROOT="$(git rev-parse --show-toplevel)"
+          APK="$REPO_ROOT/apps/mobile/build/app/outputs/flutter-apk/app-release.apk"
+          if [ -f "$APK" ]; then
+            mkdir -p "$REPO_ROOT/artifacts_mobile"
+            cp "$APK" "$REPO_ROOT/artifacts_mobile/MSN_Manager_Mobile.apk"
+            echo "OK APK collecté : artifacts_mobile/MSN_Manager_Mobile.apk"
+          else
+            echo "!! APK introuvable : $APK" >&2
+            exit 1
+          fi
     artifacts:
+      - artifacts_mobile/*.apk
       - apps/mobile/build/app/outputs/flutter-apk/*.apk
     publishing:
       email:
@@ -40,38 +82,12 @@ workflows:
         notify:
           success: true
           failure: true
-
-  windows-desktop:
-    name: MSN Manager — Windows (EXE release)
-    instance_type: windows_x2
-    max_build_duration: 60
-    environment:
-      flutter: 3.35.4
-    scripts:
-      # Sur les machines Windows Codemagic, les scripts s'exécutent en PowerShell.
-      - name: Génération de la plateforme Windows
-        script: |
-          cd apps/desktop
-          if (-not (Test-Path windows)) {
-            flutter create . --platforms windows --project-name msn_desktop
-          }
-          flutter pub get
-      - name: Build Windows release
-        script: |
-          cd apps/desktop
-          flutter build windows --release
-      - name: Empaquetage ZIP (exe + DLL)
-        script: |
-          cd apps/desktop
-          New-Item -ItemType Directory -Force -Path dist | Out-Null
-          Compress-Archive -Path build/windows/x64/runner/Release/* `
-            -DestinationPath dist/MSN_Manager_Windows.zip -Force
-    artifacts:
-      - apps/desktop/dist/*.zip
-    publishing:
-      email:
-        recipients:
-          - vous@votre-domaine.mg
-        notify:
-          success: true
-          failure: true
+    # Déclenchement automatique OPTIONNEL — décommenter pour builder à chaque
+    # push sur main :
+    # triggering:
+    #   events:
+    #     - push
+    #   branch_patterns:
+    #     - pattern: main
+    #       include: true
+    #       source: true
